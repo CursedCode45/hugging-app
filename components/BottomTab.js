@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 
 
-export default function Navitavi() {
+export default function BottomTab() {
   return (
     <View style={styles.container}>
         <Text style={styles.tekst}>Ratitati</Text>
@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
-    height: '10%',
+    height: 100,
     position: 'absolute',
     bottom: 0,
     backgroundColor: '#088F8F',

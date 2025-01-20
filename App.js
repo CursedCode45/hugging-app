@@ -1,15 +1,19 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import Navitavi from './components/Naviravi'  
+import BottomTab from './components/BottomTab'  
+import { Vidplays, Upload } from './components/Vidplays';
+
+
 
 export default function App() {
   return (
     <View style={styles.container}>
-      <Navitavi></Navitavi>
+      <BottomTab></BottomTab>
       <View style={styles.textContainer}>
         <Text>Open up App.js to start working on your app!</Text>
         <StatusBar style="auto" />
       </View>
+      <Upload></Upload>
     </View> 
   );
 }
