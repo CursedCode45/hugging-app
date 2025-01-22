@@ -8,14 +8,14 @@ const UPLOAD_SVG = (props) => (
     viewBox="0 0 24 24"
   >
     <Path
-      stroke="#000"
+      stroke={props.color}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}
       d="M7 11a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM5.56 21c5.57-9.9 10.2-11.64 15.44-5.21"
     />
     <Path
-      stroke="#000"
+      stroke={props.color}
       strokeLinecap="round"
       strokeLinejoin="round"
       strokeWidth={1.5}

@@ -1,8 +1,7 @@
 import { StyleSheet, Button, Text, View } from 'react-native';
 import BottomTab from '../components/BottomTab'  
-import { PhotoUpload } from '../components/PhotoUpload';
+import { UploadPhotosContainer } from '../components/PhotoUpload';
 import { useNavigation } from '@react-navigation/native';
-import UPLOAD_SVG from '../assets/images/UploadSvg';
 
 
 
@@ -14,10 +13,9 @@ export default function GenerateScreen(){
     return(
     <View style={styles.container}>
         <View style={styles.textContainer}>
-        <UPLOAD_SVG></UPLOAD_SVG>
             <Text>Hi!</Text>
         </View>
-        <PhotoUpload></PhotoUpload>
+        <UploadPhotosContainer></UploadPhotosContainer>
         <BottomTab></BottomTab>
     </View>
     );

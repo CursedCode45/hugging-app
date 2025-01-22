@@ -16,8 +16,6 @@ export default function BottomTab() {
   const route = useRoute();
   const navigation = useNavigation();
 
-  console.log(route.name);
-
   return (
     <View style={styles.container}>
         <TouchableHighlight style={styles.touchable} underlayColor={on_touch_color} onPress={() => {navigation.popTo('Generate')}}>
@@ -30,7 +28,7 @@ export default function BottomTab() {
         </TouchableHighlight>
 
         <TouchableHighlight style={styles.touchable} underlayColor={on_touch_color} onPress={() => {navigation.popTo('UserVideos');}}>
-        <View style={styles.iconContainer}>
+          <View style={styles.iconContainer}>
             <View style={styles.svgContainer}>
               <PROFILE_SVG color={(route.name === 'UserVideos')? svg_selected_color: svg_unselected_color}/>
             </View>

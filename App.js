@@ -1,4 +1,3 @@
-import { StyleSheet, Text, View } from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GenerateScreen from './screens/GenerateScreen';
@@ -16,7 +15,7 @@ const stack_options = {
 export default function App() {
   return (
     <NavigationContainer>
-      <Stack.Navigator>
+      <Stack.Navigator screenOptions={{unmountOnBlur: false}}>
         <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
         <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
         <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
