@@ -4,6 +4,7 @@ import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import UPLOAD_SVG from '../assets/images/UploadSvg';
 import X_SVG from '../assets/images/XSVG';
+import { changeImageMan } from './ManipulateImage';
 
 
 const on_touch_color = 'rgb(255, 255, 255)';
@@ -13,6 +14,7 @@ const x_color = 'rgb(34, 34, 34)';
 
 export function PhotoUpload(props){
     const [image, setImage] = useState(null);
+    const [jimpImage, setJimpImage] = useState(null);
 
     async function uploadImage() {
         if (!image) {
@@ -48,9 +50,8 @@ export function PhotoUpload(props){
         // Launch the image picker
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaType,
-            allowsEditing: true,
+            allowsEditing: false,
             quality: 1,
-            aspect: [1, 2020],
         });
 
         if (!result.canceled) {
@@ -59,11 +60,10 @@ export function PhotoUpload(props){
     }
 
     useEffect(() => {
-        if (!image) {
-            return;
-        }
-        else{
-            uploadImage();
+        if (image) {
+            console.log(image);
+            const result = changeImageMan(image)
+            console.log(result);
         }
     }, [image])
 
