@@ -1,38 +1,27 @@
-import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
-import BottomTab from './components/BottomTab'  
-import { Vidplays, Upload } from './components/Vidplays';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+import GenerateScreen from './screens/GenerateScreen';
+import UserVideos from './screens/UserVideos';
+import Settings from './screens/Settings';
 
+
+const Stack = createNativeStackNavigator();
+const stack_options = {
+  headerShown: false,
+  animation: 'none',
+}
 
 
 export default function App() {
   return (
-    <View style={styles.container}>
-      <BottomTab></BottomTab>
-      <View style={styles.textContainer}>
-        <Text>Open up App.js to start working on your app!</Text>
-        <StatusBar style="auto" />
-      </View>
-      <Upload></Upload>
-    </View> 
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
+        <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
+        <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#000',
-  },
-  textContainer: {
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    width: '70%',
-    height: 200,
-    backgroundColor: '#088F8F',
-    borderRadius: 20,
-  },
-});
