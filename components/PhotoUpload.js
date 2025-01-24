@@ -76,7 +76,7 @@ export function PhotoUpload(props){
                         <X_SVG color={x_color}/>
                     </View>
                 </TouchableHighlight>
-                <EditImageModal></EditImageModal>
+                <EditImageModal uri={image.uri}></EditImageModal>
             </View>
         )
     }

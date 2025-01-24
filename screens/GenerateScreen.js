@@ -35,17 +35,9 @@ const styles = StyleSheet.create({
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: 320,
-      height: 195,
-    },
-    textContainer: {
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
       width: 330,
-      height: 200,
+      height: 198,
       ...appColors.addShadow,
-      backgroundColor: appColors.lighterDark,
       borderRadius: 20,
     },
     text: {
