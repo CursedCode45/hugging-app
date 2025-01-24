@@ -3,7 +3,9 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GenerateScreen from './screens/GenerateScreen';
 import UserVideos from './screens/UserVideos';
 import Settings from './screens/Settings';
-
+import {
+  GestureHandlerRootView,
+} from 'react-native-gesture-handler';
 
 const Stack = createNativeStackNavigator();
 const stack_options = {
@@ -14,13 +16,15 @@ const stack_options = {
 
 export default function App() {
   return (
-    <NavigationContainer>
-      <Stack.Navigator screenOptions={{unmountOnBlur: false}}>
-        <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
-        <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
-        <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
-      </Stack.Navigator>
-    </NavigationContainer>
+    <GestureHandlerRootView style={{flex: 1}}>
+      <NavigationContainer>
+        <Stack.Navigator screenOptions={{unmountOnBlur: false}}>
+          <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
+          <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
+          <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
+        </Stack.Navigator>
+      </NavigationContainer>
+    </GestureHandlerRootView>
   );
 }
 

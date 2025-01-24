@@ -4,12 +4,13 @@ import Svg, { Circle, Path } from "react-native-svg"
 import SETTINGS from '../assets/images/Settings.js';
 import BRAIN from '../assets/images/Brain.js';
 import PROFILE_SVG from '../assets/images/ProfileSvg.js';
+import { appColors, addShadow } from '../constant/AppColors';
 
 
 const on_touch_color = 'rgba(0, 0, 0, 0)';
 
-const svg_unselected_color = 'rgba(34, 34, 34, 1)';
-const svg_selected_color = 'rgba(245, 245, 245, 1)';
+const svg_unselected_color = appColors.lightColor;
+const svg_selected_color = appColors.textColor;
 
 
 export default function BottomTab() {
@@ -58,8 +59,10 @@ const styles = StyleSheet.create({
     height: 95,
     position: 'absolute',
     bottom: 0,
-    backgroundColor: '#088F8F',
+    backgroundColor: appColors.bottomTab,
     paddingBottom: 17,
+
+    ...appColors.addShadow
   },
 
   touchable:{
@@ -74,13 +77,16 @@ const styles = StyleSheet.create({
     marginTop: 5,
     fontSize: 11,
     textAlign: 'center',
+    fontWeight: 700,
+    color: appColors.lightColor,
   },
 
   textSelected: {
     marginTop: 5,
     fontSize: 11,
     textAlign: 'center',
-    color: '#FFF',
+    fontWeight: 700,
+    color: appColors.textColor,
   },
 
   svgContainer: {

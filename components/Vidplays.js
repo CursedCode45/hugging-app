@@ -6,8 +6,8 @@ import axios from 'axios';
 
 
 
-export function Vidplays() {
-  const video_source = 'http://192.168.100.154:8083/get-video'
+export function Vidplays(props) {
+  const video_source = props.source
   const player = useVideoPlayer(video_source, (player) => {
     player.loop = true;
     player.staysActiveInBackground= true;
@@ -15,31 +15,22 @@ export function Vidplays() {
   });
 
   return (
-    <View style={styles.container}>
-       <VideoView
-        style={styles.video}
-        player={player}
-        allowsFullscreen={false} // Disables fullscreen button
-        allowsPictureInPicture={true} // Disables picture-in-picture mode
-        nativeControls={false}
-      />
-    </View>
+      <VideoView
+      style={styles.video}
+      player={player}
+      allowsFullscreen={false} // Disables fullscreen button
+      allowsPictureInPicture={true} // Disables picture-in-picture mode
+      nativeControls={false}
+    />
   )
 }
 
 const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: 200,
-    height: 200,
-  },
   video: {
     display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    flex: 1,
     width: '100%',
     height: '100%',
+    borderRadius: 20,
   },
 });

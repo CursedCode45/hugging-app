@@ -1,20 +1,25 @@
+import React from 'react';
 import { useEffect, useState } from 'react';
-import { View, Button, Image, StyleSheet, Alert, TouchableHighlight, Text } from 'react-native';
+import { View, Image, StyleSheet, Alert, TouchableHighlight, Text, Dimensions } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import UPLOAD_SVG from '../assets/images/UploadSvg';
 import X_SVG from '../assets/images/XSVG';
-import { changeImageMan } from './ManipulateImage';
+import { useNavigation, useRoute } from '@react-navigation/native';
+import { EditImageModal } from './ManipulateImage.js';
+import { appColors } from '../constant/AppColors';
 
 
-const on_touch_color = 'rgb(255, 255, 255)';
-const x_touch_color = 'rgb(179, 179, 179)';
-const x_color = 'rgb(34, 34, 34)';
+
+const on_touch_color = appColors.buttonColor;
+const x_touch_color = appColors.buttonColor;
+const x_color = appColors.lighterDark;
 
 
 export function PhotoUpload(props){
     const [image, setImage] = useState(null);
-    const [jimpImage, setJimpImage] = useState(null);
+    const route = useRoute();
+    const navigation = useNavigation();
 
     async function uploadImage() {
         if (!image) {
@@ -59,45 +64,49 @@ export function PhotoUpload(props){
         }
     }
 
-    useEffect(() => {
-        if (image) {
-            console.log(image);
-            const result = changeImageMan(image)
-            console.log(result);
-        }
-    }, [image])
 
-
-    const withImage = () => (
-        <View style={styles.container}>
-            <View style={styles.previewImage}>
-                {image && (<Image source={{ uri: image.uri }} style={styles.previewImage} />)}
-            </View>
-            <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={() => {setImage(null);}}>
-                <View style={styles.xContainer}>
-                    <X_SVG color={x_color}/>
+    function WithImage(){
+        return(
+            <View style={styles.container}>
+                <View style={styles.previewImage}>
+                    {image && (<Image source={{ uri: image.uri }} style={styles.previewImage} />)}
                 </View>
-            </TouchableHighlight>
-        </View>
-    )
-
-    const withoutImage = () => (
-        <View style={styles.container}>
-            <TouchableHighlight style={styles.touchable} underlayColor={on_touch_color} onPress={selectImage}>
-                <View style={styles.imageContainer}>
-                    <View style={styles.svgContainer}>
-                        <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
+                <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={() => {setImage(null);}}>
+                    <View style={styles.xContainer}>
+                        <X_SVG color={x_color}/>
                     </View>
-                    <Text style={styles.text}>Add new Image</Text>
-                </View>
-            </TouchableHighlight>
-        </View>
-    )
+                </TouchableHighlight>
+                <EditImageModal></EditImageModal>
+            </View>
+        )
+    }
+
+    function WithoutImage(){
+        return(
+            <View style={styles.container}>
+                <TouchableHighlight style={styles.touchable} underlayColor={on_touch_color} onPress={selectImage}>
+                    <View style={styles.imageContainer}>
+                        <View style={styles.svgContainer}>
+                            <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
+                        </View>
+                        <Text style={styles.text}>{(props.filename === 'image1.jpg')? 'Image 1': 'Image 2'}</Text>
+                    </View>
+                </TouchableHighlight>
+            </View>
+        );
+    }
 
 
-    return (
-        (image)? withImage(): withoutImage()
-    );
+    if (image){
+        return(
+            <WithImage/>
+        );
+    }
+    else{
+        return(
+            <WithoutImage/>
+        );
+    }
 }
 
 export function UploadPhotosContainer(){
@@ -105,6 +114,7 @@ export function UploadPhotosContainer(){
         <View style={styles.uploadContainer}>
             <PhotoUpload filename={'image1.jpg'}/>
             <PhotoUpload filename={'image2.jpg'}/>
+            {/* <PhotoUpload filename={'image2.jpg'}/> */}
         </View>
     )
 }
@@ -113,6 +123,7 @@ const styles = StyleSheet.create({
     uploadContainer:{
         display: 'flex',
         flexDirection: 'row',
+        marginTop: 30,
     },
     container: {
         display: 'flex',
@@ -127,6 +138,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 150,
         height: 150,
+        ...appColors.addShadow
     },
 
     touchable: {
@@ -134,17 +146,19 @@ const styles = StyleSheet.create({
     },
 
     imageContainer:{
-        backgroundColor: 'rgb(53, 53, 53)',
+        backgroundColor: appColors.lighterDark,
         borderRadius: 10,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         width: 150,
         height: 150,
+
+        ...appColors.addShadow
     },
 
     touchableX: {
-        backgroundColor: 'rgb(107, 107, 107)',
+        backgroundColor: appColors.lightColor,
         borderRadius: 1000,
         borderWidth: 0,
         width: 40,
@@ -161,7 +175,7 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: 'rgb(255, 255, 255)',
+        color: appColors.textColor,
     }
 
 });

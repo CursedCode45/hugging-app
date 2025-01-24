@@ -1,5 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native';
 import BottomTab from '../components/BottomTab'  
+import { appColors } from '../constant/AppColors';
 
 
 
@@ -8,7 +9,7 @@ export default function Settings(){
   return(
     <View style={styles.container}>
       <View style={styles.textContainer}>
-        <Text>Settings</Text>
+        <Text style={styles.text}>Settings</Text>
       </View>
       <BottomTab></BottomTab>
     </View>
@@ -22,7 +23,7 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#000',
+      backgroundColor: appColors.background,
     },
     textContainer: {
       display: 'flex',
@@ -30,7 +31,10 @@ const styles = StyleSheet.create({
       alignItems: 'center',
       width: '70%',
       height: 200,
-      backgroundColor: '#088F8F',
+      backgroundColor: appColors.lighterDark,
       borderRadius: 20,
     },
+    text: {
+      color: appColors.textColor,
+    }
   });

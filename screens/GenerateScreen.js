@@ -1,9 +1,10 @@
 import { StyleSheet, Button, Text, View } from 'react-native';
 import BottomTab from '../components/BottomTab'  
 import { UploadPhotosContainer } from '../components/PhotoUpload';
-import { useNavigation } from '@react-navigation/native';
-
-
+import { useNavigation } from '@react-navigation/native'
+import { appColors } from '../constant/AppColors';
+import { Vidplays } from '../components/Vidplays';
+import Hug_video from '../assets/images/Hug_video.mp4'
 
 
 export default function GenerateScreen(){
@@ -12,8 +13,8 @@ export default function GenerateScreen(){
 
     return(
     <View style={styles.container}>
-        <View style={styles.textContainer}>
-            <Text>Hi!</Text>
+        <View style={styles.videoContainer}>
+          <Vidplays source={Hug_video}/>
         </View>
         <UploadPhotosContainer></UploadPhotosContainer>
         <BottomTab></BottomTab>
@@ -28,15 +29,27 @@ const styles = StyleSheet.create({
       flex: 1,
       justifyContent: 'center',
       alignItems: 'center',
-      backgroundColor: '#000',
+      backgroundColor: appColors.background,
+    },
+    videoContainer: {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      width: 320,
+      height: 195,
     },
     textContainer: {
       display: 'flex',
       justifyContent: 'center',
       alignItems: 'center',
-      width: '70%',
+      width: 330,
       height: 200,
-      backgroundColor: '#088F8F',
+      ...appColors.addShadow,
+      backgroundColor: appColors.lighterDark,
       borderRadius: 20,
     },
+    text: {
+      fontWeight: 1000,
+      color: appColors.textColor,
+    }
   });
