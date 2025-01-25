@@ -20,14 +20,9 @@ export function EditImageModal(props) {
     function GestureComp(){
         const screen_width = Dimensions.get('screen').width;
         const screen_height = styles.containerG.height
-        const [modalVisible, setModalVisible] = useState(true);
-    
-        function clamp(val, min, max) {
-            return Math.min(Math.max(val, min), max);
-        }
-    
-        const width_Sqare = useSharedValue(1);
-        const height_Sqare = useSharedValue(1);
+        
+        const width_Sqare = useSharedValue(styles.imageContainer.width);
+        const height_Sqare = useSharedValue(styles.imageContainer.height);
         const startScale = useSharedValue(0);
         const init_x = useSharedValue(0);
         const init_y = useSharedValue(0);
@@ -39,6 +34,15 @@ export function EditImageModal(props) {
         .onUpdate((e) => {
             position_x.value = e.translationX + init_x.value;
             position_y.value = e.translationY + init_y.value;
+
+            var topLeft = [position_x.value, position_y.value - height_Sqare.value]
+            var bottomRight = [position_x.value + width_Sqare.value - 1, position_y.value - 2]
+
+            position_x.value = Math.max(0, position_x.value);
+            position_x.value = Math.min(screen_width-width_Sqare.value, position_x.value);
+
+            position_y.value = Math.max(0, position_y.value);
+            position_y.value = Math.min(screen_height-height_Sqare.value, position_y.value);
         })
         .onEnd((e) => {
             init_x.value = position_x.value;
@@ -52,28 +56,73 @@ export function EditImageModal(props) {
             startScale.value = height_Sqare.value;
         })
         .onUpdate((event) => {
-    
             width_Sqare.value = startScale.value*event.scale
             height_Sqare.value = startScale.value*event.scale
+
+            var newX = Math.max(0, position_x.value);
+            newX = Math.min(screen_width-width_Sqare.value, newX);
+            position_x.value = newX
+
+            var newY = Math.max(0, position_y.value);
+            newY = Math.min(screen_height-height_Sqare.value, newY);
+            position_y.value = newY;
+
+            if (width_Sqare.value >= screen_width || height_Sqare.value >= screen_height){
+                width_Sqare.value = Math.min(screen_width, width_Sqare.value);
+                height_Sqare.value = Math.min(screen_height, height_Sqare.value);
+
+                newX = Math.max(0, position_x.value);
+                newX = Math.min(screen_width-width_Sqare.value, newX);
+                position_x.value = newX;
+
+                newY = Math.max(0, position_y.value);
+                newY = Math.min(screen_height-height_Sqare.value, newY);
+                position_y.value = newY;
+
+                console.log(`Square Height: ${position_y.value}`)
+                console.log(`\n`)
+                return;
+            }
+
         })
         .runOnJS(true);
     
         const boxAnimatedStyles = useAnimatedStyle(() => ({
-            width: width_Sqare.value*100,
-            height: height_Sqare.value*100,
+            width: width_Sqare.value,
+            height: height_Sqare.value,
             top: position_y.value,
             left: position_x.value,
+        }));
+
+        const topLeftBox = useAnimatedStyle(() => ({
+            width: 1,
+            height: 1,
+            top: position_y.value - height_Sqare.value,
+            left: position_x.value,
+            backgroundColor: 'rgb(0, 255, 0)',
+            zIndex: 999,
+        }));
+
+        const bottomrightBox = useAnimatedStyle(() => ({
+            width: 1,
+            height: 1,
+            top: position_y.value - 2,
+            left: position_x.value + width_Sqare.value - 1,
+            backgroundColor: 'rgb(0, 255, 0)',
+            zIndex: 999,
         }));
 
         return(
             <GestureHandlerRootView style={styles.containerG}>
                 <GestureDetector gesture={panGesture}>
                     <GestureDetector gesture={pinch}>
-                        {/* <Animated.View style={[styles.boxG, boxAnimatedStyles]}></Animated.View> */}
-                        <Animated.View style={[styles.imageContainer, boxAnimatedStyles]}>
-                            <Image style={styles.image} source={{ uri: props.uri }}/>
-                        </Animated.View>
-                        
+                        <View>
+                            <Animated.View style={[styles.imageContainer, boxAnimatedStyles]}>
+                                <Image style={styles.image} source={{ uri: props.uri }}/>
+                            </Animated.View>
+                            <Animated.View style={topLeftBox}></Animated.View>
+                            <Animated.View style={bottomrightBox}></Animated.View>
+                        </View>
                     </GestureDetector>
                 </GestureDetector>
             </GestureHandlerRootView>
@@ -97,8 +146,6 @@ export function EditImageModal(props) {
 
 const styles = StyleSheet.create({
     containerG: {
-        alignItems: 'center',
-        justifyContent: 'center',
         width: '100%',
         height: 350,
         backgroundColor: appColors.background,
@@ -110,16 +157,6 @@ const styles = StyleSheet.create({
     image: {
         width: '100%',
         height: '100%',
-    },
-    boxG: {
-        width: 100,
-        height: 100,
-        borderRadius: 20,
-        backgroundColor: '#b58df1',
-        zIndex: 16,
-        position: 'relative',
-        left: 100,
-        top: 30,
     },
 
 
