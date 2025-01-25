@@ -21,107 +21,121 @@ export function EditImageModal(props) {
         const screen_width = Dimensions.get('screen').width;
         const screen_height = styles.containerG.height
         
-        const width_Sqare = useSharedValue(styles.imageContainer.width);
-        const height_Sqare = useSharedValue(styles.imageContainer.height);
-        const startScale = useSharedValue(0);
-        const init_x = useSharedValue(0);
-        const init_y = useSharedValue(0);
-        const position_x = useSharedValue(0);
-        const position_y = useSharedValue(0);
-        const END_POSITION = 200;
+        // const width_Sqare = useSharedValue(styles.imageContainer.width);
+        // const height_Sqare = useSharedValue(styles.imageContainer.height);
+        // const startScale = useSharedValue(0);
+        // const init_x = useSharedValue(0);
+        // const init_y = useSharedValue(0);
+        // const position_x = useSharedValue(0);
+        // const position_y = useSharedValue(0);
+
+        const [width_Sqare, setWidth_Square] = useState(styles.imageContainer.width);
+        const [height_Sqare, setHeight_Square] = useState(styles.imageContainer.height);
+        const [startScaleWidth, setStartScaleWidth] = useState(0);
+        const [startScaleHeight, setStartScaleHeight] = useState(0);
+        const [init_x, setInit_x] = useState(0);
+        const [init_y, setInit_y] = useState(0);
+        const [position_x, setPosition_x] = useState(0);
+        const [position_y, setPosition_y] = useState(0);
+
+
     
         const panGesture = Gesture.Pan()
+        .onStart((e) => {
+            console.log('starting works');
+        })
         .onUpdate((e) => {
-            position_x.value = e.translationX + init_x.value;
-            position_y.value = e.translationY + init_y.value;
+            var newX;
+            var newY;
+            newX = e.translationX + init_x;
+            newY = e.translationY + init_y;
 
-            var topLeft = [position_x.value, position_y.value - height_Sqare.value]
-            var bottomRight = [position_x.value + width_Sqare.value - 1, position_y.value - 2]
+            newX = Math.max(0, newX);
+            setPosition_x(Math.min(screen_width-width_Sqare, newX));
 
-            position_x.value = Math.max(0, position_x.value);
-            position_x.value = Math.min(screen_width-width_Sqare.value, position_x.value);
-
-            position_y.value = Math.max(0, position_y.value);
-            position_y.value = Math.min(screen_height-height_Sqare.value, position_y.value);
+            newY = Math.max(0,newY);
+            setPosition_y(Math.min(screen_height-height_Sqare, newY));
         })
         .onEnd((e) => {
-            init_x.value = position_x.value;
-            init_y.value = position_y.value;
+            setInit_x(position_x);
+            setInit_y(position_y);
         });
         
 
         const pinch = Gesture.Pinch()
         .onStart(() => {
-            startScale.value = width_Sqare.value;
-            startScale.value = height_Sqare.value;
+            setStartScaleWidth(width_Sqare);
+            setStartScaleHeight(height_Sqare);
         })
         .onUpdate((event) => {
-            width_Sqare.value = startScale.value*event.scale
-            height_Sqare.value = startScale.value*event.scale
+            var newWidth;
+            var newHeight;
+            newWidth = startScaleWidth*event.scale
+            newHeight = startScaleHeight*event.scale
 
-            var newX = Math.max(0, position_x.value);
-            newX = Math.min(screen_width-width_Sqare.value, newX);
-            position_x.value = newX
+            var newX = Math.max(0, position_x);
+            newX = Math.min(screen_width-width_Sqare, newX);
+            setPosition_x(newX)
 
-            var newY = Math.max(0, position_y.value);
-            newY = Math.min(screen_height-height_Sqare.value, newY);
-            position_y.value = newY;
+            var newY = Math.max(0, position_y);
+            newY = Math.min(screen_height-height_Sqare, newY);
+            setPosition_y(newY)
 
-            if (width_Sqare.value >= screen_width || height_Sqare.value >= screen_height){
-                width_Sqare.value = Math.min(screen_width, width_Sqare.value);
-                height_Sqare.value = Math.min(screen_height, height_Sqare.value);
 
-                newX = Math.max(0, position_x.value);
-                newX = Math.min(screen_width-width_Sqare.value, newX);
-                position_x.value = newX;
+            if (width_Sqare >= screen_width || height_Sqare >= screen_height){
+                newWidth = Math.min(screen_width, newWidth);
+                newHeight = Math.min(screen_height, newHeight);
 
-                newY = Math.max(0, position_y.value);
-                newY = Math.min(screen_height-height_Sqare.value, newY);
-                position_y.value = newY;
+                newX = Math.max(0, position_x);
+                newX = Math.min(screen_width-width_Sqare, newX);
+                setPosition_x(newX)
 
-                console.log(`Square Height: ${position_y.value}`)
+                newY = Math.max(0, position_y);
+                newY = Math.min(screen_height-height_Sqare, newY);
+                setPosition_y(newY)
+
                 console.log(`\n`)
-                return;
             }
-
+            setWidth_Square(newWidth);
+            setHeight_Square(newHeight);
         })
         .runOnJS(true);
     
-        const boxAnimatedStyles = useAnimatedStyle(() => ({
-            width: width_Sqare.value,
-            height: height_Sqare.value,
-            top: position_y.value,
-            left: position_x.value,
-        }));
+        // const boxAnimatedStyles = useAnimatedStyle(() => ({
+        //     width: width_Sqare.value,
+        //     height: height_Sqare.value,
+        //     top: position_y.value,
+        //     left: position_x.value,
+        // }));
 
-        const topLeftBox = useAnimatedStyle(() => ({
-            width: 1,
-            height: 1,
-            top: position_y.value - height_Sqare.value,
-            left: position_x.value,
-            backgroundColor: 'rgb(0, 255, 0)',
-            zIndex: 999,
-        }));
+        // const topLeftBox = useAnimatedStyle(() => ({
+        //     width: 1,
+        //     height: 1,
+        //     top: position_y.value - height_Sqare.value,
+        //     left: position_x.value,
+        //     backgroundColor: 'rgb(0, 255, 0)',
+        //     zIndex: 999,
+        // }));
 
-        const bottomrightBox = useAnimatedStyle(() => ({
-            width: 1,
-            height: 1,
-            top: position_y.value - 2,
-            left: position_x.value + width_Sqare.value - 1,
-            backgroundColor: 'rgb(0, 255, 0)',
-            zIndex: 999,
-        }));
+        // const bottomrightBox = useAnimatedStyle(() => ({
+        //     width: 1,
+        //     height: 1,
+        //     top: position_y.value - 2,
+        //     left: position_x.value + width_Sqare.value - 1,
+        //     backgroundColor: 'rgb(0, 255, 0)',
+        //     zIndex: 999,
+        // }));
 
         return(
-            <GestureHandlerRootView style={styles.containerG}>
+            <GestureHandlerRootView style={styles.containerG}>  
                 <GestureDetector gesture={panGesture}>
                     <GestureDetector gesture={pinch}>
                         <View>
-                            <Animated.View style={[styles.imageContainer, boxAnimatedStyles]}>
+                            <View style={{ width: width_Sqare, height: height_Sqare, top: position_y, left: position_x}}>
                                 <Image style={styles.image} source={{ uri: props.uri }}/>
-                            </Animated.View>
-                            <Animated.View style={topLeftBox}></Animated.View>
-                            <Animated.View style={bottomrightBox}></Animated.View>
+                            </View>
+                            {/* <Animated.View style={topLeftBox}></Animated.View>
+                            <Animated.View style={bottomrightBox}></Animated.View> */}
                         </View>
                     </GestureDetector>
                 </GestureDetector>
