@@ -20,6 +20,13 @@ export function PhotoUpload(props){
     const [image, setImage] = useState(null);
     const route = useRoute();
     const navigation = useNavigation();
+    const [isEdited, setIsEdited] = useState(false);
+
+    useEffect(() =>{
+        if (image){
+            uploadImage();
+        }
+    }, [isEdited])
 
     async function uploadImage() {
         if (!image) {
@@ -66,19 +73,36 @@ export function PhotoUpload(props){
 
 
     function WithImage(){
-        return(
-            <View style={styles.container}>
-                <View style={styles.previewImage}>
-                    {image && (<Image source={{ uri: image.uri }} style={styles.previewImage} />)}
-                </View>
-                <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={() => {setImage(null);}}>
-                    <View style={styles.xContainer}>
-                        <X_SVG color={x_color}/>
+        if (isEdited){
+            return(
+                <View style={styles.container}>
+                    <View style={styles.previewImage}>
+                        {image && (<Image source={{ uri: image.uri }} style={styles.previewImage} />)}
                     </View>
-                </TouchableHighlight>
-                <EditImageModal uri={image.uri}></EditImageModal>
-            </View>
-        )
+                    <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={() => {setImage(null); setIsEdited(false);}}>
+                        <View style={styles.xContainer}>
+                            <X_SVG color={x_color}/>
+                        </View>
+                    </TouchableHighlight>
+                </View>
+            );
+        }
+
+        else{
+            return(
+                <View style={styles.container}>
+                    <TouchableHighlight style={styles.touchable} underlayColor={on_touch_color} onPress={console.log('Nice try')}>
+                        <View style={styles.imageContainer}>
+                            <View style={styles.svgContainer}>
+                                <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
+                            </View>
+                            <Text style={styles.text}>{(props.filename === 'image1.jpg')? 'Image 1': 'Image 2'}</Text>
+                        </View>
+                    </TouchableHighlight>
+                    <EditImageModal setIsEdited={setIsEdited} setImage={setImage} uri={image.uri}></EditImageModal>
+                </View>
+            );
+        }
     }
 
     function WithoutImage(){
@@ -114,7 +138,6 @@ export function UploadPhotosContainer(){
         <View style={styles.uploadContainer}>
             <PhotoUpload filename={'image1.jpg'}/>
             <PhotoUpload filename={'image2.jpg'}/>
-            {/* <PhotoUpload filename={'image2.jpg'}/> */}
         </View>
     )
 }
