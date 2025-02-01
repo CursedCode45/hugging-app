@@ -32,7 +32,10 @@
     "react-native-video": "^6.9.1",
     "react-native-web": "~0.19.13",
     "react-navigation": "^5.0.0",
-    "sharp": "^0.33.5"
+    "sharp": "^0.33.5",
+    "expo-secure-store": "~14.0.1",
+    "expo-file-system": "~18.0.8",
+    "expo-crypto": "~14.0.2"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

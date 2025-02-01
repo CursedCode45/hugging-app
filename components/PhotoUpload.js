@@ -8,20 +8,38 @@ import X_SVG from '../assets/images/XSVG';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { EditImageModal } from './ManipulateImage.js';
 import { appColors } from '../constant/AppColors';
-
+import * as SecureStore from 'expo-secure-store';
+import * as crypto from 'expo-crypto';
 
 
 const on_touch_color = appColors.buttonColor;
 const x_touch_color = appColors.buttonColor;
 const x_color = appColors.lighterDark;
 
+async function getUniqueId() {
+    let userId = await SecureStore.getItemAsync('userId');
+
+    if (userId) {
+        console.log(`At third: ${userId}`);
+        console.log(`At third: ${userId}`);
+        console.log(`At third: ${userId}`);
+        return userId;
+    }
+    else{
+        userId = crypto.randomUUID();
+        console.log(`At first: ${userId}`);
+        console.log(`At first: ${userId}`);
+        console.log(`At first: ${userId}`);
+        await SecureStore.setItemAsync('userId', userId);
+    }
+}
 
 export function PhotoUpload(props){
     const [image, setImage] = useState(null);
     const route = useRoute();
     const navigation = useNavigation();
     const [isEdited, setIsEdited] = useState(false);
-
+    
     useEffect(() =>{
         if (image){
             uploadImage();
@@ -33,7 +51,6 @@ export function PhotoUpload(props){
             Alert.alert('No image selected');
             return;
         }
-        
 
         const formData = new FormData();
         formData.append('image', {

@@ -13,19 +13,42 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "entitlements": {
+        "com.apple.developer.icloud-services": [
+          "CloudKit",
+          "CloudKit"
+        ]
+      },
+      "bundleIdentifier": "com.leka45.huggingapp",
+      "infoPlist": {
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "com.leka45.huggingapp"
     },
     "web": {
       "favicon": "./assets/favicon.png"
     },
     "plugins": [
-      ["expo-video", {"supportsBackgroundPlayback": true,"supportsPictureInPicture": true}]
-    ]
+      [
+        "expo-video",
+        {
+          "supportsBackgroundPlayback": true,
+          "supportsPictureInPicture": true
+        }
+      ],
+      "expo-secure-store"
+    ],
+    "extra": {
+      "eas": {
+        "projectId": "d5eb0207-7c10-4b1b-b750-1b046e11c721"
+      }
+    }
   }
 }
