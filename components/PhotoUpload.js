@@ -20,18 +20,12 @@ async function getUniqueId() {
     let userId = await SecureStore.getItemAsync('userId');
 
     if (userId) {
-        console.log(`At third: ${userId}`);
-        console.log(`At third: ${userId}`);
-        console.log(`At third: ${userId}`);
         return userId;
     }
     else{
         userId = crypto.randomUUID();
-        console.log(`At first: ${userId}`);
-        console.log(`At first: ${userId}`);
-        console.log(`At first: ${userId}`);
         await SecureStore.setItemAsync('userId', userId);
-    }
+    } 
 }
 
 export function PhotoUpload(props){
@@ -52,7 +46,7 @@ export function PhotoUpload(props){
             return;
         }
 
-        const formData = new FormData();
+        const formData = new FormData() ;
         formData.append('image', {
             uri: image.uri, // File URI
             type: 'image/jpeg', // MIME type
@@ -60,7 +54,8 @@ export function PhotoUpload(props){
         });
 
         try {
-            const response = await axios.post('http://192.168.100.154:8083/upload', formData);
+            const userID = await getUniqueId();
+            const response = await axios.post(`http://192.168.100.154:8083/upload?id=${userID}`, formData);
         }
         catch (error) {
             console.error('Error uploading image:', error);
@@ -113,7 +108,7 @@ export function PhotoUpload(props){
                             <View style={styles.svgContainer}>
                                 <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
                             </View>
-                            <Text style={styles.text}>{(props.filename === 'image1.jpg')? 'Image 1': 'Image 2'}</Text>
+                            <Text style={styles.text}>{(props.filename === '1.jpg')? 'Image 1': 'Image 2'}</Text>
                         </View>
                     </TouchableHighlight>
                     <EditImageModal setIsEdited={setIsEdited} setImage={setImage} uri={image.uri}></EditImageModal>
@@ -130,7 +125,7 @@ export function PhotoUpload(props){
                         <View style={styles.svgContainer}>
                             <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
                         </View>
-                        <Text style={styles.text}>{(props.filename === 'image1.jpg')? 'Image 1': 'Image 2'}</Text>
+                        <Text style={styles.text}>{(props.filename === '1.jpg')? 'Image 1': 'Image 2'}</Text>
                     </View>
                 </TouchableHighlight>
             </View>
@@ -153,8 +148,8 @@ export function PhotoUpload(props){
 export function UploadPhotosContainer(){
     return(
         <View style={styles.uploadContainer}>
-            <PhotoUpload filename={'image1.jpg'}/>
-            <PhotoUpload filename={'image2.jpg'}/>
+            <PhotoUpload filename={'1.jpg'}/>
+            <PhotoUpload filename={'2.jpg'}/>
         </View>
     )
 }
