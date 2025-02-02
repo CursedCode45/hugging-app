@@ -8,6 +8,7 @@ export const appColors = {
     textColor: '#e6e9f5',
     buttonColor: '#4366e5',
     buttonPressColor: 'rgba(74, 113, 255, 1)',
+    buttonPressedColor: 'rgb(32, 55, 139)',
     addShadow: {
         shadowColor: '#000',
         shadowOffset: { width: 0, height: 0 },

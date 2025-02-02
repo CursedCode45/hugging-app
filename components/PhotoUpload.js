@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Alert, TouchableHighlight, Text, Dimensions } from 'react-native';
+import { View, Image, StyleSheet, Alert, TouchableHighlight, Text, Modal } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import UPLOAD_SVG from '../assets/images/UploadSvg';
@@ -10,6 +10,8 @@ import { EditImageModal } from './ManipulateImage.js';
 import { appColors } from '../constant/AppColors';
 import * as SecureStore from 'expo-secure-store';
 import * as crypto from 'expo-crypto';
+import { backend_domain } from '../constant/Settings.js';
+import { Vidplays } from './Vidplays.js';
 
 
 const on_touch_color = appColors.buttonColor;
@@ -26,6 +28,19 @@ async function getUniqueId() {
         userId = crypto.randomUUID();
         await SecureStore.setItemAsync('userId', userId);
     } 
+}
+
+async function sendImageNull(image) {
+    const id = await getUniqueId();
+    const url = `${backend_domain}/remove-image?image=${image}&id=${id}`;
+    try {
+        const response = await fetch(url);
+        if (!response.ok) {
+        throw new Error(`Response status: ${response.status}`);
+        }
+    } catch (error) {
+        console.error(error.message);
+    }
 }
 
 export function PhotoUpload(props){
@@ -55,7 +70,7 @@ export function PhotoUpload(props){
 
         try {
             const userID = await getUniqueId();
-            const response = await axios.post(`http://192.168.100.154:8083/upload?id=${userID}`, formData);
+            const response = await axios.post(`${backend_domain}/upload?id=${userID}`, formData);
         }
         catch (error) {
             console.error('Error uploading image:', error);
@@ -83,6 +98,12 @@ export function PhotoUpload(props){
         }
     }
 
+    function onXpress(){
+        setImage(null);
+        setIsEdited(false);
+        sendImageNull(props.filename);
+    }
+
 
     function WithImage(){
         if (isEdited){
@@ -91,10 +112,8 @@ export function PhotoUpload(props){
                     <View style={styles.previewImage}>
                         {image && (<Image source={{ uri: image.uri }} style={styles.previewImage} />)}
                     </View>
-                    <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={() => {setImage(null); setIsEdited(false);}}>
-                        <View style={styles.xContainer}>
-                            <X_SVG color={x_color}/>
-                        </View>
+                    <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={onXpress}>
+                        <X_SVG color={x_color}/>
                     </TouchableHighlight>
                 </View>
             );
@@ -145,17 +164,77 @@ export function PhotoUpload(props){
     }
 }
 
+export function GenerateButton(){
+    const [generateClicked, setGenerateClicked] = useState(false);
+    const [userID, setUserID] = useState('');
+
+    function onGeneratePress(){
+        setGenerateClicked(true);
+        getUniqueId().then((data) => {setUserID(data)});
+    }
+
+    function onModalClose(){
+        setGenerateClicked(false);
+    }
+
+
+    async function getVideoURL(){
+        const user_id = await getUniqueId();
+        const url = `${backend_domain}/get-video?id=${user_id}`;
+
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+        } catch (error) {
+            console.error(error.message);
+        }
+    } 
+
+    if (generateClicked){
+        return(
+            <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onModalClose}>
+                <View style={styles.insideModalContainer}>
+                    <View style={styles.videoModalContainer}>
+                        <Vidplays source={`${backend_domain}/get-video?id=${userID}`}></Vidplays>
+                    </View>
+                    <TouchableHighlight style={styles.videoModalX} underlayColor={x_touch_color} onPress={onModalClose}>
+                        <X_SVG color={x_color}/>
+                    </TouchableHighlight>
+                </View>
+            </Modal>
+        )
+    }
+    else{
+        return(
+            <View style={styles.generateButtonContainer}>
+                <TouchableHighlight style={styles.generateButton} underlayColor={appColors.buttonPressedColor} onPress={onGeneratePress}>
+                    <Text style={styles.generateText}>Generate</Text>
+                </TouchableHighlight>
+            </View>
+        );
+    }
+}
+
 export function UploadPhotosContainer(){
     return(
         <View style={styles.uploadContainer}>
-            <PhotoUpload filename={'1.jpg'}/>
-            <PhotoUpload filename={'2.jpg'}/>
+            <View style={styles.photosContainer}>
+                <PhotoUpload filename={'1.jpg'}/>
+                <PhotoUpload filename={'2.jpg'}/>
+            </View>
+            <GenerateButton/>
         </View>
     )
 }
   
 const styles = StyleSheet.create({
-    uploadContainer:{
+    uploadContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+    photosContainer:{
         display: 'flex',
         flexDirection: 'row',
         marginTop: 30,
@@ -211,6 +290,56 @@ const styles = StyleSheet.create({
 
     text: {
         color: appColors.textColor,
-    }
+    },
+
+    generateButtonContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
+
+    generateButton: {
+        width: 330,
+        height: 50,
+        borderRadius: 10,
+        backgroundColor: appColors.buttonColor,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    generateText: {
+        color: appColors.textColor,
+        fontSize: 30,
+        fontFamily: 'Poppins',
+    },
+
+    insideModalContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+        width: '100%',
+        height: '100%',
+        backgroundColor: appColors.background,
+    },
+    
+    videoModalContainer: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        width: 330,
+        height: 198,
+    },
+
+    videoModalX: {
+        backgroundColor: appColors.lightColor,
+        borderRadius: 1000,
+        borderWidth: 0,
+        width: 40,
+        height: 40,
+        position: 'relative',
+        right: 0,
+        top: 0,
+    },
 
 });
