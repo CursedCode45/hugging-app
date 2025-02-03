@@ -1,8 +1,7 @@
 import { StyleSheet, Text, View } from 'react-native';
 import BottomTab from '../components/BottomTab'  
 import { appColors } from '../constant/AppColors';
-
-
+import { useEffect } from 'react';
 
 
 export default function Settings(){

@@ -12,6 +12,10 @@ import * as SecureStore from 'expo-secure-store';
 import * as crypto from 'expo-crypto';
 import { backend_domain } from '../constant/Settings.js';
 import { Vidplays } from './Vidplays.js';
+import * as FileSystem from "expo-file-system";
+import * as MediaLibrary from 'expo-media-library';
+
+
 
 
 const on_touch_color = appColors.buttonColor;
@@ -166,41 +170,41 @@ export function PhotoUpload(props){
 
 export function GenerateButton(){
     const [generateClicked, setGenerateClicked] = useState(false);
-    const [userID, setUserID] = useState('');
+    const [videoStream, setVideoStream] = useState(null);
+
+    async function getVideoFromAPI(){
+        const userID =  await getUniqueId();
+        const url = `${backend_domain}/get-video?id=${userID}`;
+        const fileUri = FileSystem.documentDirectory + "1.mp4";
+        const { uri } = await FileSystem.downloadAsync(url, fileUri);
+        setVideoStream(fileUri);
+    }
+
+    async function saveToGallery(){
+        await MediaLibrary.saveToLibraryAsync(videoStream);
+    }
 
     function onGeneratePress(){
         setGenerateClicked(true);
-        getUniqueId().then((data) => {setUserID(data)});
+        getVideoFromAPI();
     }
 
     function onModalClose(){
         setGenerateClicked(false);
     }
 
-
-    async function getVideoURL(){
-        const user_id = await getUniqueId();
-        const url = `${backend_domain}/get-video?id=${user_id}`;
-
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-        } catch (error) {
-            console.error(error.message);
-        }
-    } 
-
     if (generateClicked){
         return(
             <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onModalClose}>
                 <View style={styles.insideModalContainer}>
                     <View style={styles.videoModalContainer}>
-                        <Vidplays source={`${backend_domain}/get-video?id=${userID}`}></Vidplays>
+                        <Vidplays source={videoStream}></Vidplays>
                     </View>
                     <TouchableHighlight style={styles.videoModalX} underlayColor={x_touch_color} onPress={onModalClose}>
                         <X_SVG color={x_color}/>
+                    </TouchableHighlight>
+                    <TouchableHighlight style={styles.downloadButton} underlayColor={appColors.buttonPressedColor} onPress={saveToGallery}>
+                        <Text style={styles.downloadText}>Download</Text>
                     </TouchableHighlight>
                 </View>
             </Modal>
@@ -311,7 +315,6 @@ const styles = StyleSheet.create({
     generateText: {
         color: appColors.textColor,
         fontSize: 30,
-        fontFamily: 'Poppins',
     },
 
     insideModalContainer: {
@@ -340,6 +343,20 @@ const styles = StyleSheet.create({
         position: 'relative',
         right: 0,
         top: 0,
+    },
+
+    downloadButton: {
+        width: 330,
+        height: 50,
+        borderRadius: 10,
+        backgroundColor: appColors.buttonColor,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    downloadText: {
+        color: appColors.textColor,
+        fontSize: 30,
     },
 
 });
