@@ -22,6 +22,19 @@ const on_touch_color = appColors.buttonColor;
 const x_touch_color = appColors.buttonColor;
 const x_color = appColors.lighterDark;
 
+
+function getFormattedDate() {
+    const date = new Date();
+    
+    const optionsDate = { day: '2-digit', month: 'short', year: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-GB', optionsDate);
+
+    const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
+    const formattedTime = date.toLocaleTimeString('en-GB', optionsTime).toUpperCase();
+
+    return `${formattedDate} - ${formattedTime}`;
+}
+
 async function getUniqueId() {
     let userId = await SecureStore.getItemAsync('userId');
 
@@ -47,27 +60,22 @@ async function sendImageNull(image) {
     }
 }
 
-export function PhotoUpload(props){
-    const [image, setImage] = useState(null);
-    const route = useRoute();
-    const navigation = useNavigation();
-    const [isEdited, setIsEdited] = useState(false);
-    
+export function PhotoUpload(props){    
     useEffect(() =>{
-        if (image){
+        if (props.image){
             uploadImage();
         }
-    }, [isEdited])
+    }, [props.isEdited])
 
     async function uploadImage() {
-        if (!image) {
+        if (!props.image) {
             Alert.alert('No image selected');
             return;
         }
 
         const formData = new FormData() ;
         formData.append('image', {
-            uri: image.uri, // File URI
+            uri: props.image.uri, // File URI
             type: 'image/jpeg', // MIME type
             name: props.filename, // File name
         });
@@ -98,23 +106,23 @@ export function PhotoUpload(props){
         });
 
         if (!result.canceled) {
-            setImage(result.assets[0]); // Store selected image data
+            props.setImage(result.assets[0]); // Store selected image data
         }
     }
 
     function onXpress(){
-        setImage(null);
-        setIsEdited(false);
+        props.setImage(null);
+        props.setIsEdited(false);
         sendImageNull(props.filename);
     }
 
 
     function WithImage(){
-        if (isEdited){
+        if (props.isEdited){
             return(
                 <View style={styles.container}>
                     <View style={styles.previewImage}>
-                        {image && (<Image source={{ uri: image.uri }} style={styles.previewImage} />)}
+                        {props.image && (<Image source={{ uri: props.image.uri }} style={styles.previewImage} />)}
                     </View>
                     <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={onXpress}>
                         <X_SVG color={x_color}/>
@@ -134,7 +142,7 @@ export function PhotoUpload(props){
                             <Text style={styles.text}>{(props.filename === '1.jpg')? 'Image 1': 'Image 2'}</Text>
                         </View>
                     </TouchableHighlight>
-                    <EditImageModal setIsEdited={setIsEdited} setImage={setImage} uri={image.uri}></EditImageModal>
+                    <EditImageModal setIsEdited={props.setIsEdited} setImage={props.setImage} uri={props.image.uri}></EditImageModal>
                 </View>
             );
         }
@@ -156,7 +164,7 @@ export function PhotoUpload(props){
     }
 
 
-    if (image){
+    if (props.image){
         return(
             <WithImage/>
         );
@@ -168,14 +176,20 @@ export function PhotoUpload(props){
     }
 }
 
-export function GenerateButton(){
+export function GenerateButton(props){
     const [generateClicked, setGenerateClicked] = useState(false);
     const [videoStream, setVideoStream] = useState(null);
 
     async function getVideoFromAPI(){
         const userID =  await getUniqueId();
         const url = `${backend_domain}/get-video?id=${userID}`;
-        const fileUri = FileSystem.documentDirectory + "1.mp4";
+        var fileName = (await FileSystem.readDirectoryAsync(FileSystem.documentDirectory)).length;
+        fileName = '000000' + fileName;
+        console.log(fileName);
+        fileName = fileName.substr(fileName.length-7);
+        var date_right_now = getFormattedDate();
+        console.log(`${date_right_now}_${fileName}.mp4`);
+        const fileUri = FileSystem.documentDirectory + `${date_right_now}_${fileName}.mp4`;
         const { uri } = await FileSystem.downloadAsync(url, fileUri);
         setVideoStream(fileUri);
     }
@@ -187,6 +201,10 @@ export function GenerateButton(){
     function onGeneratePress(){
         setGenerateClicked(true);
         getVideoFromAPI();
+        props.setImage1(null);
+        props.setImage2(null);
+        props.setIsEdited1(false);
+        props.setIsEdited2(false);
     }
 
     function onModalClose(){
@@ -222,13 +240,18 @@ export function GenerateButton(){
 }
 
 export function UploadPhotosContainer(){
+    const [image1, setImage1] = useState(null);
+    const [image2, setImage2] = useState(null);
+    const [isEdited1, setIsEdited1] = useState(false);
+    const [isEdited2, setIsEdited2] = useState(false);
+
     return(
         <View style={styles.uploadContainer}>
             <View style={styles.photosContainer}>
-                <PhotoUpload filename={'1.jpg'}/>
-                <PhotoUpload filename={'2.jpg'}/>
+                <PhotoUpload isEdited={isEdited2} setIsEdited={setIsEdited2} image={image1} setImage={setImage1} filename={'1.jpg'}/>
+                <PhotoUpload isEdited={isEdited1} setIsEdited={setIsEdited1} image={image2} setImage={setImage2} filename={'2.jpg'}/>
             </View>
-            <GenerateButton/>
+            <GenerateButton isEdited1={isEdited1} setIsEdited1={setIsEdited1} isEdited2={isEdited2} setIsEdited2={setIsEdited2} image1={image1} setImage1={setImage1} image2={image2} setImage2={setImage2}/>
         </View>
     )
 }
