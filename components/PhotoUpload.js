@@ -134,7 +134,7 @@ export function PhotoUpload(props){
         else{
             return(
                 <View style={styles.container}>
-                    <TouchableHighlight style={styles.touchable} underlayColor={on_touch_color} onPress={console.log('Nice try')}>
+                    <TouchableHighlight style={styles.touchable} underlayColor={on_touch_color} onPress={() => {}}>
                         <View style={styles.imageContainer}>
                             <View style={styles.svgContainer}>
                                 <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
@@ -179,16 +179,16 @@ export function PhotoUpload(props){
 export function GenerateButton(props){
     const [generateClicked, setGenerateClicked] = useState(false);
     const [videoStream, setVideoStream] = useState(null);
+    const [buttonStyle, setButtonStyle] = useState(styles.generateButton);
+    const [buttonPressColor, setButtonPressColor] = useState(appColors.mediumDark);
 
     async function getVideoFromAPI(){
         const userID =  await getUniqueId();
         const url = `${backend_domain}/get-video?id=${userID}`;
         var fileName = (await FileSystem.readDirectoryAsync(FileSystem.documentDirectory)).length;
         fileName = '000000' + fileName;
-        console.log(fileName);
         fileName = fileName.substr(fileName.length-7);
         var date_right_now = getFormattedDate();
-        console.log(`${date_right_now}_${fileName}.mp4`);
         const fileUri = FileSystem.documentDirectory + `${date_right_now}_${fileName}.mp4`;
         const { uri } = await FileSystem.downloadAsync(url, fileUri);
         setVideoStream(fileUri);
@@ -199,17 +199,32 @@ export function GenerateButton(props){
     }
 
     function onGeneratePress(){
-        setGenerateClicked(true);
-        getVideoFromAPI();
-        props.setImage1(null);
-        props.setImage2(null);
-        props.setIsEdited1(false);
-        props.setIsEdited2(false);
+        if (props.image1 !== null && props.image2 !== null){
+            setButtonPressColor(appColors.buttonPressedColor);
+            setGenerateClicked(true);
+            getVideoFromAPI();
+            props.setImage1(null);
+            props.setImage2(null);
+            props.setIsEdited1(false);
+            props.setIsEdited2(false);
+        }
     }
 
     function onModalClose(){
         setGenerateClicked(false);
     }
+
+    useEffect(() => {
+        if (props.image1 !== null && props.image2 !== null){
+            setButtonStyle(styles.generateButton);
+            setButtonPressColor(appColors.buttonPressedColor);
+        }
+        else{
+            setButtonStyle(styles.generateButtonUnclickable);
+            setButtonPressColor(appColors.mediumDark);
+        }
+    }, [props.image1, props.image2])
+
 
     if (generateClicked){
         return(
@@ -231,7 +246,7 @@ export function GenerateButton(props){
     else{
         return(
             <View style={styles.generateButtonContainer}>
-                <TouchableHighlight style={styles.generateButton} underlayColor={appColors.buttonPressedColor} onPress={onGeneratePress}>
+                <TouchableHighlight style={buttonStyle} underlayColor={buttonPressColor} onPress={onGeneratePress}>
                     <Text style={styles.generateText}>Generate</Text>
                 </TouchableHighlight>
             </View>
@@ -331,6 +346,15 @@ const styles = StyleSheet.create({
         height: 50,
         borderRadius: 10,
         backgroundColor: appColors.buttonColor,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+
+    generateButtonUnclickable: {
+        width: 330,
+        height: 50,
+        borderRadius: 10,
+        backgroundColor: appColors.mediumDark,
         alignItems: 'center',
         justifyContent: 'center',
     },

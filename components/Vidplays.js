@@ -1,6 +1,5 @@
-import { useVideoPlayer, VideoView, VideoPlayer } from 'expo-video';
-import { useEffect, useState } from 'react';
-import { View, Button, Image, StyleSheet, Alert } from 'react-native';
+import { useVideoPlayer, VideoView } from 'expo-video';
+import { StyleSheet } from 'react-native';
 
 
 export function Vidplays(props) {

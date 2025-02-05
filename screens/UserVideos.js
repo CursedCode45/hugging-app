@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     },
 
     item: {
-      flex: 1,
+      width: '33%',
       justifyContent: 'center',
       alignItems: 'center',
       marginTop: 5,
