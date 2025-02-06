@@ -4,6 +4,7 @@ import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
 import { Vidplays } from '../components/Vidplays';
 import * as VideoThumbnails from 'expo-video-thumbnails';
+import * as MediaLibrary from 'expo-media-library';
 
 
 export function VideoItem(props){
@@ -31,6 +32,17 @@ export function VideoItem(props){
         setIsOpen(true);
     }
 
+    async function onDeleteClick(){
+        await FileSystem.deleteAsync(fileUri);
+        const allFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+        props.setFiles(allFiles);
+        setIsOpen(false);
+    }
+
+    async function onSaveClick(){
+        await MediaLibrary.saveToLibraryAsync(fileUri);
+    }
+
     function VideoModal(){
         return(
             <Modal color={appColors.background} animationType="slide" transparent={false} visible={isOpen} onRequestClose={()=>{}}>
@@ -45,11 +57,11 @@ export function VideoItem(props){
                     </View>
 
                     <View style={styles.buttonContainer}>
-                        <TouchableHighlight style={[styles.buttonTextContainer, styles.galleryTextContainer]} underlayColor={appColors.buttonPressedColor} onPress={()=>{setIsOpen(false);}}>
+                        <TouchableHighlight style={[styles.buttonTextContainer, styles.galleryTextContainer]} underlayColor={appColors.buttonPressedColor} onPress={onSaveClick}>
                             <Text style={[styles.text, styles.closeText]}>Save to Gallery</Text>
                         </TouchableHighlight>
 
-                        <TouchableHighlight style={[styles.buttonTextContainer, styles.deleteTextContainer]} underlayColor={appColors.buttonPressedColor} onPress={()=>{setIsOpen(false);}}>
+                        <TouchableHighlight style={[styles.buttonTextContainer, styles.deleteTextContainer]} underlayColor={appColors.buttonPressedColor} onPress={onDeleteClick}>
                             <Text style={[styles.text, styles.closeText]}>Delete</Text>
                         </TouchableHighlight>
                     </View>

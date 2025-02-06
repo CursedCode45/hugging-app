@@ -34,7 +34,7 @@ export default function GenerateScreen(){
           numColumns={3} // Number of columns
           renderItem={({ item }) => (
             <View style={styles.item}>
-              <VideoItem filename={item}></VideoItem>
+              <VideoItem setFiles={setFiles} filename={item}></VideoItem>
             </View>
           )}
         />

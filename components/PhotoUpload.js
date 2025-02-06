@@ -5,7 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import UPLOAD_SVG from '../assets/images/UploadSvg';
 import X_SVG from '../assets/images/XSVG';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { EditImageModal } from './ManipulateImage.js';
 import { appColors } from '../constant/AppColors';
 import * as SecureStore from 'expo-secure-store';
