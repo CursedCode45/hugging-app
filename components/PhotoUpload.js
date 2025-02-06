@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Alert, TouchableHighlight, Text, Modal } from 'react-native';
+import { View, Image, StyleSheet, Alert, TouchableHighlight, Text, Modal, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import UPLOAD_SVG from '../assets/images/UploadSvg';
@@ -13,8 +13,8 @@ import { backend_domain } from '../constant/Settings.js';
 import { Vidplays } from './Vidplays.js';
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from 'expo-media-library';
-
-
+import { Loading } from './Loading.js';
+import { wp, hp } from '../constant/Helpers.js';
 
 
 const on_touch_color = appColors.buttonColor;
@@ -176,6 +176,7 @@ export function PhotoUpload(props){
 }
 
 export function GenerateButton(props){
+    const [gettingVideo, setGettingVideo] = useState(false);
     const [generateClicked, setGenerateClicked] = useState(false);
     const [videoStream, setVideoStream] = useState(null);
     const [buttonStyle, setButtonStyle] = useState(styles.generateButton);
@@ -191,6 +192,7 @@ export function GenerateButton(props){
         const fileUri = FileSystem.documentDirectory + `${date_right_now}_${fileName}.mp4`;
         const { uri } = await FileSystem.downloadAsync(url, fileUri);
         setVideoStream(fileUri);
+        setGettingVideo(false);
     }
 
     async function saveToGallery(){
@@ -202,6 +204,7 @@ export function GenerateButton(props){
             setButtonPressColor(appColors.buttonPressedColor);
             setGenerateClicked(true);
             getVideoFromAPI();
+            setGettingVideo(true);
             props.setImage1(null);
             props.setImage2(null);
             props.setIsEdited1(false);
@@ -211,6 +214,7 @@ export function GenerateButton(props){
 
     function onModalClose(){
         setGenerateClicked(false);
+        setGettingVideo(false);
     }
 
     useEffect(() => {
@@ -229,15 +233,27 @@ export function GenerateButton(props){
         return(
             <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onModalClose}>
                 <View style={styles.insideModalContainer}>
-                    <View style={styles.videoModalContainer}>
-                        <Vidplays source={videoStream}></Vidplays>
-                    </View>
-                    <TouchableHighlight style={styles.videoModalX} underlayColor={x_touch_color} onPress={onModalClose}>
-                        <X_SVG color={x_color}/>
-                    </TouchableHighlight>
-                    <TouchableHighlight style={styles.downloadButton} underlayColor={appColors.buttonPressedColor} onPress={saveToGallery}>
-                        <Text style={styles.downloadText}>Download</Text>
-                    </TouchableHighlight>
+
+                    {
+                    (gettingVideo)?
+                        <View style={{width: wp(100), height: hp(100), justifyContent: 'center', alignItems: 'center'}}>
+                            <ActivityIndicator size={'large'} style={{transform: [{ scale: 3 }]}} color={appColors.lightColor}/>
+                        </View>
+                        :
+                        <>
+                            <TouchableHighlight style={styles.downloadButton} underlayColor={appColors.buttonPressedColor} onPress={onModalClose}>
+                                <Text style={styles.downloadText}>Close</Text>
+                            </TouchableHighlight>
+
+                            <View style={styles.videoModalContainer}>
+                                <Vidplays source={videoStream}></Vidplays>
+                            </View>
+
+                            <TouchableHighlight style={styles.downloadButton} underlayColor={appColors.buttonPressedColor} onPress={saveToGallery}>
+                                <Text style={styles.downloadText}>Download</Text>
+                            </TouchableHighlight>
+                        </>
+                    }
                 </View>
             </Modal>
         )
@@ -395,6 +411,8 @@ const styles = StyleSheet.create({
         width: 330,
         height: 50,
         borderRadius: 10,
+        marginBottom: 20,
+        marginTop: 20,
         backgroundColor: appColors.buttonColor,
         alignItems: 'center',
         justifyContent: 'center',

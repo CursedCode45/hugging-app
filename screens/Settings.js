@@ -8,7 +8,6 @@ import * as SecureStore from 'expo-secure-store';
 
 async function getUniqueId() {
     let userId = await SecureStore.getItemAsync('userId');
-    console.log(userId);
     if (userId) {
         return userId;
     }
@@ -32,7 +31,6 @@ export default function Settings(){
 
   useEffect(() => {
     getUniqueId().then((data) => {setUserID(data);});
-    console.log(userID);
   }, [])
 
   return(

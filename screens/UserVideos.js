@@ -1,29 +1,20 @@
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import * as React from 'react';
 import BottomTab from '../components/BottomTab'  
-import { useNavigation } from '@react-navigation/native';
 import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
-import { Vidplays } from '../components/Vidplays';
 import { VideoItem } from '../components/VideoItem';
+import { wp } from '../constant/Helpers';
 
 
 export default function GenerateScreen(){
     const [files, setFiles] = React.useState([]);
 
     React.useEffect(() => {
-        
         FileSystem.readDirectoryAsync(FileSystem.documentDirectory).then((result) => {
           setFiles(result);
         });
     }, [])
-
-    React.useEffect(() => {
-      if (files.length > 0) {
-        console.log(files)
-      }
-    }, [files])
-
 
     return(
     <View style={styles.container}>
@@ -58,10 +49,8 @@ const styles = StyleSheet.create({
     },
 
     item: {
-      width: '33%',
+      width: wp(33),
       justifyContent: 'center',
       alignItems: 'center',
-      marginTop: 5,
-      marginBottom: 5,
     },
   });

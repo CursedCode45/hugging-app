@@ -12,11 +12,12 @@ export function Vidplays(props) {
 
   return (
       <VideoView
-      style={styles.video}
-      player={player}
-      allowsFullscreen={false} // Disables fullscreen button
-      allowsPictureInPicture={true} // Disables picture-in-picture mode
-      nativeControls={false}
+        style={styles.video}
+        player={player}
+        allowsFullscreen={false} // Disables fullscreen button
+        allowsPictureInPicture={true} // Disables picture-in-picture mode
+        nativeControls={false}
+        onLoad={props.handleLoad}
     />
   )
 }

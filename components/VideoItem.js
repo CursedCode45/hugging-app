@@ -1,10 +1,11 @@
-import { StyleSheet, Text, View, Image, Modal, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Image, TouchableHighlight } from 'react-native';
 import * as React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
-import { Vidplays } from '../components/Vidplays';
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import * as MediaLibrary from 'expo-media-library';
+import { Loading } from '../components/Loading';
+import { UserVideoModal } from './UserVideoModal';
+import { wp, hp } from '../constant/Helpers';
 
 
 export function VideoItem(props){
@@ -13,10 +14,18 @@ export function VideoItem(props){
     const [date_right_now, fileName] = props.filename.split('_')
     const fileUri = FileSystem.documentDirectory + props.filename;
 
-    async function generateThumbnail(){
+    async function getThumbnail(){
+        const thumbnailUri = FileSystem.cacheDirectory + props.filename.replace('.mp4', '.jpg')
+        const thumbnailExists = (await FileSystem.getInfoAsync(thumbnailUri)).exists;
+        if (thumbnailExists){
+            setThumbnail(thumbnailUri);
+            return;
+        }
+
         try {
             const { uri } = await VideoThumbnails.getThumbnailAsync(fileUri, {time: 0});
             setThumbnail(uri);
+            await FileSystem.downloadAsync(uri, thumbnailUri);
         }
         catch (e) {
             console.warn(e);
@@ -24,108 +33,58 @@ export function VideoItem(props){
     };
 
     React.useEffect(() => {
-        generateThumbnail();
-        console.log(thumbnail);
+        getThumbnail();
     }, [])
 
     function onVideoItemClick(){
         setIsOpen(true);
     }
 
-    async function onDeleteClick(){
-        await FileSystem.deleteAsync(fileUri);
-        const allFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-        props.setFiles(allFiles);
-        setIsOpen(false);
-    }
-
-    async function onSaveClick(){
-        await MediaLibrary.saveToLibraryAsync(fileUri);
-    }
-
-    function VideoModal(){
+    function VideoItemText(){
         return(
-            <Modal color={appColors.background} animationType="slide" transparent={false} visible={isOpen} onRequestClose={()=>{}}>
-                <View style={styles.modalContainer}>
-
-                    <TouchableHighlight style={styles.closeTextContainer} underlayColor={appColors.buttonPressedColor} onPress={()=>{setIsOpen(false);}}>
-                        <Text style={[styles.text, styles.closeText]}>Close</Text>
-                    </TouchableHighlight>
-
-                    <View style={styles.modalVideoContainer}>
-                        <Vidplays source={fileUri}/>
-                    </View>
-
-                    <View style={styles.buttonContainer}>
-                        <TouchableHighlight style={[styles.buttonTextContainer, styles.galleryTextContainer]} underlayColor={appColors.buttonPressedColor} onPress={onSaveClick}>
-                            <Text style={[styles.text, styles.closeText]}>Save to Gallery</Text>
-                        </TouchableHighlight>
-
-                        <TouchableHighlight style={[styles.buttonTextContainer, styles.deleteTextContainer]} underlayColor={appColors.buttonPressedColor} onPress={onDeleteClick}>
-                            <Text style={[styles.text, styles.closeText]}>Delete</Text>
-                        </TouchableHighlight>
-                    </View>
-                </View>
-            </Modal>
-        )
-    }
-
-    if (isOpen){
-        return(
-            <VideoModal/>
+            <View style={styles.textContainer}>
+                <Text style={[styles.text, styles.text1]}>{fileName}</Text>
+                <Text style={[styles.text, styles.text2]}>{date_right_now}</Text>
+            </View>
         );
     }
-
-    else{
-        return(
-            <TouchableHighlight underlayColor={appColors.buttonPressedColor} onPress={onVideoItemClick}>
+    
+    return(
+        <View styles={styles.videoItemContainer}>
+            <TouchableHighlight style={styles.touchable} underlayColor={appColors.buttonPressedColor} onPress={onVideoItemClick}>
                 <View>
                     <View style={styles.thumbnailContainer}>
                         <Image source={{ uri: thumbnail }} style={styles.thumbnail}/>
                     </View>
-                    <View style={styles.textContainer}>
-                        <Text style={[styles.text, styles.text1]}>{fileName}</Text>
-                        <Text style={[styles.text, styles.text2]}>{date_right_now}</Text>
-                    </View>
-                    {(isOpen)? <VideoModal/> : null}
+                    {false && <VideoItemText/>}
                 </View>
             </TouchableHighlight>
-        )
-    }
+
+            {isOpen && <UserVideoModal isOpen={isOpen} setIsOpen={setIsOpen} fileUri={fileUri} setFiles={props.setFiles}/>}
+        </View>
+    )
 }
 
 
 const styles = StyleSheet.create({
-    modalContainer: {
-        flex: 1,
-        backgroundColor: appColors.background,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-
-    modalVideoContainer: {
-        width: '90%',
-        height: 100,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: appColors.lighterDark,
-        
-    },
-
-    thumbnail: {
-        flex: 1,
-        width: 100,
-        height: 100,
-    },
-
-    videoContainer: {
+    videoItemContainer: {
         width: '100%',
-        height: 92,
+        height: '100%',
+    },
+
+    touchable:{
+        width: '100%',
     },
 
     thumbnailContainer:{
         width: '100%',
-        height: 92,
+    },
+
+    thumbnail: {
+        padding: 3,
+        flex: 1,
+        width: wp(33.3),
+        height: wp(33.3),
     },
 
     textContainer: {
