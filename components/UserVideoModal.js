@@ -5,19 +5,14 @@ import * as FileSystem from "expo-file-system";
 import { Vidplays } from '../components/Vidplays';
 import * as MediaLibrary from 'expo-media-library';
 import { Loading } from '../components/Loading';
+import { hp, wp } from '../constant/Helpers';
+import { setVideoSize } from '../constant/Helpers';
 
-export function UserVideoModal({isOpen, setIsOpen, fileUri, setFiles}){
+
+export function UserVideoModal({videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
         const [isSaving, setIsSaving] = React.useState(false);
-        const [videoDimensions, setVideoDimensions] = React.useState({ width: 0, height: 0 });
 
-        function handleLoad(metadata){
-            setVideoDimensions({
-                width: metadata.naturalSize.width,
-                height: metadata.naturalSize.height,
-            });
-            console.log(`Video Width ${videoDimensions.width}`);
-            console.log(`Video Height ${videoDimensions.height}`);
-        };
+        const videoAspectRatio = videoWidth/videoHeight;
   
         async function onDeleteClick(){
             await FileSystem.deleteAsync(fileUri);
@@ -52,14 +47,14 @@ export function UserVideoModal({isOpen, setIsOpen, fileUri, setFiles}){
         }
 
         return(
-            <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={()=>{}}>
+            <Modal color={appColors.background} animationType="none" transparent={false} visible={true} onRequestClose={()=>{}}>
                 <View style={styles.modalContainer}>
                     <TouchableHighlight style={styles.closeTextContainer} underlayColor={appColors.buttonPressedColor} onPress={()=>{setIsOpen(false);}}>
                         <Text style={[styles.text, styles.closeText]}>Close</Text>
                     </TouchableHighlight>
 
-                    <View style={styles.modalVideoContainer}>
-                        <Vidplays source={fileUri} handleLoad={handleLoad}/>
+                    <View style={[styles.modalVideoContainer, {width: wp(90), height: wp(90)/videoAspectRatio}]}>
+                        <Vidplays source={fileUri}/>
                     </View>
 
                     <View style={styles.buttonContainer}>
@@ -84,12 +79,8 @@ const styles = StyleSheet.create({
     },
 
     modalVideoContainer: {
-        width: '90%',
-        height: 100,
         justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: appColors.lighterDark,
-        
+        alignItems: 'center',        
     },
 
     thumbnail: {

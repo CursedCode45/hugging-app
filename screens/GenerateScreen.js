@@ -37,6 +37,7 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       width: 330,
       height: 198,
+      backgroundColor: appColors.lighterDark,
       ...appColors.addShadow,
       borderRadius: 20,
     },

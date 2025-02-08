@@ -49,7 +49,8 @@ const styles = StyleSheet.create({
     },
 
     item: {
-      width: wp(33),
+      width: wp(33.333),
+      height: wp(33.333),
       justifyContent: 'center',
       alignItems: 'center',
     },
