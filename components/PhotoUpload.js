@@ -15,6 +15,7 @@ import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from 'expo-media-library';
 import { Loading } from './Loading.js';
 import { wp, hp } from '../constant/Helpers.js';
+import { setVideoSize } from '../constant/Helpers.js';
 
 
 const on_touch_color = appColors.buttonColor;
@@ -176,6 +177,10 @@ export function PhotoUpload(props){
 }
 
 export function GenerateButton(props){
+    const [videoWidth, setVideoWidth] = useState(0);
+    const [videoHeight, setVideoHeight] = useState(0);
+    const [videoAspectRatio, setVideoAspectRatio] = useState(1);
+
     const [gettingVideo, setGettingVideo] = useState(false);
     const [generateClicked, setGenerateClicked] = useState(false);
     const [videoStream, setVideoStream] = useState(null);
@@ -191,6 +196,7 @@ export function GenerateButton(props){
         var date_right_now = getFormattedDate();
         const fileUri = FileSystem.documentDirectory + `${date_right_now}_${fileName}.mp4`;
         const { uri } = await FileSystem.downloadAsync(url, fileUri);
+        setVideoSize(fileUri, setVideoWidth, setVideoHeight, setVideoAspectRatio);
         setVideoStream(fileUri);
         setGettingVideo(false);
     }
@@ -245,7 +251,7 @@ export function GenerateButton(props){
                                 <Text style={styles.downloadText}>Close</Text>
                             </TouchableHighlight>
 
-                            <View style={styles.videoModalContainer}>
+                            <View style={[styles.videoModalContainer, {width: wp(85), height: wp(85)/videoAspectRatio}]}>
                                 <Vidplays source={videoStream}></Vidplays>
                             </View>
 
@@ -392,8 +398,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        width: 330,
-        height: 198,
+        width: wp(90),
+        height: wp(90)/1.66666,
     },
 
     videoModalX: {

@@ -16,5 +16,12 @@ export const appColors = {
         shadowRadius: 20,
         elevation: 5,
     },
+    addShadowLarge: {
+        shadowColor: '#000',
+        shadowOffset: { width: 0, height: 0 },
+        shadowOpacity: 1,
+        shadowRadius: 20,
+        elevation: 5,
+    },
 
 }

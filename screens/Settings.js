@@ -34,47 +34,49 @@ export default function Settings(){
   }, [])
 
   return(
-    <View style={styles.container}>
-      <View style={styles.btnContainer}>
+    <>
+      <View style={styles.container}>
+        <View style={styles.btnContainer}>
 
-        <TouchableHighlight style={styles.textContainer} underlayColor={appColors.buttonColor} onPress={()=>{}}>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>👤</Text>
-            <Text style={styles.text}>User ID -</Text>
-            <Text style={styles.idText}>{userID}</Text>
-          </View>
-        </TouchableHighlight>
+          <TouchableHighlight style={styles.textContainer} underlayColor={appColors.buttonColor} onPress={()=>{}}>
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>👤</Text>
+              <Text style={styles.text}>User ID -</Text>
+              <Text style={styles.idText}>{userID}</Text>
+            </View>
+          </TouchableHighlight>
 
-        <View style={styles.horizontalLine}></View>
+          <View style={styles.horizontalLine}></View>
 
-        <TouchableHighlight style={styles.textContainer} underlayColor={appColors.buttonColor} onPress={()=>{}}>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>🔒</Text>
-            <Text style={styles.text}>Privacy Policy</Text>
-          </View>
-        </TouchableHighlight>
-      
-        <View style={styles.horizontalLine}></View>
+          <TouchableHighlight style={styles.textContainer} underlayColor={appColors.buttonColor} onPress={()=>{}}>
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>🔒</Text>
+              <Text style={styles.text}>Privacy Policy</Text>
+            </View>
+          </TouchableHighlight>
+        
+          <View style={styles.horizontalLine}></View>
 
-        <TouchableHighlight style={styles.textContainer} underlayColor={appColors.buttonColor} onPress={()=>{}}>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>⚖️</Text>
-            <Text style={styles.text}>Terms of Use</Text>
-          </View>
-        </TouchableHighlight>
+          <TouchableHighlight style={styles.textContainer} underlayColor={appColors.buttonColor} onPress={()=>{}}>
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>⚖️</Text>
+              <Text style={styles.text}>Terms of Use</Text>
+            </View>
+          </TouchableHighlight>
 
-        <View style={styles.horizontalLine}></View>
+          <View style={styles.horizontalLine}></View>
 
-        <TouchableHighlight style={styles.textContainer} underlayColor={appColors.buttonColor} onPress={deleteAllVideos}>
-          <View style={styles.textContainer}>
-            <Text style={styles.text}>🗑️</Text>
-            <Text style={styles.text}>Delete All Videos</Text>
-          </View>
-        </TouchableHighlight>
+          <TouchableHighlight style={styles.textContainer} underlayColor={appColors.buttonColor} onPress={deleteAllVideos}>
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>🗑️</Text>
+              <Text style={styles.text}>Delete All Videos</Text>
+            </View>
+          </TouchableHighlight>
 
+        </View>
       </View>
       <BottomTab></BottomTab>
-    </View>
+    </>
   );
 }
 

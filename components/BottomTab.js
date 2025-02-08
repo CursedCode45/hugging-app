@@ -56,10 +56,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     width: '100%',
     height: hp(12),
-    position: 'absolute',
+    position: 'fixed',
     bottom: 0,
     backgroundColor: appColors.bottomTab,
-    ...appColors.addShadow
+    ...appColors.addShadowLarge
   },
 
   buttonContainer: {

@@ -12,13 +12,16 @@ export default function GenerateScreen(){
 
 
     return(
-    <View style={styles.container}>
-        <View style={styles.videoContainer}>
-          <Vidplays source={Hug_video}/>
+      <>
+        <View style={styles.container}>
+            <View style={styles.videoContainer}>
+              <Vidplays source={Hug_video}/>
+            </View>
+            <UploadPhotosContainer/>
         </View>
-        <UploadPhotosContainer></UploadPhotosContainer>
-        <BottomTab></BottomTab>
-    </View>
+        <BottomTab/>
+      </>
+
     );
 }
 
@@ -27,6 +30,8 @@ const styles = StyleSheet.create({
     container: {
       display: 'flex',
       flex: 1,
+      width: '100%',
+      height: '100%',
       justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: appColors.background,

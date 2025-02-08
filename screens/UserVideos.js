@@ -1,4 +1,4 @@
-import { StyleSheet, View, FlatList } from 'react-native';
+import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
 import * as React from 'react';
 import BottomTab from '../components/BottomTab'  
 import { appColors } from '../constant/AppColors';
@@ -17,20 +17,21 @@ export default function GenerateScreen(){
     }, [])
 
     return(
-    <View style={styles.container}>
-        <FlatList
-          style={styles.flatList}
-          data={files}
-          keyExtractor={(item, index) => index.toString()}
-          numColumns={3} // Number of columns
-          renderItem={({ item }) => (
-            <View style={styles.item}>
-              <VideoItem setFiles={setFiles} filename={item}></VideoItem>
-            </View>
-          )}
-        />
-        <BottomTab/>
-    </View>
+        <View style={styles.container}>
+            <FlatList
+              style={styles.flatList}
+              data={files}
+              scrollEnabled={true}
+              keyExtractor={(item, index) => index.toString()}
+              numColumns={3} // Number of columns
+              renderItem={({ item }) => (
+                <View style={styles.item}>
+                  <VideoItem setFiles={setFiles} filename={item}></VideoItem>
+                </View>
+              )}
+            />
+            <BottomTab></BottomTab>
+        </View>
     );
 }
 
@@ -44,6 +45,7 @@ const styles = StyleSheet.create({
 
     flatList:{
       marginTop: 60,
+      flex: 1,
       display: 'flex',
       backgroundColor: appColors.background,
     },

@@ -18,11 +18,12 @@ export function hp(percentage){
     return ((screenHeight*percentage)/100);
 }
 
-export async function setVideoSize(videoURI, setWidth, setHeight){
+export async function setVideoSize(videoURI, setWidth, setHeight, setAspectRatio=() => {}){
     const thumbnailURI = await VideoThumbnails.getThumbnailAsync(videoURI, {time: 0});
     const {width, height} = await Image.getSize(thumbnailURI);
     setWidth(width);
     setHeight(height);
+    setAspectRatio(width/height);
 }
 
 export async function setImageSize(imageURI, setWidth, setHeight){
