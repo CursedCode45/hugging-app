@@ -10,10 +10,24 @@ import { wp } from '../constant/Helpers';
 export default function GenerateScreen(){
     const [files, setFiles] = React.useState([]);
 
+    async function readVideos(){
+      try{
+        const results = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+        var filtered_files = [];
+        for (const item of results){
+          const itemURI = FileSystem.documentDirectory+item;
+          const isDir = (await FileSystem.getInfoAsync(itemURI)).isDirectory
+          if (!isDir){
+            filtered_files.push(item)
+          }
+        }
+        setFiles(filtered_files);
+      }
+      catch(e){console.warn(e);}
+    }
+
     React.useEffect(() => {
-        FileSystem.readDirectoryAsync(FileSystem.documentDirectory).then((result) => {
-          setFiles(result);
-        });
+      readVideos();
     }, [])
 
     return(

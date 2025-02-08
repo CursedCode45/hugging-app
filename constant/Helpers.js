@@ -1,6 +1,7 @@
 import {Dimensions} from 'react-native';
 import { Image } from 'react-native';
 import * as VideoThumbnails from 'expo-video-thumbnails';
+import * as FileSystem from "expo-file-system";
 import path from 'path-browserify';
 
 
@@ -31,3 +32,16 @@ export async function setImageSize(imageURI, setWidth, setHeight){
     setWidth(width);
     setHeight(height);
 }
+
+export async function createNewDocumentSubDir(dirName){
+    const folderUri = FileSystem.documentDirectory + dirName;
+    try {
+        const folderInfo = await FileSystem.getInfoAsync(folderUri);
+        if (!folderInfo.exists) {
+            await FileSystem.makeDirectoryAsync(folderUri, { intermediates: true });
+        }
+    }
+    catch (error) {
+        console.error('Error creating folder:', error);
+    }
+};

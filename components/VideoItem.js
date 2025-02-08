@@ -34,6 +34,7 @@ export function VideoItem(props){
             await FileSystem.downloadAsync(uri, thumbnailUri);
         }
         catch (e) {
+            console.warn(thumbnailUri);
             console.warn(e);
         }
     };

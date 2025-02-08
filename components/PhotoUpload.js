@@ -195,7 +195,7 @@ export function GenerateButton(props){
         fileName = fileName.substr(fileName.length-7);
         var date_right_now = getFormattedDate();
         const fileUri = FileSystem.documentDirectory + `${date_right_now}_${fileName}.mp4`;
-        const { uri } = await FileSystem.downloadAsync(url, fileUri);
+        await FileSystem.downloadAsync(url, fileUri);
         setVideoSize(fileUri, setVideoWidth, setVideoHeight, setVideoAspectRatio);
         setVideoStream(fileUri);
         setGettingVideo(false);
