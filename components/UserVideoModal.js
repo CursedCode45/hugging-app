@@ -1,4 +1,5 @@
-import { StyleSheet, Text, View, Image, Modal, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Modal, TouchableHighlight, useAnimatedValue } from 'react-native';
+import Animated from 'react-native-reanimated';
 import * as React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
@@ -6,13 +7,68 @@ import { Vidplays } from '../components/Vidplays';
 import * as MediaLibrary from 'expo-media-library';
 import { Loading } from '../components/Loading';
 import { hp, wp } from '../constant/Helpers';
-import { setVideoSize } from '../constant/Helpers';
+import { useNavigation } from '@react-navigation/native';
+import { SharedElement } from 'react-navigation-shared-element';
 
 
-export function UserVideoModal({videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
+export function UserVideoModal({ route }){
+        // Navigation
+        const {fileIndex, videoWidth, videoHeight, isOpen, fileUri} = route.params; 
+        const navigation = useNavigation();
+
         const [isSaving, setIsSaving] = React.useState(false);
-
         const videoAspectRatio = videoWidth/videoHeight;
+
+
+        // const fadeAnim = useAnimatedValue(0);
+        // const scaleInButtonsAnim = useAnimatedValue(0);
+
+        // // Video Size and Position animation values
+        // const videoWidthAnim = useAnimatedValue(wp(33.333));
+        // const videoHeightAnim = useAnimatedValue(wp(33.333));
+
+        // const videoXAnim = useAnimatedValue(0);
+        // const videoYAnim = useAnimatedValue(0);
+
+        // function fadeIn(){
+        //     Animated.timing(fadeAnim, {
+        //         toValue: 1,
+        //         duration: 200,
+        //         useNativeDriver: true,
+        //     }).start();
+        // }
+
+        // function scaleIn(){
+        //     Animated.timing(scaleInButtonsAnim, {
+        //         toValue: wp(90)/videoAspectRatio,
+        //         duration: 200,
+        //         useNativeDriver: false,
+        //     }).start();
+        // }
+
+        // function videoScale(){
+        //     const videoScaleAnimationDuration = 1500;
+
+        //     Animated.timing(videoHeightAnim, {
+        //         toValue: wp(90)/videoAspectRatio,
+        //         duration: videoScaleAnimationDuration,
+        //         useNativeDriver: false,
+        //     }).start();
+
+        //     Animated.timing(videoWidthAnim, {
+        //         toValue: wp(90),
+        //         duration: videoScaleAnimationDuration,
+        //         useNativeDriver: false,
+        //     }).start();
+        // }
+
+        // React.useEffect(() => {
+        //     fadeIn();
+        //     scaleIn();
+        //     videoScale();
+        //     console.log(fileIndex);
+        // }, [])
+
   
         async function onDeleteClick(){
             await FileSystem.deleteAsync(fileUri);
@@ -46,28 +102,51 @@ export function UserVideoModal({videoWidth, videoHeight, isOpen, setIsOpen, file
             );
         }
 
+        function DeleteButton(){
+            return(
+            <TouchableHighlight style={[styles.buttonTextContainer, styles.deleteTextContainer]} underlayColor={appColors.buttonPressedColor} onPress={onDeleteClick}>
+                <Text style={[styles.text, styles.closeText]}>Delete</Text>
+            </TouchableHighlight>
+            );
+        }
+
+        function CloseButton(){
+            return(
+                <TouchableHighlight style={styles.closeTextContainer} underlayColor={appColors.buttonPressedColor} onPress={()=>{navigation.goBack();}}>
+                    <Text style={[styles.text, styles.closeText]}>Close</Text>
+                </TouchableHighlight> 
+            );
+        }
+
+        function AllButtonsContainer({style = {}}){
+            return (
+                <View style={[styles.allButtonsContainer, style]}>
+                    <CloseButton/>
+                    <View style={[styles.buttonContainer, {marginTop: wp(90)/videoAspectRatio}]}>
+                        <SavingButton/>
+                        <DeleteButton/>
+                    </View>
+                </View>
+            );
+        }
+
+        const sharedElements = () => [{ id: "image" }];
         return(
             <Modal color={appColors.background} animationType="none" transparent={false} visible={true} onRequestClose={()=>{}}>
                 <View style={styles.modalContainer}>
-                    <TouchableHighlight style={styles.closeTextContainer} underlayColor={appColors.buttonPressedColor} onPress={()=>{setIsOpen(false);}}>
-                        <Text style={[styles.text, styles.closeText]}>Close</Text>
-                    </TouchableHighlight>
-
-                    <View style={[styles.modalVideoContainer, {width: wp(90), height: wp(90)/videoAspectRatio}]}>
+                    <AllButtonsContainer/>
+                    <View style={[styles.modalVideoContainer, {width: wp(90), height:  wp(90)/videoAspectRatio}]}>
                         <Vidplays source={fileUri}/>
-                    </View>
-
-                    <View style={styles.buttonContainer}>
-                        <SavingButton/>
-
-                        <TouchableHighlight style={[styles.buttonTextContainer, styles.deleteTextContainer]} underlayColor={appColors.buttonPressedColor} onPress={onDeleteClick}>
-                            <Text style={[styles.text, styles.closeText]}>Delete</Text>
-                        </TouchableHighlight>
+                        <SharedElement id={`image`}>
+                            <Vidplays source={fileUri}/>
+                        </SharedElement>
                     </View>
                 </View>
             </Modal>
         )
 }
+
+UserVideoModal.sharedElements = () => [{ id: "image" }];
 
 
 const styles = StyleSheet.create({
@@ -78,9 +157,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
+    allButtonsContainer: {
+        width: '100%',
+        height: hp(100),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+
     modalVideoContainer: {
         justifyContent: 'center',
-        alignItems: 'center',        
+        alignItems: 'center',
     },
 
     thumbnail: {
@@ -166,4 +252,3 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 });
-

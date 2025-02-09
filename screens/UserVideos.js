@@ -38,9 +38,9 @@ export default function GenerateScreen(){
               scrollEnabled={true}
               keyExtractor={(item, index) => index.toString()}
               numColumns={3} // Number of columns
-              renderItem={({ item }) => (
+              renderItem={({ item, index }) => (
                 <View style={styles.item}>
-                  <VideoItem setFiles={setFiles} filename={item}></VideoItem>
+                  <VideoItem fileIndex={index} setFiles={setFiles} filename={item}></VideoItem>
                 </View>
               )}
             />

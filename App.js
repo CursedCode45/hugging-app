@@ -3,6 +3,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GenerateScreen from './screens/GenerateScreen';
 import UserVideos from './screens/UserVideos';
 import Settings from './screens/Settings';
+import { UserVideoModal } from './components/UserVideoModal';
 import { appColors } from './constant/AppColors';
 const Stack = createNativeStackNavigator();
 const stack_options = {
@@ -20,6 +21,7 @@ export default function App() {
             <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
             <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
             <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
+            <Stack.Screen name='UserVideoModal' component={UserVideoModal} options={stack_options}/>
           </Stack.Navigator>
       </NavigationContainer>
     </View>

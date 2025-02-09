@@ -12,20 +12,18 @@ export function Vidplays(props) {
 
   return (
       <VideoView
-        style={styles.video}
+        style={[styles.video, props.style]}
         player={player}
         allowsFullscreen={false} // Disables fullscreen button
         allowsPictureInPicture={true} // Disables picture-in-picture mode
         nativeControls={false}
-        onLoad={props.handleLoad}
+        contentFit={'cover'}
     />
   )
 }
 
 const styles = StyleSheet.create({
   video: {
-    display: 'flex',
-    flex: 1,
     width: '100%',
     height: '100%',
     borderRadius: 10,
