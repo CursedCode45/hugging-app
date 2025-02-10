@@ -1,15 +1,12 @@
 import { StyleSheet, View, Image, TouchableHighlight } from 'react-native';
-import Animated from 'react-native-reanimated';
 import * as React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import { Loading } from '../components/Loading';
 import { UserVideoModal } from './UserVideoModal';
 import { wp, hp } from '../constant/Helpers';
 import { setImageSize } from '../constant/Helpers';
 import { useNavigation } from '@react-navigation/native';
-import { SharedElement } from 'react-navigation-shared-element';
 
 
 
@@ -26,10 +23,12 @@ export function VideoItem(props){
     const [date_right_now, fileName] = props.filename.split('_')
     const fileUri = FileSystem.documentDirectory + props.filename;
 
+
     async function getThumbnail(){
         const thumbnailUri = FileSystem.cacheDirectory + props.filename.replace('.mp4', '.jpg')
         const thumbnailExists = (await FileSystem.getInfoAsync(thumbnailUri)).exists;
         if (thumbnailExists){
+            console.log(thumbnailUri);
             await setImageSize(thumbnailUri, setThumbnailWidth, setThumbnailHeight);
             setThumbnail(thumbnailUri);
             return;
@@ -54,28 +53,22 @@ export function VideoItem(props){
 
     function onVideoItemClick(){
         setIsOpen(true);
-        navigation.navigate('UserVideoModal', {fileIndex: props.fileIndex, videoWidth: thumbnailWidth, videoHeight: thumbnailHeight, isOpen: isOpen, fileUri: fileUri});
     }
-
-    const sharedElements = () => [{ id: "image" }];
     
     return(
         <View styles={styles.videoItemContainer}>
             <TouchableHighlight style={styles.touchable} underlayColor={appColors.background} onPress={onVideoItemClick}>
                 <View>
                     <View style={styles.thumbnailContainer}>
-                        <SharedElement id={`image`}>
                             <Image source={{ uri: thumbnail }} style={styles.thumbnail}/>
-                        </SharedElement>
                     </View>
                 </View>
             </TouchableHighlight>
 
-            {/* {isOpen && <UserVideoModal fileIndex={props.fileIndex} videoWidth={thumbnailWidth} videoHeight={thumbnailHeight} isOpen={isOpen} setIsOpen={setIsOpen} fileUri={fileUri} setFiles={props.setFiles}/>} */}
+            {isOpen && <UserVideoModal fileIndex={props.fileIndex} videoWidth={thumbnailWidth} videoHeight={thumbnailHeight} isOpen={isOpen} setIsOpen={setIsOpen} fileUri={fileUri} setFiles={props.setFiles}/>}
         </View>
     )
 }
-VideoItem.sharedElements = () => [{ id: "image" }];
 
 
 const styles = StyleSheet.create({

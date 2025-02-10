@@ -5,12 +5,14 @@ import UserVideos from './screens/UserVideos';
 import Settings from './screens/Settings';
 import { UserVideoModal } from './components/UserVideoModal';
 import { appColors } from './constant/AppColors';
+import { View } from 'react-native';
+
+
 const Stack = createNativeStackNavigator();
 const stack_options = {
   headerShown: false,
   animation: 'none',
 }
-import { View } from 'react-native';
 
 
 export default function App() {
@@ -27,4 +29,5 @@ export default function App() {
     </View>
   );
 }
+
 

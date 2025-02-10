@@ -5,7 +5,6 @@ import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import UPLOAD_SVG from '../assets/images/UploadSvg';
 import X_SVG from '../assets/images/XSVG';
-import { EditImageModal } from './ManipulateImage.js';
 import { appColors } from '../constant/AppColors';
 import * as SecureStore from 'expo-secure-store';
 import * as crypto from 'expo-crypto';
@@ -60,12 +59,14 @@ async function sendImageNull(image) {
     }
 }
 
-export function PhotoUpload(props){    
-    useEffect(() =>{
-        if (props.image){
-            uploadImage();
+export function PhotoUpload(props){
+
+    useEffect(() => {
+        if (!props.image) {
+            return;
         }
-    }, [props.isEdited])
+        uploadImage();
+    }, [props.image])
 
     async function uploadImage() {
         if (!props.image) {
@@ -82,7 +83,7 @@ export function PhotoUpload(props){
 
         try {
             const userID = await getUniqueId();
-            const response = await axios.post(`${backend_domain}/upload?id=${userID}`, formData);
+            await axios.post(`${backend_domain}/upload?id=${userID}`, formData);
         }
         catch (error) {
             console.error('Error uploading image:', error);
@@ -101,7 +102,7 @@ export function PhotoUpload(props){
         // Launch the image picker
         const result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaType,
-            allowsEditing: false,
+            allowsEditing: true,
             quality: 1,
         });
 
@@ -112,40 +113,21 @@ export function PhotoUpload(props){
 
     function onXpress(){
         props.setImage(null);
-        props.setIsEdited(false);
         sendImageNull(props.filename);
     }
 
 
     function WithImage(){
-        if (props.isEdited){
-            return(
-                <View style={styles.container}>
-                    <View style={styles.previewImage}>
-                        {props.image && (<Image source={{ uri: props.image.uri }} style={styles.previewImage} />)}
-                    </View>
-                    <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={onXpress}>
-                        <X_SVG color={x_color}/>
-                    </TouchableHighlight>
+        return(
+            <View style={styles.container}>
+                <View style={styles.previewImage}>
+                    {props.image && (<Image source={{ uri: props.image.uri }} style={styles.previewImage} />)}
                 </View>
-            );
-        }
-
-        else{
-            return(
-                <View style={styles.container}>
-                    <TouchableHighlight style={styles.touchable} underlayColor={on_touch_color} onPress={() => {}}>
-                        <View style={styles.imageContainer}>
-                            <View style={styles.svgContainer}>
-                                <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
-                            </View>
-                            <Text style={styles.text}>{(props.filename === '1.jpg')? 'Image 1': 'Image 2'}</Text>
-                        </View>
-                    </TouchableHighlight>
-                    <EditImageModal setIsEdited={props.setIsEdited} setImage={props.setImage} uri={props.image.uri}></EditImageModal>
-                </View>
-            );
-        }
+                <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={onXpress}>
+                    <X_SVG color={x_color}/>
+                </TouchableHighlight>
+            </View>
+        );
     }
 
     function WithoutImage(){
@@ -213,8 +195,6 @@ export function GenerateButton(props){
             setGettingVideo(true);
             props.setImage1(null);
             props.setImage2(null);
-            props.setIsEdited1(false);
-            props.setIsEdited2(false);
         }
     }
 
@@ -278,16 +258,15 @@ export function GenerateButton(props){
 export function UploadPhotosContainer(){
     const [image1, setImage1] = useState(null);
     const [image2, setImage2] = useState(null);
-    const [isEdited1, setIsEdited1] = useState(false);
-    const [isEdited2, setIsEdited2] = useState(false);
+
 
     return(
         <View style={styles.uploadContainer}>
             <View style={styles.photosContainer}>
-                <PhotoUpload isEdited={isEdited2} setIsEdited={setIsEdited2} image={image1} setImage={setImage1} filename={'1.jpg'}/>
-                <PhotoUpload isEdited={isEdited1} setIsEdited={setIsEdited1} image={image2} setImage={setImage2} filename={'2.jpg'}/>
+                <PhotoUpload image={image1} setImage={setImage1} filename={'1.jpg'}/>
+                <PhotoUpload image={image2} setImage={setImage2} filename={'2.jpg'}/>
             </View>
-            <GenerateButton isEdited1={isEdited1} setIsEdited1={setIsEdited1} isEdited2={isEdited2} setIsEdited2={setIsEdited2} image1={image1} setImage1={setImage1} image2={image2} setImage2={setImage2}/>
+            <GenerateButton image1={image1} setImage1={setImage1} image2={image2} setImage2={setImage2}/>
         </View>
     )
 }
