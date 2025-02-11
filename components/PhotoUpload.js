@@ -6,15 +6,15 @@ import UPLOAD_SVG from '../assets/images/UploadSvg.js';
 import X_SVG from '../assets/images/XSVG.js';
 import { appColors } from '../constant/AppColors.js';
 import { backend_domain } from '../constant/Settings.js';
-import { getUniqueId } from '../constant/Helpers.js';
+import { getUniqueId, wp } from '../constant/Helpers.js';
 
 
 
 function WithoutImage({filename, onPress}){
     return(
         <View style={styles.container}>
-            <TouchableHighlight style={styles.touchable} underlayColor={appColors.buttonColor} onPress={onPress}>
-                <View style={styles.imageContainer}>
+            <TouchableHighlight style={styles.uploadTouchable} underlayColor={appColors.buttonColor} onPress={onPress}>
+                <View style={styles.iconTextContainer}>
                     <View style={styles.svgContainer}>
                         <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
                     </View>
@@ -106,11 +106,11 @@ export default function PhotoUpload({image, setImage, filename}){
 
     if (image){
         return(
-            <WithImage onRemoveImage={selectImage}/>
+            <WithImage image={image} onRemoveImage={onXpress}/>
         );
     }
     return(
-        <WithoutImage filename={filename} onPress={onXpress}/>
+        <WithoutImage filename={filename} onPress={selectImage}/>
     );
 
 }
@@ -120,38 +120,50 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 15,
-        marginRight: 15,
+        marginLeft: 10,
+        marginRight: 10,
     },
 
-    previewImage: {
-        display: 'flex',
-        borderRadius: 10,
-        width: 150,
-        height: 150,
-        ...appColors.addShadow,
-
-        borderWidth: 0.3,
-        borderColor: appColors.veryLightColor,
-    },
-
-    touchable: {
+    uploadTouchable: {
         borderRadius: 10,
     },
 
-    imageContainer:{
+    iconTextContainer:{
         backgroundColor: appColors.lighterDark,
         borderRadius: 10,
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: 150,
-        height: 150,
+        width: wp(40),
+        height: wp(40),
 
         borderWidth: 0.4,
         borderColor: appColors.veryLightColor,
 
         ...appColors.addShadow
+    },
+
+    svgContainer:{
+        width: wp(24),
+        height: wp(24),
+        marginBottom: 10,
+    },
+
+    text: {
+        color: appColors.textColor,
+        fontSize: 17,
+        fontFamily: appColors.fontSemiBold,
+    },
+
+    previewImage: {
+        display: 'flex',
+        borderRadius: 10,
+        width: wp(40),
+        height: wp(40),
+        ...appColors.addShadow,
+
+        borderWidth: 0.3,
+        borderColor: appColors.veryLightColor,
     },
 
     touchableX: {
@@ -163,15 +175,5 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: -15,
         top: -15,
-    },
-
-    svgContainer:{
-        width: 100,
-        height: 100,
-        marginBottom: 10,
-    },
-
-    text: {
-        color: appColors.textColor,
     },
 });
