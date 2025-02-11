@@ -28,9 +28,9 @@ export function UserVideoModal({fileIndex, videoWidth, videoHeight, isOpen, setI
                         <Vidplays source={fileUri}/>
                     </View>
                     
-                    <View style={[styles.buttonContainer]}>
-                        <SaveVideoButton fileUri={fileUri}/>
-                        <DeleteVideoButton onPress={onDeleteClick}/>
+                    <View style={[styles.buttonRootContainer]}>
+                        <View style={[styles.buttonContainer]}><SaveVideoButton fileUri={fileUri}/></View>
+                        <View style={[styles.buttonContainer]}><DeleteVideoButton onPress={onDeleteClick}/></View>
                     </View>
                 </View>
             </Modal>
@@ -52,11 +52,16 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
 
-    buttonContainer: {
+    buttonRootContainer: {
         display: 'flex',
         flexDirection: 'row',
-        width: '90%',
-        justifyContent: 'space-around',
+        width: wp(90),
+        justifyContent: 'space-between',
         alignItems: 'center',
     },
+    buttonContainer:{
+        display: 'flex',
+        marginTop: 10,
+        width: '48%',
+    }
 });

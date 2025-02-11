@@ -20,15 +20,13 @@ export default function DeleteVideoButton({onPress}) {
 
 const styles = StyleSheet.create({
     rootContainer: {
-        flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
 
         width: '100%',
         height: 50,
-        marginTop: 10,
         borderRadius: 10,
-        marginLeft: 5,
+        flex: 1,
 
         borderWidth: 0.2,
         borderColor: appColors.deleteButtonTextColor,

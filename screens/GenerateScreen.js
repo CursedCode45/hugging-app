@@ -1,6 +1,6 @@
 import { StyleSheet, Button, Text, View } from 'react-native';
 import BottomTab from '../components/BottomTab'  
-import { UploadPhotosContainer } from '../components/PhotoUpload';
+import { UploadPhotosContainer } from '../components/UploadPhotosContainer';
 import { useNavigation } from '@react-navigation/native'
 import { appColors } from '../constant/AppColors';
 import { Vidplays } from '../components/Vidplays';

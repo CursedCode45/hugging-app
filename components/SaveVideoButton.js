@@ -45,12 +45,9 @@ const styles = StyleSheet.create({
     rootContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-
         width: '100%',
         height: 50,
-        marginTop: 10,
         borderRadius: 10,
-        marginRight: 5,
 
         borderWidth: 0.2,
         borderColor: appColors.saveButtonTextColor,

@@ -8,7 +8,7 @@ import SaveVideoButton from './SaveVideoButton.js';
 import CloseVideoButton from './CloseVideoButton.js'
 
 
-export default function GeneratingVideoModal({gettingVideo, onModalClose, videoStream, videoAspectRatio}){
+export default function GeneratingVideoModal({modalVisible, gettingVideo, onModalClose, videoStream, videoAspectRatio}){
 
     if (gettingVideo) {
         return(
@@ -16,7 +16,7 @@ export default function GeneratingVideoModal({gettingVideo, onModalClose, videoS
             color={appColors.background}
             animationType="slide"
             transparent={false}
-            visible={true}
+            visible={modalVisible}
             onRequestClose={onModalClose}
             >
 
@@ -33,7 +33,8 @@ export default function GeneratingVideoModal({gettingVideo, onModalClose, videoS
         <Modal
             color={appColors.background}
             animationType="slide"
-            transparent={false} visible={true}
+            transparent={false}
+            visible={modalVisible}
             onRequestClose={onModalClose}>
 
             <View style={styles.container}>
@@ -74,6 +75,7 @@ const styles = StyleSheet.create({
     },
 
     saveButtonContainer: {
+        marginTop: 10,
         width: '90%'
     },
 
