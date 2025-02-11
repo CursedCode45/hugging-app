@@ -34,7 +34,7 @@ export default function Settings(){
   }, [])
 
   return(
-    <>
+    <View style={styles.rootContainer}>
       <View style={styles.container}>
         <View style={styles.btnContainer}>
 
@@ -76,12 +76,18 @@ export default function Settings(){
         </View>
       </View>
       <BottomTab></BottomTab>
-    </>
+    </View>
   );
 }
 
 
 const styles = StyleSheet.create({
+    rootContainer:{
+      display: 'flex',
+      flex: 1,
+      backgroundColor: appColors.background,
+    },
+
     container: {
       display: 'flex',
       flex: 1,

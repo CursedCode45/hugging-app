@@ -2,7 +2,7 @@ import {Dimensions} from 'react-native';
 import { Image } from 'react-native';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import * as FileSystem from "expo-file-system";
-import path from 'path-browserify';
+import * as SecureStore from 'expo-secure-store';
 
 
 const screenWidth = Dimensions.get('window').width;
@@ -45,3 +45,29 @@ export async function createNewDocumentSubDir(dirName){
         console.error('Error creating folder:', error);
     }
 };
+
+
+
+export function getFormattedDate() {
+    const date = new Date();
+    
+    const optionsDate = { day: '2-digit', month: 'short', year: 'numeric' };
+    const formattedDate = date.toLocaleDateString('en-GB', optionsDate);
+
+    const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
+    const formattedTime = date.toLocaleTimeString('en-GB', optionsTime).toUpperCase();
+
+    return `${formattedDate} - ${formattedTime}`;
+}
+
+export async function getUniqueId() {
+    let userId = await SecureStore.getItemAsync('userId');
+
+    if (userId) {
+        return userId;
+    }
+    else{
+        userId = crypto.randomUUID();
+        await SecureStore.setItemAsync('userId', userId);
+    } 
+}

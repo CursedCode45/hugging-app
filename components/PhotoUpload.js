@@ -1,20 +1,19 @@
 import React from 'react';
 import { useEffect, useState } from 'react';
-import { View, Image, StyleSheet, Alert, TouchableHighlight, Text, Modal, ActivityIndicator } from 'react-native';
+import { View, Image, StyleSheet, Alert, TouchableHighlight, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import axios from 'axios';
 import UPLOAD_SVG from '../assets/images/UploadSvg';
 import X_SVG from '../assets/images/XSVG';
 import { appColors } from '../constant/AppColors';
-import * as SecureStore from 'expo-secure-store';
-import * as crypto from 'expo-crypto';
 import { backend_domain } from '../constant/Settings.js';
-import { Vidplays } from './Vidplays.js';
 import * as FileSystem from "expo-file-system";
 import * as MediaLibrary from 'expo-media-library';
-import { Loading } from './Loading.js';
 import { wp, hp } from '../constant/Helpers.js';
 import { setVideoSize } from '../constant/Helpers.js';
+import GenerateVideoButton from './GenerateVideoButton.js';
+import GeneratingVideoModal from './GeneratingVideoModal.js';
+import { getFormattedDate, getUniqueId } from '../constant/Helpers.js';
 
 
 const on_touch_color = appColors.buttonColor;
@@ -22,63 +21,35 @@ const x_touch_color = appColors.buttonColor;
 const x_color = appColors.lighterDark;
 
 
-function getFormattedDate() {
-    const date = new Date();
-    
-    const optionsDate = { day: '2-digit', month: 'short', year: 'numeric' };
-    const formattedDate = date.toLocaleDateString('en-GB', optionsDate);
-
-    const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
-    const formattedTime = date.toLocaleTimeString('en-GB', optionsTime).toUpperCase();
-
-    return `${formattedDate} - ${formattedTime}`;
-}
-
-async function getUniqueId() {
-    let userId = await SecureStore.getItemAsync('userId');
-
-    if (userId) {
-        return userId;
-    }
-    else{
-        userId = crypto.randomUUID();
-        await SecureStore.setItemAsync('userId', userId);
-    } 
-}
-
-async function sendImageNull(image) {
-    const id = await getUniqueId();
-    const url = `${backend_domain}/remove-image?image=${image}&id=${id}`;
-    try {
-        const response = await fetch(url);
-        if (!response.ok) {
-        throw new Error(`Response status: ${response.status}`);
-        }
-    } catch (error) {
-        console.error(error.message);
-    }
-}
-
-export function PhotoUpload(props){
+function PhotoUpload({image, setImage, filename}){
 
     useEffect(() => {
-        if (!props.image) {
-            return;
+        if (image) {
+            apiUploadImage();
         }
-        uploadImage();
-    }, [props.image])
+    }, [image])
 
-    async function uploadImage() {
-        if (!props.image) {
-            Alert.alert('No image selected');
-            return;
+    
+    async function apiRemoveImage(image) {
+        const id = await getUniqueId();
+        const url = `${backend_domain}/remove-image?image=${image}&id=${id}`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
         }
+        catch (error) {
+            console.error(error.message);
+        }
+    }
 
+    async function apiUploadImage() {
         const formData = new FormData() ;
         formData.append('image', {
-            uri: props.image.uri, // File URI
-            type: 'image/jpeg', // MIME type
-            name: props.filename, // File name
+            uri: image.uri,
+            type: 'image/jpeg',
+            name: filename,
         });
 
         try {
@@ -107,13 +78,13 @@ export function PhotoUpload(props){
         });
 
         if (!result.canceled) {
-            props.setImage(result.assets[0]); // Store selected image data
+            setImage(result.assets[0]); // Store selected image data
         }
     }
 
     function onXpress(){
-        props.setImage(null);
-        sendImageNull(props.filename);
+        setImage(null);
+        apiRemoveImage(filename);
     }
 
 
@@ -121,7 +92,7 @@ export function PhotoUpload(props){
         return(
             <View style={styles.container}>
                 <View style={styles.previewImage}>
-                    {props.image && (<Image source={{ uri: props.image.uri }} style={styles.previewImage} />)}
+                    <Image source={{ uri: image.uri }} style={styles.previewImage} />
                 </View>
                 <TouchableHighlight style={styles.touchableX} underlayColor={x_touch_color} onPress={onXpress}>
                     <X_SVG color={x_color}/>
@@ -138,7 +109,7 @@ export function PhotoUpload(props){
                         <View style={styles.svgContainer}>
                             <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
                         </View>
-                        <Text style={styles.text}>{(props.filename === '1.jpg')? 'Image 1': 'Image 2'}</Text>
+                        <Text style={styles.text}>{(filename === '1.jpg')? 'Image 1': 'Image 2'}</Text>
                     </View>
                 </TouchableHighlight>
             </View>
@@ -146,19 +117,18 @@ export function PhotoUpload(props){
     }
 
 
-    if (props.image){
+    if (image){
         return(
             <WithImage/>
         );
     }
-    else{
-        return(
-            <WithoutImage/>
-        );
-    }
+    return(
+        <WithoutImage/>
+    );
+
 }
 
-export function GenerateButton(props){
+function GenerateButton({image1, setImage1, image2, setImage2}){
     const [videoWidth, setVideoWidth] = useState(0);
     const [videoHeight, setVideoHeight] = useState(0);
     const [videoAspectRatio, setVideoAspectRatio] = useState(1);
@@ -166,8 +136,6 @@ export function GenerateButton(props){
     const [gettingVideo, setGettingVideo] = useState(false);
     const [generateClicked, setGenerateClicked] = useState(false);
     const [videoStream, setVideoStream] = useState(null);
-    const [buttonStyle, setButtonStyle] = useState(styles.generateButton);
-    const [buttonPressColor, setButtonPressColor] = useState(appColors.mediumDark);
 
     async function getVideoFromAPI(){
         const userID =  await getUniqueId();
@@ -188,13 +156,12 @@ export function GenerateButton(props){
     }
 
     function onGeneratePress(){
-        if (props.image1 !== null && props.image2 !== null){
-            setButtonPressColor(appColors.buttonPressedColor);
+        if (image1 !== null && image2 !== null){
             setGenerateClicked(true);
             getVideoFromAPI();
             setGettingVideo(true);
-            props.setImage1(null);
-            props.setImage2(null);
+            setImage1(null);
+            setImage2(null);
         }
     }
 
@@ -203,56 +170,15 @@ export function GenerateButton(props){
         setGettingVideo(false);
     }
 
-    useEffect(() => {
-        if (props.image1 !== null && props.image2 !== null){
-            setButtonStyle(styles.generateButton);
-            setButtonPressColor(appColors.buttonPressedColor);
-        }
-        else{
-            setButtonStyle(styles.generateButtonUnclickable);
-            setButtonPressColor(appColors.mediumDark);
-        }
-    }, [props.image1, props.image2])
-
 
     if (generateClicked){
         return(
-            <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onModalClose}>
-                <View style={styles.insideModalContainer}>
-
-                    {
-                    (gettingVideo)?
-                        <View style={{width: wp(100), height: hp(100), justifyContent: 'center', alignItems: 'center'}}>
-                            <ActivityIndicator size={'large'} style={{transform: [{ scale: 3 }]}} color={appColors.lightColor}/>
-                        </View>
-                        :
-                        <>
-                            <TouchableHighlight style={styles.downloadButton} underlayColor={appColors.buttonPressedColor} onPress={onModalClose}>
-                                <Text style={styles.downloadText}>Close</Text>
-                            </TouchableHighlight>
-
-                            <View style={[styles.videoModalContainer, {width: wp(85), height: wp(85)/videoAspectRatio}]}>
-                                <Vidplays source={videoStream}></Vidplays>
-                            </View>
-
-                            <TouchableHighlight style={styles.downloadButton} underlayColor={appColors.buttonPressedColor} onPress={saveToGallery}>
-                                <Text style={styles.downloadText}>Download</Text>
-                            </TouchableHighlight>
-                        </>
-                    }
-                </View>
-            </Modal>
+            <GeneratingVideoModal gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio}/>
         )
     }
-    else{
-        return(
-            <View style={styles.generateButtonContainer}>
-                <TouchableHighlight style={buttonStyle} underlayColor={buttonPressColor} onPress={onGeneratePress}>
-                    <Text style={styles.generateText}>Generate</Text>
-                </TouchableHighlight>
-            </View>
-        );
-    }
+    return(
+        <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress}/>
+    );
 }
 
 export function UploadPhotosContainer(){
@@ -279,6 +205,7 @@ const styles = StyleSheet.create({
     photosContainer:{
         display: 'flex',
         flexDirection: 'row',
+        justifyContent: 'center',
         marginTop: 30,
     },
     container: {
@@ -294,7 +221,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: 150,
         height: 150,
-        ...appColors.addShadow
+        ...appColors.addShadow,
+
+        borderWidth: 0.3,
+        borderColor: appColors.veryLightColor,
     },
 
     touchable: {
@@ -309,6 +239,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: 150,
         height: 150,
+
+        borderWidth: 0.4,
+        borderColor: appColors.veryLightColor,
 
         ...appColors.addShadow
     },
@@ -348,6 +281,10 @@ const styles = StyleSheet.create({
         backgroundColor: appColors.buttonColor,
         alignItems: 'center',
         justifyContent: 'center',
+
+        borderWidth: 0.8,
+        borderColor: appColors.buttonPressedColor,
+
     },
 
     generateButtonUnclickable: {
@@ -357,20 +294,14 @@ const styles = StyleSheet.create({
         backgroundColor: appColors.mediumDark,
         alignItems: 'center',
         justifyContent: 'center',
+        
+        borderWidth: 0.4,
+        borderColor: appColors.veryLightColor,
     },
 
     generateText: {
         color: appColors.textColor,
         fontSize: 30,
-    },
-
-    insideModalContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: '100%',
-        height: '100%',
-        backgroundColor: appColors.background,
     },
     
     videoModalContainer: {

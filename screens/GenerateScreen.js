@@ -41,21 +41,27 @@ export default function GenerateScreen(){
 
 
     return(
-      <>
+      <View style={styles.rootContainer}>
         <View style={styles.container}>
             <View style={styles.videoContainer}>
-              <Vidplays source={video}/>
+              <Vidplays source={video} style={styles.videoContainer}/>
             </View>
             <UploadPhotosContainer/>
         </View>
         <BottomTab/>
-      </>
+      </View>
 
     );
 }
 
 
 const styles = StyleSheet.create({
+  rootContainer:{
+    display: 'flex',
+    flex: 1,
+    backgroundColor: appColors.background,
+  },
+
     container: {
       display: 'flex',
       flex: 1,
@@ -71,9 +77,13 @@ const styles = StyleSheet.create({
       justifyContent: 'center',
       width: 330,
       height: 198,
-      backgroundColor: appColors.lighterDark,
+
+      backgroundColor: appColors.lightColor,
       ...appColors.addShadow,
-      borderRadius: 20,
+      borderRadius: 10,
+
+      borderWidth: 0.6,
+      borderColor: appColors.veryLightColor,
     },
     text: {
       fontWeight: 1000,
