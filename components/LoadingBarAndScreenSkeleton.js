@@ -14,7 +14,7 @@ import Animated, {
 
 export default function LoadingBarAndScreenSkeleton(){
     const [text, setText] = React.useState('Loading...');
-    const colorAnim = useSharedValue(0.3);
+    const colorAnim = useSharedValue(0.2);
     const widthAnim = useSharedValue(0);
 
     const barAnimatedStyle =  useAnimatedStyle(() => {
@@ -35,7 +35,7 @@ export default function LoadingBarAndScreenSkeleton(){
     function startAnimation(){
         widthAnim.value = withTiming(wp(90-2.4), { duration: 28500 });
         colorAnim.value = withRepeat(
-            withTiming(0.7, { duration: 1000 }),
+            withTiming(0.8, { duration: 1000 }),
             -1,
             true
         )
