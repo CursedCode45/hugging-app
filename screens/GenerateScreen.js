@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 import { createNewDocumentSubDir } from '../constant/Helpers';
 import * as FileSystem from "expo-file-system";
 import { Asset } from 'expo-asset';
-
+import LoadingBarAndScreenSkeleton from '../components/LoadingBarAndScreenSkeleton.js';
 
 export default function GenerateScreen(){
     const navigation = useNavigation();
@@ -49,6 +49,7 @@ export default function GenerateScreen(){
             <UploadPhotosContainer/>
         </View>
         <BottomTab/>
+
       </View>
 
     );

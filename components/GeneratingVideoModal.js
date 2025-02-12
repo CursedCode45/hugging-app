@@ -6,41 +6,23 @@ import { wp, hp } from '../constant/Helpers.js';
 
 import SaveVideoButton from './SaveVideoButton.js';
 import CloseVideoButton from './CloseVideoButton.js'
+import LoadingBarAndScreenSkeleton from './LoadingBarAndScreenSkeleton.js';
+
 
 
 export default function GeneratingVideoModal({modalVisible, gettingVideo, onModalClose, videoStream, videoAspectRatio}){
 
-    if (gettingVideo) {
+    function WhatToRender(){
+        if(gettingVideo){
+            return(
+                <LoadingBarAndScreenSkeleton/>  
+            )
+        }
         return(
-            <Modal
-            color={appColors.background}
-            animationType="slide"
-            transparent={false}
-            visible={modalVisible}
-            onRequestClose={onModalClose}
-            >
-
-                <View style={styles.container}>
-                    <View style={styles.loadingContainer}>
-                        <ActivityIndicator size={'large'} style={styles.loading} color={appColors.closeButtonTextColor}/>
-                    </View>
-                </View>
-            </Modal>
-        )
-    }
-
-    return (
-        <Modal
-            color={appColors.background}
-            animationType="slide"
-            transparent={false}
-            visible={modalVisible}
-            onRequestClose={onModalClose}>
-
             <View style={styles.container}>
                 <CloseVideoButton onPress={onModalClose}/>
 
-                <View style={[styles.videoModalContainer, {width: wp(85), height: wp(85)/videoAspectRatio}]}>
+                <View style={{width: wp(85), height: wp(85)/videoAspectRatio}}>
                     <Vidplays source={videoStream}></Vidplays>
                 </View>
 
@@ -48,6 +30,17 @@ export default function GeneratingVideoModal({modalVisible, gettingVideo, onModa
                     <SaveVideoButton fileUri={videoStream}/>
                 </View>
             </View>
+        );
+    }
+
+    return (
+        <Modal
+        color={appColors.background}
+        animationType="slide"
+        transparent={false}
+        visible={modalVisible}
+        onRequestClose={onModalClose}>
+            <WhatToRender/>
         </Modal>
     )
 }

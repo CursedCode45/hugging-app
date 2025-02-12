@@ -28,7 +28,6 @@ export function VideoItem(props){
         const thumbnailUri = FileSystem.cacheDirectory + props.filename.replace('.mp4', '.jpg')
         const thumbnailExists = (await FileSystem.getInfoAsync(thumbnailUri)).exists;
         if (thumbnailExists){
-            console.log(thumbnailUri);
             await setImageSize(thumbnailUri, setThumbnailWidth, setThumbnailHeight);
             setThumbnail(thumbnailUri);
             return;
@@ -48,7 +47,6 @@ export function VideoItem(props){
 
     React.useEffect(() => {
         getThumbnail();
-        console.log(props.fileIndex);
     }, [])
 
     function onVideoItemClick(){

@@ -41,5 +41,7 @@ export const appColors = {
     },
 
     fontSemiBold: Platform.select({android: 'Inter_600SemiBold', ios: 'Inter-SemiBold'}),
+    fontExtraLight: Platform.select({android: 'Inter_200ExtraLight', ios: 'Inter-ExtraLight'}),
+    fontThin: Platform.select({android: 'Inter_100Thin', ios: 'Inter-Thin'}),
 
 }
