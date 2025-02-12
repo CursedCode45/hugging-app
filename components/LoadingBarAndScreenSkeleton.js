@@ -33,7 +33,7 @@ export default function LoadingBarAndScreenSkeleton(){
 
 
     function startAnimation(){
-        widthAnim.value = withTiming(wp(90-2.4), { duration: 28000 });
+        widthAnim.value = withTiming(wp(90-2.4), { duration: 28500 });
         colorAnim.value = withRepeat(
             withTiming(0.7, { duration: 1000 }),
             -1,
