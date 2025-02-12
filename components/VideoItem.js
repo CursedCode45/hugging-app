@@ -58,7 +58,7 @@ export function VideoItem(props){
             <TouchableHighlight style={styles.touchable} underlayColor={appColors.background} onPress={onVideoItemClick}>
                 <View>
                     <View style={styles.thumbnailContainer}>
-                            <Image source={{ uri: thumbnail }} style={styles.thumbnail}/>
+                        <Image source={{ uri: thumbnail }} style={styles.thumbnail}/>
                     </View>
                 </View>
             </TouchableHighlight>

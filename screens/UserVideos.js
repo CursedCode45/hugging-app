@@ -21,7 +21,7 @@ export default function GenerateScreen(){
             filtered_files.push(item)
           }
         }
-        setFiles(filtered_files);
+        setFiles(filtered_files.sort());
       }
       catch(e){console.warn(e);}
     }
