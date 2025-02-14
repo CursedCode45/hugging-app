@@ -3,6 +3,7 @@ import * as React from 'react'
 import { appColors } from '../constant/AppColors'
 import { wp } from '../constant/Helpers';
 
+
 export default function GenerateVideoButton({image1, image2, onPress}) {
     const [buttonStyle, setButtonStyle] = React.useState(styles.buttonContainerUnclickable);
     const [buttonPressColor, setButtonPressColor] = React.useState(appColors.lighterDark);

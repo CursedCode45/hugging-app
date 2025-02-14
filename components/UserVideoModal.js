@@ -14,8 +14,9 @@ export function UserVideoModal({fileIndex, videoWidth, videoHeight, isOpen, setI
   
         async function onDeleteClick(){
             await FileSystem.deleteAsync(fileUri);
-            const allFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-            setFiles(allFiles);
+            let allFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+            const fileredFiles = allFiles.filter((elem) => elem.endsWith('.mp4'))
+            setFiles(fileredFiles);
             setIsOpen(false);
         }
 

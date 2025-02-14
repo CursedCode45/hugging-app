@@ -4,18 +4,24 @@ import React from 'react'
 import { appColors } from '../constant/AppColors'
 import { Loading } from '../components/Loading';
 import * as MediaLibrary from 'expo-media-library';
+import * as FileSystem from "expo-file-system";
 
 
 export default function SaveVideoButton({fileUri}) {
     const [isSaving, setIsSaving] = React.useState(false);
-
-    function onPress(){
-        console.log('Saving...');
-        setIsSaving(true);
-        MediaLibrary.saveToLibraryAsync(fileUri);
-        setTimeout(()=>{
-            setIsSaving(false);
-        }, 600)
+    
+    async function onPress(){
+        try{
+            setIsSaving(true);
+            const videoExists = (await FileSystem.getInfoAsync(fileUri));
+            MediaLibrary.saveToLibraryAsync(videoExists.uri);
+            setTimeout(()=>{
+                setIsSaving(false);
+            }, 600)
+        }
+        catch(e){
+            console.log(e);
+        }
     }
 
 

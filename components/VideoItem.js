@@ -7,8 +7,7 @@ import { UserVideoModal } from './UserVideoModal';
 import { wp, hp } from '../constant/Helpers';
 import { setImageSize } from '../constant/Helpers';
 import { useNavigation } from '@react-navigation/native';
-
-
+import * as MediaLibrary from 'expo-media-library';
 
 
 export function VideoItem(props){
@@ -25,22 +24,27 @@ export function VideoItem(props){
 
 
     async function getThumbnail(){
-        const thumbnailUri = FileSystem.cacheDirectory + props.filename.replace('.mp4', '.jpg')
-        const thumbnailExists = (await FileSystem.getInfoAsync(thumbnailUri)).exists;
-        if (thumbnailExists){
-            await setImageSize(thumbnailUri, setThumbnailWidth, setThumbnailHeight);
-            setThumbnail(thumbnailUri);
-            return;
-        }
-
         try {
+            // Request permissions
+            const { status } = await MediaLibrary.requestPermissionsAsync();
+            if (status !== 'granted') {
+                Alert.alert('Permission required', 'Please allow access to save images.');
+                return;
+             }
+            const thumbnailUri = fileUri.replace('.mp4', '.jpg')
+            const thumbnailExists = (await FileSystem.getInfoAsync(thumbnailUri)).exists;
+            if (thumbnailExists){
+                await setImageSize(thumbnailUri, setThumbnailWidth, setThumbnailHeight);
+                setThumbnail(thumbnailUri);
+                return;
+            }
             const { uri } = await VideoThumbnails.getThumbnailAsync(fileUri, {time: 0});
             setThumbnail(uri);
             await setImageSize(uri, setThumbnailWidth, setThumbnailHeight);
-            await FileSystem.downloadAsync(uri, thumbnailUri);
+            await FileSystem.copyAsync({from: uri, to: thumbnailUri});
         }
         catch (e) {
-            console.warn(thumbnailUri);
+            console.log('VideoItem.js')
             console.warn(e);
         }
     };

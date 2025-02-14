@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { View, Image, StyleSheet, Alert, TouchableHighlight, Text } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import axios from 'axios';
 import UPLOAD_SVG from '../assets/images/UploadSvg.js';
 import X_SVG from '../assets/images/XSVG.js';
 import { appColors } from '../constant/AppColors.js';
@@ -61,16 +60,21 @@ export default function PhotoUpload({image, setImage, filename}){
     }
 
     async function apiUploadImage() {
-        const formData = new FormData() ;
-        formData.append('image', {
-            uri: image.uri,
-            type: 'image/jpeg',
-            name: filename,
-        });
-
         try {
             const userID = await getUniqueId();
-            await axios.post(`${backend_domain}/upload?id=${userID}`, formData);
+            const apiURL = `${backend_domain}/upload?id=${userID}`
+            const formData = new FormData() ;
+            formData.append('image', {
+                uri: image.uri,
+                type: 'image/jpeg',
+                name: filename, 
+            });
+            await fetch(apiURL, {
+                method: 'post',
+                body :formData,
+                headers:{
+                    "Content-Type": "multipart/form-data",
+                }})
         }
         catch (error) {
             console.error('Error uploading image:', error);
@@ -91,6 +95,7 @@ export default function PhotoUpload({image, setImage, filename}){
             mediaTypes: ImagePicker.MediaType,
             allowsEditing: true,
             quality: 1,
+            aspect: [1, 1],
         });
 
         if (!result.canceled) {

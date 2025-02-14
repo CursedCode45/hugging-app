@@ -16,8 +16,7 @@ export default function GenerateScreen(){
         var filtered_files = [];
         for (const item of results){
           const itemURI = FileSystem.documentDirectory+item;
-          const isDir = (await FileSystem.getInfoAsync(itemURI)).isDirectory
-          if (!isDir){
+          if (itemURI.endsWith('.mp4')){
             filtered_files.push(item)
           }
         }

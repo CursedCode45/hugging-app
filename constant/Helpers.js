@@ -3,6 +3,7 @@ import { Image } from 'react-native';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
+import * as Crypto from 'expo-crypto';
 
 
 const screenWidth = Dimensions.get('window').width;
@@ -20,11 +21,18 @@ export function hp(percentage){
 }
 
 export async function setVideoSize(videoURI, setWidth, setHeight, setAspectRatio=() => {}){
-    const thumbnailURI = await VideoThumbnails.getThumbnailAsync(videoURI, {time: 0});
-    const {width, height} = await Image.getSize(thumbnailURI);
-    setWidth(width);
-    setHeight(height);
-    setAspectRatio(width/height);
+    console.log(`Video uri here: ${videoURI}`)
+    try {
+        const thumbnailURI = await VideoThumbnails.getThumbnailAsync(videoURI, {time: 0});
+        const {width, height} = await Image.getSize(thumbnailURI.uri);
+        console.log(`Image is here width: ${width} and height ${height}`)
+        setWidth(width);
+        setHeight(height);
+        setAspectRatio(width/height);
+    }
+    catch(e){
+        console.log(e);
+    }
 }
 
 export async function setImageSize(imageURI, setWidth, setHeight){
@@ -57,7 +65,7 @@ export function getFormattedDate() {
     const optionsTime = { hour: 'numeric', minute: '2-digit', hour12: true };
     const formattedTime = date.toLocaleTimeString('en-GB', optionsTime).toUpperCase();
 
-    return `${formattedDate} - ${formattedTime}`;
+    return `${formattedDate} - ${formattedTime.replace(':', ' ')}`;
 }
 
 export async function getUniqueId() {
@@ -67,7 +75,7 @@ export async function getUniqueId() {
         return userId;
     }
     else{
-        userId = crypto.randomUUID();
+        userId = Crypto.randomUUID();
         await SecureStore.setItemAsync('userId', userId);
     } 
 }
