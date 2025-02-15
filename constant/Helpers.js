@@ -79,3 +79,42 @@ export async function getUniqueId() {
         await SecureStore.setItemAsync('userId', userId);
     } 
 }
+
+export async function base64To3DArrayWithoutCanvas(base64) {
+    // Convert base64 string to binary data
+    const binary = atob(base64.split(',')[1]);
+    const len = binary.length;
+    const bytes = new Uint8Array(len);
+    for (let i = 0; i < len; i++) {
+        bytes[i] = binary.charCodeAt(i);
+    }
+
+    // Create an image bitmap from the binary data
+    const blob = new Blob([bytes], { type: 'image/jpg' }); // Adjust MIME type if needed
+    const bitmap = await createImageBitmap(blob);
+
+    // Create an OffscreenCanvas if available
+    const canvas = new OffscreenCanvas(bitmap.width, bitmap.height);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(bitmap, 0, 0);
+
+    // Extract image data
+    const imageData = ctx.getImageData(0, 0, bitmap.width, bitmap.height).data;
+
+    // Convert to 3D array
+    const array3D = [];
+    for (let y = 0; y < bitmap.height; y++) {
+        const row = [];
+        for (let x = 0; x < bitmap.width; x++) {
+            const index = (y * bitmap.width + x) * 4;
+            row.push([
+                imageData[index],     // Red
+                imageData[index + 1], // Green
+                imageData[index + 2]  // Blue
+            ]);
+        }
+        array3D.push(row);
+    }
+
+    return array3D;
+}

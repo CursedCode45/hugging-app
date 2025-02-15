@@ -6,7 +6,8 @@ import GenerateVideoButton from './GenerateVideoButton.js';
 import GeneratingVideoModal from './GeneratingVideoModal.js';
 import { getFormattedDate, getUniqueId } from '../constant/Helpers.js';
 import * as ImageManipulator from 'expo-image-manipulator';
-import { Image } from 'react-native';
+import { Image, View } from 'react-native';
+import MergeImages from './MergeImages.js';
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -21,7 +22,6 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
 
     async function stitchImages() {
         try{
-
             // Get dimensions of both images
             const img1 = await ImageManipulator.manipulateAsync(image1.uri);
             const img2 = await ImageManipulator.manipulateAsync(image2.uri);
@@ -94,14 +94,13 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
 
     React.useEffect(() => {
         if (image1 !== null && image2 !== null){
-            stitchImages();
             console.log('stitched images')
         }
     }, [image1, image2])
 
     return(
         <>
-            <Image source={{uri: stitchedImages}} style={{width: 250, height: 100}}/>
+            {(image1 && image2) && <MergeImages image1={image1} image2={image2}/>}
             <GeneratingVideoModal modalVisible={generateClicked} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio}/>
             <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress}/>
         </>

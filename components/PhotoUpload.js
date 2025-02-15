@@ -39,11 +39,11 @@ function WithImage({image, onRemoveImage}){
 
 
 export default function PhotoUpload({image, setImage, filename}){
-    React.useEffect(() => {
-        if (image) {
-            apiUploadImage();
-        }
-    }, [image])
+    // React.useEffect(() => {
+    //     if (image) {
+    //         apiUploadImage();
+    //     }
+    // }, [image])
     
     async function apiRemoveImage(image) {
         const id = await getUniqueId();
