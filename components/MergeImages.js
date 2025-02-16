@@ -5,30 +5,36 @@ import { captureRef } from 'react-native-view-shot';
 import * as MediaLibrary from 'expo-media-library';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { hp } from '../constant/Helpers';
-import { base64To3DArrayWithoutCanvas } from '../constant/Helpers';
 
-export default function MergeImages({ image1, image2 }){
+
+export default function MergeImages({ image1, image2, mergedImages, setMergedImages }){
     const svgRef = useRef();
-    const [savedImage, setSavedImage] = useState(null);
     const [maxHeight, setMaxHeight] = useState();
-    
-  
-    // Function to capture and save the merged image
-    const saveImage = async () => {
-        try {
+    const [activateSaveImage, setActivateSaveImage] = useState(false);
+
+
+    async function resizeImages(){
+        try{
+
             let img1 = await ImageManipulator.manipulateAsync(image1.uri, [], {base64: true});
             let img2 = await ImageManipulator.manipulateAsync(image2.uri, [], {base64: true});
             
-            const totalWidth = img1.width + img2.width;
-            const maxHeight = Math.max(img1.height, img2.height);
-            const array3D = await base64To3DArrayWithoutCanvas(img1.base64);
-            console.log(`3D IMAGE: ${array3D}`);
-
-
+            let maxHeight = Math.max(img1.height, img2.height);
+            maxHeight = Math.min(1080, maxHeight)
+            
             img1 = await ImageManipulator.manipulateAsync(img1.uri, [{ resize: {height: maxHeight, width: maxHeight}}])
             img2 = await ImageManipulator.manipulateAsync(img2.uri, [{ resize: {height: maxHeight, width: maxHeight}}])
             setMaxHeight(maxHeight);
-
+            setActivateSaveImage(true);
+        }
+        catch(e){
+            console.error('Resize Error:', error);
+        }
+    }
+    
+    
+    async function saveImage(){
+        try {
             const uri = await captureRef(svgRef, {
                 result: 'tmpfile',
                 height: maxHeight,
@@ -37,11 +43,7 @@ export default function MergeImages({ image1, image2 }){
                 format: 'jpg',
                 useRenderInContext: true,
             });
-            setSavedImage(uri);
-
-            await MediaLibrary.createAssetAsync(uri);
-            alert('Image saved to gallery!');
-            console.log('Saved Image URI:', uri);
+            setMergedImages(uri);
         }
 
         catch (error) {
@@ -50,8 +52,15 @@ export default function MergeImages({ image1, image2 }){
     };
 
     useEffect(() => {
-        saveImage();
-    }, [])
+        resizeImages();
+    }, [image1, image2])
+
+    useEffect(() => {
+        if (activateSaveImage){
+            saveImage();
+            setActivateSaveImage(false);
+        }
+    }, [activateSaveImage])
 
   
     return (
@@ -62,8 +71,6 @@ export default function MergeImages({ image1, image2 }){
                     <SvgImage href={{ uri: image2.uri }} x={ `${maxHeight}` } y="0"    width={ `${maxHeight}` }      height={ `${maxHeight}` }/>
                 </Svg>
             </View>
-            <Button title="Save Merged Image" onPress={saveImage} />
-            <Image source={{uri: savedImage}}/>
         </View>
     );
 }

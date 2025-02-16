@@ -39,26 +39,6 @@ function WithImage({image, onRemoveImage}){
 
 
 export default function PhotoUpload({image, setImage, filename}){
-    // React.useEffect(() => {
-    //     if (image) {
-    //         apiUploadImage();
-    //     }
-    // }, [image])
-    
-    async function apiRemoveImage(image) {
-        const id = await getUniqueId();
-        const url = `${backend_domain}/remove-image?image=${image}&id=${id}`;
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error(`Response status: ${response.status}`);
-            }
-        }
-        catch (error) {
-            console.error(error.message);
-        }
-    }
-
     async function apiUploadImage() {
         try {
             const userID = await getUniqueId();
@@ -105,7 +85,6 @@ export default function PhotoUpload({image, setImage, filename}){
 
     function onXpress(){
         setImage(null);
-        apiRemoveImage(filename);
     }
 
 

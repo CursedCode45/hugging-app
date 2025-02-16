@@ -10,7 +10,7 @@ import LoadingBarAndScreenSkeleton from './LoadingBarAndScreenSkeleton.js';
 
 
 
-export default function GeneratingVideoModal({modalVisible, gettingVideo, onModalClose, videoStream, videoAspectRatio}){
+export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio}){
 
     function WhatToRender(){
         if(gettingVideo){
@@ -38,7 +38,7 @@ export default function GeneratingVideoModal({modalVisible, gettingVideo, onModa
         color={appColors.background}
         animationType="slide"
         transparent={false}
-        visible={modalVisible}
+        visible={showModal}
         onRequestClose={onModalClose}>
             <WhatToRender/>
         </Modal>

@@ -1,7 +1,6 @@
 import { StyleSheet, Button, Text, View } from 'react-native';
 import BottomTab from '../components/BottomTab'  
 import { UploadPhotosContainer } from '../components/UploadPhotosContainer';
-import { useNavigation } from '@react-navigation/native'
 import { appColors } from '../constant/AppColors';
 import { Vidplays } from '../components/Vidplays';
 import Hug_video from '../assets/images/Hug_video.mp4'
@@ -9,12 +8,9 @@ import { useEffect, useState } from 'react';
 import { createNewDocumentSubDir } from '../constant/Helpers';
 import * as FileSystem from "expo-file-system";
 import { Asset } from 'expo-asset';
-import LoadingBarAndScreenSkeleton from '../components/LoadingBarAndScreenSkeleton.js';
 
 export default function GenerateScreen(){
-    const navigation = useNavigation();
     const [video, setVideo] = useState();
-
 
     async function saveHomeVideoToStorage() {
       await createNewDocumentSubDir('home_videos')
