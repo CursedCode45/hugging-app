@@ -6,7 +6,7 @@ import GenerateVideoButton from './GenerateVideoButton.js';
 import GeneratingVideoModal from './GeneratingVideoModal.js';
 import { getFormattedDate, getUniqueId } from '../constant/Helpers.js';
 import MergeImages from './MergeImages.js';
-import { blobToBase64 } from '../constant/Helpers.js';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -19,6 +19,54 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     const [showModal, setShowModal] = React.useState(false);
     const [gettingVideo, setGettingVideo] = React.useState(false);
     const [videoStream, setVideoStream] = React.useState(null);
+
+    // Merge Images Variables
+    const [activateSaveImage, setActivateSaveImage] = React.useState(false);
+    const [maxHeight, setMaxHeight] = React.useState();
+
+
+    
+    async function resizeImages(){
+        try{
+
+            let img1 = await ImageManipulator.manipulateAsync(image1.uri);
+            let img2 = await ImageManipulator.manipulateAsync(image2.uri);
+
+            console.log(`${img1.width}`);
+            console.log(`${img1.height}`);
+
+            console.log(`${img2.width}`);
+            console.log(`${img2.height}`);
+
+            const img1size = Math.min(img1.width, img1.height);
+            const img2size = Math.min(img2.width, img2.height);
+
+            const a = (img1.width - img1.height)/2;
+
+            img1 = await ImageManipulator.manipulateAsync(img1.uri, [{ crop: {height: img1size, originX: 0, originY: 0, width: img1size}}])
+            img2 = await ImageManipulator.manipulateAsync(img2.uri, [{ crop: {height: img2size, originX: 0, originY: 0, width: img2size}}])
+            console.log('~~~~~~~~~~~~~~~~~~~~~~~~');
+            console.log(`${img1.width}`);
+            console.log(`${img1.height}`);
+
+            console.log(`${img2.width}`);
+            console.log(`${img2.height}`);
+            
+            let maxHeight = Math.max(img1.height, img2.height);
+            maxHeight = Math.min(1080, maxHeight)
+            
+            img1 = await ImageManipulator.manipulateAsync(img1.uri, [{ resize: {height: maxHeight, width: maxHeight}}])
+            img2 = await ImageManipulator.manipulateAsync(img2.uri, [{ resize: {height: maxHeight, width: maxHeight}}])
+
+            setImage1(img1);
+            setImage2(img2);
+            setMaxHeight(maxHeight);
+            setActivateSaveImage(true);
+        }
+        catch(e){
+            console.error('Resize Error:', error);
+        }
+    }
 
 
     async function apiUploadImage() {
@@ -74,17 +122,18 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     }
 
     React.useEffect(() => {
-        if (image1 === null){
+        if (!image1 || !image2){
             setMergedImages(null);
         }
-        if (image2 === null){
-            setMergedImages(null);
+        if (image1 && image2 && !mergedImages){
+            resizeImages();
         }
+
     }, [image1, image2])
 
     return(
         <>
-            {(image1 && image2) && <MergeImages image1={image1} image2={image2} mergedImages={mergedImages} setMergedImages={setMergedImages}/>}
+            {(image1 && image2) && <MergeImages maxHeight={maxHeight} activateSaveImage={activateSaveImage} setActivateSaveImage={setActivateSaveImage} image1={image1} image2={image2} mergedImages={mergedImages} setMergedImages={setMergedImages}/>}
             <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio}/>
             <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress}/>
         </>

@@ -39,29 +39,6 @@ function WithImage({image, onRemoveImage}){
 
 
 export default function PhotoUpload({image, setImage, filename}){
-    async function apiUploadImage() {
-        try {
-            const userID = await getUniqueId();
-            const apiURL = `${backend_domain}/upload?id=${userID}`
-            const formData = new FormData() ;
-            formData.append('image', {
-                uri: image.uri,
-                type: 'image/jpeg',
-                name: filename, 
-            });
-            await fetch(apiURL, {
-                method: 'post',
-                body :formData,
-                headers:{
-                    "Content-Type": "multipart/form-data",
-                }})
-        }
-        catch (error) {
-            console.error('Error uploading image:', error);
-            Alert.alert('Upload Failed', 'Something went wrong while uploading the image.');
-        }
-    }
-
     async function selectImage(){
         // Ask for permissions to access the media library
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
