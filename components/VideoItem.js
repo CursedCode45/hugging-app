@@ -49,7 +49,7 @@ export function VideoItem(props){
         }
     };
 
-    React.useEffect(() => {
+    React.useLayoutEffect(() => {
         getThumbnail();
     }, [])
 

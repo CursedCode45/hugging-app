@@ -6,6 +6,7 @@ import Settings from './screens/Settings';
 import { UserVideoModal } from './components/UserVideoModal';
 import { appColors } from './constant/AppColors';
 import { View } from 'react-native';
+import { StrictMode } from 'react';
 
 
 const Stack = createNativeStackNavigator();
@@ -17,16 +18,18 @@ const stack_options = {
 
 export default function App() {
   return (
-    <View style={{ flex: 1, backgroundColor: appColors.background }}>
-      <NavigationContainer>
-          <Stack.Navigator screenOptions={{unmountOnBlur: false, presentation: 'transparentModal'}}>
-            <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
-            <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
-            <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
-            <Stack.Screen name='UserVideoModal' component={UserVideoModal} options={stack_options}/>
-          </Stack.Navigator>
-      </NavigationContainer>
-    </View>
+    <StrictMode>
+      <View style={{ flex: 1, backgroundColor: appColors.background }}>
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{unmountOnBlur: false, presentation: 'transparentModal'}}>
+              <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
+              <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
+              <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
+              <Stack.Screen name='UserVideoModal' component={UserVideoModal} options={stack_options}/>
+            </Stack.Navigator>
+        </NavigationContainer>
+      </View>
+    </StrictMode>
   );
 }
 

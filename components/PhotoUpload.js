@@ -4,8 +4,8 @@ import * as ImagePicker from 'expo-image-picker';
 import UPLOAD_SVG from '../assets/images/UploadSvg.js';
 import X_SVG from '../assets/images/XSVG.js';
 import { appColors } from '../constant/AppColors.js';
-import { backend_domain } from '../constant/Settings.js';
-import { getUniqueId, wp } from '../constant/Helpers.js';
+import { wp } from '../constant/Helpers.js';
+import * as ImageManipulator from 'expo-image-manipulator';
 
 
 
@@ -40,23 +40,31 @@ function WithImage({image, onRemoveImage}){
 
 export default function PhotoUpload({image, setImage, filename}){
     async function selectImage(){
-        // Ask for permissions to access the media library
-        const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (!permissionResult.granted) {
-            Alert.alert('Permission Denied', 'You need to grant permission to access the gallery.');
-            return;
+        try{
+            const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
+            if (!permissionResult.granted) {
+                Alert.alert('Permission Denied', 'You need to grant permission to access the gallery.');
+                return;
+            }
+            
+            const result = await ImagePicker.launchImageLibraryAsync({
+                mediaTypes: ImagePicker.MediaType,
+                allowsEditing: true,
+                quality: 1,
+                aspect: [1, 1],
+            });
+            
+            if (!result.canceled) {
+                // Resize Images so that it's a square 1080x1080
+                let img = await ImageManipulator.manipulateAsync(result.assets[0].uri);
+                const imgSize = Math.min(img.width, img.height);
+                img = await ImageManipulator.manipulateAsync(img.uri, [{ crop: {height: imgSize, originX: 0, originY: 0, width: imgSize}}]);
+                img = await ImageManipulator.manipulateAsync(img.uri, [{ resize: {height: 1080, width: 1080}}]);
+                setImage(img);
+            }
         }
-
-        // Launch the image picker
-        const result = await ImagePicker.launchImageLibraryAsync({
-            mediaTypes: ImagePicker.MediaType,
-            allowsEditing: true,
-            quality: 1,
-            aspect: [1, 1],
-        });
-
-        if (!result.canceled) {
-            setImage(result.assets[0]); // Store selected image data
+        catch(e){
+            console.log(`Selecting Image Error: ${e}`)
         }
     }
 

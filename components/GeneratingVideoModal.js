@@ -1,4 +1,4 @@
-import { View, StyleSheet, TouchableHighlight, Text, Modal, ActivityIndicator } from 'react-native';
+import { View, StyleSheet, TouchableHighlight, Text, Modal, ActivityIndicator, Button } from 'react-native';
 import * as React from 'react'
 import { appColors } from '../constant/AppColors';
 import { Vidplays } from './Vidplays.js';
@@ -11,7 +11,6 @@ import LoadingBarAndScreenSkeleton from './LoadingBarAndScreenSkeleton.js';
 
 
 export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio}){
-
     function WhatToRender(){
         if(gettingVideo){
             return(
@@ -21,11 +20,10 @@ export default function GeneratingVideoModal({ showModal, gettingVideo, onModalC
         return(
             <View style={styles.container}>
                 <CloseVideoButton onPress={onModalClose}/>
-
                 <View style={{width: wp(85), height: wp(85)/videoAspectRatio}}>
                     <Vidplays source={videoStream}></Vidplays>
                 </View>
-
+                
                 <View style={styles.saveButtonContainer}>
                     <SaveVideoButton fileUri={videoStream}/>
                 </View>

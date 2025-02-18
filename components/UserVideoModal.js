@@ -11,6 +11,7 @@ import CloseVideoButton from './CloseVideoButton';
 
 export function UserVideoModal({fileIndex, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
         const videoAspectRatio = videoWidth/videoHeight;
+        console.log(fileUri);
   
         async function onDeleteClick(){
             await FileSystem.deleteAsync(fileUri);
