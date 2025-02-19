@@ -21,7 +21,6 @@ export function hp(percentage){
 }
 
 export async function setVideoSize(videoURI, setWidth, setHeight, setAspectRatio=() => {}){
-    console.log(`Video uri here: ${videoURI}`)
     try {
         const thumbnailURI = await VideoThumbnails.getThumbnailAsync(videoURI, {time: 0});
         const {width, height} = await Image.getSize(thumbnailURI.uri);

@@ -29,9 +29,6 @@ export default function LoadingBarAndScreenSkeleton(){
         }
     })
 
-
-
-
     function startAnimation(){
         widthAnim.value = withTiming(wp(90-2.4), { duration: 28500 });
         colorAnim.value = withRepeat(
@@ -48,8 +45,6 @@ export default function LoadingBarAndScreenSkeleton(){
     return (
         <View style={styles.rootContainer}>
             <Animated.View style={[styles.videoSkeleton, colorAnimatedStyle]}>
-
-
                 <View style={styles.loadingBarContainer}>
                     <Text style={styles.text}>{text}</Text>
                     <View style={styles.barContainer}>

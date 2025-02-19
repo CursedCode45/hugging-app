@@ -4,34 +4,42 @@ import { UploadPhotosContainer } from '../components/UploadPhotosContainer';
 import { appColors } from '../constant/AppColors';
 import { Vidplays } from '../components/Vidplays';
 import Hug_video from '../assets/images/Hug_video.mp4'
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import { createNewDocumentSubDir } from '../constant/Helpers';
 import * as FileSystem from "expo-file-system";
 import { Asset } from 'expo-asset';
+import LoadingComponentBreathing from '../components/LoadingComponentBreathing';
+
 
 export default function GenerateScreen(){
-    const [video, setVideo] = useState();
+    const [video, setVideo] = useState(null);
 
     async function saveHomeVideoToStorage() {
-      await createNewDocumentSubDir('home_videos')
-      const fileUri = `${FileSystem.documentDirectory}home_videos/home_hugging_video.mp4`;
-      const videoExists = (await FileSystem.getInfoAsync(fileUri)).exists;
-      if (videoExists){
-        setVideo(fileUri);
-        return;
-      }
-      const asset = Asset.fromModule(Hug_video);
-      await asset.downloadAsync();
-      
-      await FileSystem.copyAsync({
-        from: asset.localUri,
-        to: fileUri,
-      });
-      setVideo(fileUri);
+      try{
+        // If Video Exist in mobile dont save it.
+        await createNewDocumentSubDir('home_videos')
+        const fileUri = `${FileSystem.documentDirectory}home_videos/home_hugging_video.mp4`;
+        const videoExists = (await FileSystem.getInfoAsync(fileUri)).exists;
+        if (videoExists){
+          setVideo(fileUri);
+          return;
+        }
 
+        // If video doesnt exist save it.
+        const asset = Asset.fromModule(Hug_video);
+        await asset.downloadAsync();
+        await FileSystem.copyAsync({
+          from: asset.localUri,
+          to: fileUri,
+        });
+        setVideo(fileUri);
+      }
+      catch(e){
+        console.log(`Error Saving Video From Local Assets to Phone assets: ${e}`)
+      }
     }
 
-    useEffect(() => {
+    useLayoutEffect(() => {
       saveHomeVideoToStorage();
     }, [])
 
@@ -40,7 +48,7 @@ export default function GenerateScreen(){
       <View style={styles.rootContainer}>
         <View style={styles.container}>
             <View style={styles.videoContainer}>
-              <Vidplays source={video} style={styles.videoContainer}/>
+              {(video)? <Vidplays source={video} style={styles.videoContainer}/> : <LoadingComponentBreathing style={styles.videoContainer} breathColor1={appColors.mediumDark} breathColor2={appColors.lighterDark}/>}
             </View>
             <UploadPhotosContainer/>
         </View>

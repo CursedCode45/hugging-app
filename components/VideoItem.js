@@ -67,7 +67,7 @@ export function VideoItem(props){
                 </View>
             </TouchableHighlight>
 
-            {isOpen && <UserVideoModal fileIndex={props.fileIndex} videoWidth={thumbnailWidth} videoHeight={thumbnailHeight} isOpen={isOpen} setIsOpen={setIsOpen} fileUri={fileUri} setFiles={props.setFiles}/>}
+            {isOpen && <UserVideoModal thumbnail={thumbnail} fileIndex={props.fileIndex} videoWidth={thumbnailWidth} videoHeight={thumbnailHeight} isOpen={isOpen} setIsOpen={setIsOpen} fileUri={fileUri} setFiles={props.setFiles}/>}
         </View>
     )
 }

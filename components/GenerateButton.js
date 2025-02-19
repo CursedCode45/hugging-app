@@ -37,10 +37,6 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             fileName = fileName.substr(fileName.length-7);
             var date_right_now = getFormattedDate().replaceAll(/\s/g,'_').replaceAll('-', '_');
             date_right_now = date_right_now.trim();
-            console.log(date_right_now);
-            console.log(date_right_now);
-            console.log(date_right_now);
-            console.log(date_right_now);
             const fileUri = FileSystem.documentDirectory + `${date_right_now}_${fileName}.mp4`;
 
             const response = await fetch(apiURL, {method: 'post', body :formData, headers:{"Content-Type": "multipart/form-data"}})
@@ -53,6 +49,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
                 setGettingVideo(false);
             };
             fr.readAsDataURL(videoBlob);
+
         }
         catch (error) {
             console.error('Error uploading image:', error);

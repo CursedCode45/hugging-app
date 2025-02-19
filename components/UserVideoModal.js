@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Modal, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Modal, TouchableHighlight, Image } from 'react-native';
 import * as React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
@@ -7,11 +7,12 @@ import { hp, wp } from '../constant/Helpers';
 import SaveVideoButton from './SaveVideoButton';
 import DeleteVideoButton from './DeleteVideoButton';
 import CloseVideoButton from './CloseVideoButton';
+import * as MediaLibrary from 'expo-media-library';
 
 
-export function UserVideoModal({fileIndex, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
+
+export function UserVideoModal({thumbnail, fileIndex, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
         const videoAspectRatio = videoWidth/videoHeight;
-        console.log(fileUri);
   
         async function onDeleteClick(){
             await FileSystem.deleteAsync(fileUri);
