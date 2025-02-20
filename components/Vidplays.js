@@ -1,11 +1,15 @@
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import * as FileSystem from "expo-file-system";
 import * as React from 'react';
+import Watermark from './../assets/images/Watermark.png'
+import { wp } from '../constant/Helpers';
 
 
-export function Vidplays({source, style}) {
+export function Vidplays({source, style, showWatermark=false}) {
   const [video, setVideo] = React.useState(null);
+
+
   React.useEffect(()=>{
     async function loadVideo(){
         try{
@@ -25,6 +29,24 @@ export function Vidplays({source, style}) {
     player.play();
   });
 
+  console.log(`Show watermark: ${showWatermark}`)
+
+  if (showWatermark){
+    return(
+      <View style={[styles.video, style]}>
+        <Image source={Watermark} style={[styles.watermark]}/>
+        <VideoView
+        style={[styles.video, style]}
+        player={player}
+        allowsFullscreen={false} // Disables fullscreen button
+        allowsPictureInPicture={true} // Disables picture-in-picture mode
+        nativeControls={false}
+        contentFit={'cover'}
+        />
+      </View>
+    )
+  }
+
   return (
       <VideoView
         style={[styles.video, style]}
@@ -33,7 +55,7 @@ export function Vidplays({source, style}) {
         allowsPictureInPicture={true} // Disables picture-in-picture mode
         nativeControls={false}
         contentFit={'cover'}
-    />
+      />
   )
 }
 
@@ -44,4 +66,11 @@ const styles = StyleSheet.create({
     backgroundColor: 'black',
     borderRadius: 10,
   },
+  watermark:{
+    width: '100%',
+    height: '100%',
+    borderRadius: 10,
+    position: 'absolute',
+    zIndex: 1000,
+  }
 });

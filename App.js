@@ -7,6 +7,7 @@ import { UserVideoModal } from './components/UserVideoModal';
 import { appColors } from './constant/AppColors';
 import { View, StatusBar } from 'react-native';
 import { StrictMode } from 'react';
+import GetPro from './components/GetPro';
 
 
 const Stack = createNativeStackNavigator();
@@ -23,6 +24,7 @@ export default function App() {
         <StatusBar animated={true} backgroundColor="#61dafb" barStyle='light-content'/>
         <NavigationContainer theme={DarkTheme}>
             <Stack.Navigator screenOptions={{unmountOnBlur: false, presentation: 'transparentModal'}}>
+              <Stack.Screen name='GetPro' component={GetPro} options={stack_options}/>
               <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
               <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
               <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
