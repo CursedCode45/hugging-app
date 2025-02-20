@@ -55,11 +55,13 @@ export default function PhotoUpload({image, setImage, filename}){
             });
             
             if (!result.canceled) {
-                // Resize Images so that it's a square 1080x1080
+                // Resize Images so that it's a square 768x768
                 let img = await ImageManipulator.manipulateAsync(result.assets[0].uri);
                 const imgSize = Math.min(img.width, img.height);
-                img = await ImageManipulator.manipulateAsync(img.uri, [{ crop: {height: imgSize, originX: 0, originY: 0, width: imgSize}}]);
-                img = await ImageManipulator.manipulateAsync(img.uri, [{ resize: {height: 1080, width: 1080}}]);
+                const offsetX = (img.width - imgSize)/2
+                const offsetY = (img.height - imgSize)/2
+                img = await ImageManipulator.manipulateAsync(img.uri, [ { crop: {height: imgSize, originX: offsetX, originY: offsetY, width: imgSize}},
+                                                                        { resize: {height: 768, width: 768}} ]);
                 setImage(img);
             }
         }
@@ -106,6 +108,9 @@ const styles = StyleSheet.create({
         width: wp(40),
         height: wp(40),
 
+        maxWidth: 230,
+        maxHeight: 230,
+
         borderWidth: 0.4,
         borderColor: appColors.veryLightColor,
 
@@ -115,6 +120,8 @@ const styles = StyleSheet.create({
     svgContainer:{
         width: wp(24),
         height: wp(24),
+        maxWidth: 138,
+        maxHeight: 138,
         marginBottom: 10,
     },
 
@@ -129,6 +136,10 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         width: wp(40),
         height: wp(40),
+
+        maxWidth: 230,
+        maxHeight: 230,
+
         ...appColors.addShadow,
 
         borderWidth: 0.3,

@@ -93,8 +93,9 @@ const styles = StyleSheet.create({
   },
 
   svgContainer: {
-    width: 30,
-    height: 30,
+    width: '30%',
+    height: '50%',
+    maxHeight: 100,
   },
 
 });

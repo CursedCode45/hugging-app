@@ -9,6 +9,7 @@ import { createNewDocumentSubDir } from '../constant/Helpers';
 import * as FileSystem from "expo-file-system";
 import { Asset } from 'expo-asset';
 import LoadingComponentBreathing from '../components/LoadingComponentBreathing';
+import { wp } from '../constant/Helpers';
 
 
 export default function GenerateScreen(){
@@ -67,29 +68,31 @@ const styles = StyleSheet.create({
     backgroundColor: appColors.background,
   },
 
-    container: {
-      display: 'flex',
-      flex: 1,
-      width: '100%',
-      height: '100%',
-      justifyContent: 'center',
-      alignItems: 'center',
-      backgroundColor: appColors.background,
-    },
-    videoContainer: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: 330,
-      height: 198,
+  container: {
+    display: 'flex',
+    flex: 1,
+    width: '100%',
+    height: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: appColors.background,
+  },
+  videoContainer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: wp(82.5),
+    height: wp(49.5),
+    maxWidth: 500,
+    maxHeight: 312.5,
 
-      backgroundColor: appColors.lightColor,
-      ...appColors.addShadow,
-      borderRadius: 10,
+    backgroundColor: appColors.lightColor,
+    ...appColors.addShadow,
+    borderRadius: 10,
 
-      borderWidth: 0.6,
-      borderColor: appColors.veryLightColor,
-    },
+    borderWidth: 0.6,
+    borderColor: appColors.veryLightColor,
+  },
     text: {
       fontWeight: 1000,
       color: appColors.textColor,
