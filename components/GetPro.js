@@ -6,7 +6,7 @@ import Watermark from './../assets/images/Watermark.png';
 import { hp, wp } from '../constant/Helpers';
 import BuyButtons from './BuyButtons';
 import * as FileSystem from "expo-file-system";
-
+import * as ImageManipulator from 'expo-image-manipulator'
 
 
 export default function GetPro({thumbnailURI}){
@@ -15,9 +15,8 @@ export default function GetPro({thumbnailURI}){
     async function getThumbnail(){
         try{
             const fileUri = `${FileSystem.documentDirectory}home_videos/home_hugging_video.mp4`;
-            const { uri } = await VideoThumbnails.getThumbnailAsync(fileUri, {time: 0});
+            const { uri } = await VideoThumbnails.getThumbnailAsync(fileUri, {time: 4000});
             setThumbnail(uri);
-            console.log(uri);
         }
         catch(e){
             console.log(`Get Pro Thumbnail Error: ${e}`)
@@ -31,12 +30,13 @@ export default function GetPro({thumbnailURI}){
     return (
     <View style={styles.rootContainer}>
         <SafeAreaView>
-            <View style={styles.imageContainer}>
-                <Image source={Watermark} style={styles.watermark}/>
-                <Image source={{uri: thumbnail}} style={styles.thumbnail}/>
+            <View style={styles.headlineTextContainer}>
+                <Text style={[styles.headlineText]}>Download Video</Text>
+                <Text style={styles.headlineText}><Text style={styles.withoutText}>Without</Text> Watermark</Text>
             </View>
             <View style={styles.imageContainer}>
                 <Image source={{uri: thumbnail}} style={styles.thumbnail}/>
+                <Image source={Watermark} style={styles.watermark}/>
             </View>
 
             <BuyButtons/>
@@ -51,37 +51,55 @@ rootContainer:{
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
+    justifyContent: 'center',
     flex: 1,
     backgroundColor: appColors.background,
   },
 
+  headlineTextContainer: {
+    width: wp(72),
+    maxWidth: 500,
+    maxHeight: 312.5,
+  },
+
+  headlineText: {
+    fontFamily: appColors.fontSemiBold,
+    fontSize: 28,
+    color: appColors.textColor,
+    textAlign: 'center',
+  },
+
+  withoutText: {
+    fontFamily: appColors.fontSemiBold,
+    fontSize: 28,
+    color: appColors.deleteButtonTextColor,
+  },
+
   imageContainer:{
     display: 'flex',
+    flexDirection: 'row',
     alignItems: 'center',
     marginTop: 10,
   },
 
-  watermark:{
-    position: 'absolute',
-    zIndex: 10,
-
-    width: hp(19)*1.66666,
-    height: hp(19),
-    maxWidth: 500,
-    maxHeight: 312.5,
-
-    borderRadius: 10,
-  },
-
   thumbnail: {
-    width: hp(19)*1.66666,
-    height: hp(19),
+    width: wp(72),
+    height: wp(72)/1.666666,
     maxWidth: 500,
     maxHeight: 312.5,
 
     backgroundColor: appColors.lighterDark,
-    borderRadius: 10,
-  }
+    borderRadius: 5,
+  },
+
+  watermark: {
+    width: wp(72),
+    height: wp(72)/1.666666,
+    maxWidth: 500,
+    maxHeight: 312.5,
+    position: 'absolute',
+    borderRadius: 5,
+  },
 
 
 })
