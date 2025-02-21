@@ -8,11 +8,14 @@ import SaveVideoButton from './SaveVideoButton';
 import DeleteVideoButton from './DeleteVideoButton';
 import CloseVideoButton from './CloseVideoButton';
 import * as MediaLibrary from 'expo-media-library';
+import * as SecureStore from 'expo-secure-store';
 
 
 
-export function UserVideoModal({thumbnail, fileIndex, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
+
+export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
         const videoAspectRatio = videoWidth/videoHeight;
+        const [showWatermark, setShowWatermark] = React.useState('false');
   
         async function onDeleteClick(){
             await FileSystem.deleteAsync(fileUri);
@@ -22,13 +25,30 @@ export function UserVideoModal({thumbnail, fileIndex, videoWidth, videoHeight, i
             setIsOpen(false);
         }
 
+        React.useLayoutEffect(() => {
+            async function isPaid(){
+                try{
+                    const key_filename = `${filename}_paid`;
+                    let result = await SecureStore.getItemAsync(key_filename);
+                    const valueWatermark = (result === 'true')? true : false
+                    setShowWatermark(valueWatermark);
+                    console.log(`Reading Item: ${result}`);
+                    console.log(`Is watermark active: ${valueWatermark}`);
+                }
+                catch(e){
+                    console.log(e);
+                }
+            }
+            isPaid();
+        }, [])
+
         return(
             <Modal color={appColors.background} animationType="none" transparent={false} visible={true} onRequestClose={()=>{}}>
                 <View style={styles.modalContainer}>
                     <CloseVideoButton onPress={()=>{setIsOpen(false);}}/>
 
                     <View style={[styles.modalVideoContainer, {width: wp(90), height:  wp(90)/videoAspectRatio}]}>
-                        <Vidplays source={fileUri}/>
+                        <Vidplays source={fileUri} showWatermark={showWatermark}/>
                     </View>
                     
                     <View style={[styles.buttonRootContainer]}>

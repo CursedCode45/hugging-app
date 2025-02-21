@@ -2,8 +2,7 @@ import { useVideoPlayer, VideoView } from 'expo-video';
 import { StyleSheet, View, Image } from 'react-native';
 import * as FileSystem from "expo-file-system";
 import * as React from 'react';
-import Watermark from './../assets/images/Watermark.png'
-import { wp } from '../constant/Helpers';
+import Watermark from './../assets/images/Watermark_User_Vids.png';
 
 
 export function Vidplays({source, style, showWatermark=false}) {
@@ -28,8 +27,6 @@ export function Vidplays({source, style, showWatermark=false}) {
     player.staysActiveInBackground= true;
     player.play();
   });
-
-  console.log(`Show watermark: ${showWatermark}`)
 
   if (showWatermark){
     return(

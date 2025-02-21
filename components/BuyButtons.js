@@ -3,10 +3,13 @@ import React from 'react'
 import { appColors } from '../constant/AppColors'
 import { hp, wp } from '../constant/Helpers'
 import CHECKMARK_SVG from '../assets/images/CheckmarkSvg';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 export default function BuyButtons(){
     const [select, setSelect] = React.useState(0);
+    const route = useRoute();
+    const navigation = useNavigation();
 
     console.log(select);
     return (
@@ -66,7 +69,7 @@ export default function BuyButtons(){
         </TouchableHighlight>
 
         {/* Checkout Button */}
-        <TouchableHighlight style={styles.checkoutTextContainer} underlayColor={appColors.closeButtonPressedColor} onPress={()=> {}}>
+        <TouchableHighlight style={styles.checkoutTextContainer} underlayColor={appColors.closeButtonPressedColor} onPress={()=> {navigation.popTo('UserVideos');}}>
             <Text style={styles.checkoutText}>Checkout</Text>
         </TouchableHighlight>
     </View>
