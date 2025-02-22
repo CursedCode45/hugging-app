@@ -8,7 +8,6 @@ import { wp, hp } from '../constant/Helpers';
 import { setImageSize } from '../constant/Helpers';
 import { useNavigation } from '@react-navigation/native';
 import * as MediaLibrary from 'expo-media-library';
-import * as SecureStore from 'expo-secure-store';
 
 
 export function VideoItem(props){
@@ -52,18 +51,6 @@ export function VideoItem(props){
 
     React.useLayoutEffect(() => {
         getThumbnail();
-        async function setIsPaid(){
-            try{
-
-                const key_filename = `${props.filename}_paid`;
-                await SecureStore.setItemAsync(key_filename, 'true');
-                console.log('works');
-            }
-            catch(e){
-                console.log(e);
-            }
-        }
-        setIsPaid();
     }, [])
 
     function onVideoItemClick(){

@@ -6,6 +6,7 @@ import GenerateVideoButton from './GenerateVideoButton.js';
 import GeneratingVideoModal from './GeneratingVideoModal.js';
 import { getFormattedDate, getUniqueId } from '../constant/Helpers.js';
 import MergeImages from './MergeImages.js';
+import * as SecureStore from 'expo-secure-store';
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -37,7 +38,8 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             fileName = fileName.substr(fileName.length-7);
             var date_right_now = getFormattedDate().replaceAll(/\s/g,'_').replaceAll('-', '_');
             date_right_now = date_right_now.trim();
-            const fileUri = FileSystem.documentDirectory + `${date_right_now}_${fileName}.mp4`;
+            fileName = `${date_right_now}_${fileName}.mp4`;
+            const fileUri = FileSystem.documentDirectory + fileName;
 
             const response = await fetch(apiURL, {method: 'post', body :formData, headers:{"Content-Type": "multipart/form-data"}})
             const videoBlob = await response.blob();
@@ -49,6 +51,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
                 setGettingVideo(false);
             };
             fr.readAsDataURL(videoBlob);
+            await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true');
 
         }
         catch (error) {

@@ -4,12 +4,6 @@ import Svg, { Defs, G, Path } from "react-native-svg";
 
 const DIAMOND_SVG = (props) => (
   <Svg
-    id="SvgjsSvg1001"
-    width={288}
-    height={288}
-    xmlns="http://www.w3.org/2000/svg"
-    xmlnsXlink="http://www.w3.org/1999/xlink"
-    xmlns:svgjs="http://svgjs.com/svgjs"
     {...props}
   >
     <Defs id="SvgjsDefs1002" />
@@ -18,8 +12,6 @@ const DIAMOND_SVG = (props) => (
         xmlns="http://www.w3.org/2000/svg"
         enableBackground="new 0 0 47.5 47.5"
         viewBox="0 0 47.5 47.5"
-        width={288}
-        height={288}
         {...props}
       >
         <Path

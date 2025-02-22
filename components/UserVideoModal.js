@@ -7,6 +7,7 @@ import { hp, wp } from '../constant/Helpers';
 import SaveVideoButton from './SaveVideoButton';
 import DeleteVideoButton from './DeleteVideoButton';
 import CloseVideoButton from './CloseVideoButton';
+import GetProButton from './GetProButton';
 import * as MediaLibrary from 'expo-media-library';
 import * as SecureStore from 'expo-secure-store';
 
@@ -25,23 +26,6 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
             setIsOpen(false);
         }
 
-        React.useLayoutEffect(() => {
-            async function isPaid(){
-                try{
-                    const key_filename = `${filename}_paid`;
-                    let result = await SecureStore.getItemAsync(key_filename);
-                    const valueWatermark = (result === 'true')? true : false
-                    setShowWatermark(valueWatermark);
-                    console.log(`Reading Item: ${result}`);
-                    console.log(`Is watermark active: ${valueWatermark}`);
-                }
-                catch(e){
-                    console.log(e);
-                }
-            }
-            isPaid();
-        }, [])
-
         return(
             <Modal color={appColors.background} animationType="none" transparent={false} visible={true} onRequestClose={()=>{}}>
                 <View style={styles.modalContainer}>
@@ -55,6 +39,7 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
                         <View style={[styles.buttonContainer]}><SaveVideoButton fileUri={fileUri}/></View>
                         <View style={[styles.buttonContainer]}><DeleteVideoButton onPress={onDeleteClick}/></View>
                     </View>
+                    <GetProButton fileUri={fileUri}/>
                 </View>
             </Modal>
         )
