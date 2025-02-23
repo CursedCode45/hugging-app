@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, Modal } from 'react-native';
 import React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as VideoThumbnails from 'expo-video-thumbnails';
@@ -9,7 +9,7 @@ import * as FileSystem from "expo-file-system";
 import * as ImageManipulator from 'expo-image-manipulator'
 
 
-export default function GetPro({thumbnailURI}){
+export default function GetPro({onModalClose=() => {}, isPaid=false}){
     const [thumbnail, setThumbnail] = React.useState(null);
 
     async function getThumbnail(){
@@ -28,20 +28,22 @@ export default function GetPro({thumbnailURI}){
     }, [])
 
     return (
-    <View style={styles.rootContainer}>
-        <SafeAreaView>
-            <View style={styles.headlineTextContainer}>
-                <Text style={[styles.headlineText]}>Download Video</Text>
-                <Text style={styles.headlineText}><Text style={styles.withoutText}>Without</Text> Watermark</Text>
-            </View>
-            <View style={styles.imageContainer}>
-                <Image source={{uri: thumbnail}} style={styles.thumbnail}/>
-                <Image source={Watermark} style={styles.watermark}/>
-            </View>
+      <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onModalClose}>
+        <View style={styles.rootContainer}>
+            <SafeAreaView>
+                <View style={styles.headlineTextContainer}>
+                    <Text style={[styles.headlineText]}>Download Video</Text>
+                    <Text style={styles.headlineText}><Text style={styles.withoutText}>Without</Text> Watermark</Text>
+                </View>
+                <View style={styles.imageContainer}>
+                    <Image source={{uri: thumbnail}} style={styles.thumbnail}/>
+                    <Image source={Watermark} style={styles.watermark}/>
+                </View>
 
-            <BuyButtons/>
-        </SafeAreaView>
-    </View>
+                <BuyButtons/>
+            </SafeAreaView>
+        </View>
+      </Modal>
     )
 }
 

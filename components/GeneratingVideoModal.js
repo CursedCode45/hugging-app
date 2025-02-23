@@ -7,40 +7,36 @@ import { wp, hp } from '../constant/Helpers.js';
 import SaveVideoButton from './SaveVideoButton.js';
 import CloseVideoButton from './CloseVideoButton.js'
 import LoadingBarAndScreenSkeleton from './LoadingBarAndScreenSkeleton.js';
-
+import GetProButton from './GetProButton.js';
+import path from "path-browserify";
 
 
 export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio}){
-    function WhatToRender(){
-        if(gettingVideo){
-            return(
-                <LoadingBarAndScreenSkeleton/>  
-            )
-        }
-        return(
-            <View style={styles.container}>
-                <CloseVideoButton onPress={onModalClose}/>
-                <View style={{width: wp(85), height: wp(85)/videoAspectRatio}}>
-                    <Vidplays source={videoStream}></Vidplays>
-                </View>
-                
-                <View style={styles.saveButtonContainer}>
-                    <SaveVideoButton fileUri={videoStream}/>
-                </View>
-            </View>
-        );
+
+    if (!showModal){
+        return null;
     }
 
-    return (
-        <Modal
-        color={appColors.background}
-        animationType="slide"
-        transparent={false}
-        visible={showModal}
-        onRequestClose={onModalClose}>
-            <WhatToRender/>
-        </Modal>
-    )
+    if(gettingVideo){
+        return(
+            <LoadingBarAndScreenSkeleton/>  
+        )
+    }
+    
+    return(
+        <View style={styles.container}>
+            <CloseVideoButton onPress={onModalClose}/>
+            <View style={{width: wp(85), height: wp(85)/videoAspectRatio}}>
+                <Vidplays source={videoStream}></Vidplays>
+            </View>
+            
+            <View style={styles.saveButtonContainer}>
+                <SaveVideoButton fileUri={videoStream}/>
+            </View>
+            <GetProButton filename={path.basename(videoStream)}/>
+        </View>
+    );
+
 }
 
 

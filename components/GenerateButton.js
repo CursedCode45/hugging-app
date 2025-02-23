@@ -7,6 +7,7 @@ import GeneratingVideoModal from './GeneratingVideoModal.js';
 import { getFormattedDate, getUniqueId } from '../constant/Helpers.js';
 import MergeImages from './MergeImages.js';
 import * as SecureStore from 'expo-secure-store';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -20,6 +21,10 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
 
     // Variables For Merge Images Component
     const [mergedImages, setMergedImages] = React.useState(null);
+
+    // Navigation
+    const route = useRoute();
+    const navigation = useNavigation();
 
     async function apiUploadImage() {
         try {
@@ -81,10 +86,16 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
         }
     }, [image1, image2])
 
+    React.useEffect(() => {
+        if (showModal){
+            navigation.push('GeneratingVideoModal', {showModal: showModal, gettingVideo: gettingVideo, onModalClose: onModalClose, videoStream: videoStream, videoAspectRatio: videoAspectRatio});
+        }
+    }, [showModal])
+
     return(
         <>
             {(image1 && image2 && !mergedImages) && <MergeImages image1={image1} image2={image2} mergedImages={mergedImages} setMergedImages={setMergedImages}/>}
-            <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio}/>
+            {/* <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio}/> */}
             <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress}/>
         </>
         

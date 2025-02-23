@@ -12,19 +12,28 @@ import * as MediaLibrary from 'expo-media-library';
 import * as SecureStore from 'expo-secure-store';
 
 
-
-
 export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
         const videoAspectRatio = videoWidth/videoHeight;
         const [showWatermark, setShowWatermark] = React.useState('false');
+
+        async function loadWatermarkKey(){
+            const read_key = await SecureStore.getItemAsync(`show_watermark_${filename}`);
+            const keyToBool = (read_key === 'true')? true : false
+            setShowWatermark(keyToBool);
+            console.log(`User Video Modal Watermark Show: ${keyToBool}`);
+        }
   
         async function onDeleteClick(){
             await FileSystem.deleteAsync(fileUri);
             let allFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-            const fileredFiles = allFiles.filter((elem) => elem.endsWith('.mp4'))
+            const fileredFiles = allFiles.filter((elem) => elem.endsWith('.mp4'));
             setFiles(fileredFiles);
             setIsOpen(false);
         }
+
+        React.useLayoutEffect(() => {
+            loadWatermarkKey();
+        }, [])
 
         return(
             <Modal color={appColors.background} animationType="none" transparent={false} visible={true} onRequestClose={()=>{}}>
@@ -39,7 +48,7 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
                         <View style={[styles.buttonContainer]}><SaveVideoButton fileUri={fileUri}/></View>
                         <View style={[styles.buttonContainer]}><DeleteVideoButton onPress={onDeleteClick}/></View>
                     </View>
-                    <GetProButton fileUri={fileUri}/>
+                    <GetProButton filename={filename}/>
                 </View>
             </Modal>
         )
