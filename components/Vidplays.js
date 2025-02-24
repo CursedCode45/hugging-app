@@ -7,6 +7,7 @@ import Watermark from './../assets/images/Watermark_User_Vids.png';
 
 export function Vidplays({source, style, showWatermark=false}) {
   const [video, setVideo] = React.useState(null);
+  const watermarkToBool = (showWatermark === 'true')? true : false
 
 
   React.useEffect(()=>{
@@ -28,7 +29,7 @@ export function Vidplays({source, style, showWatermark=false}) {
     player.play();
   });
 
-  if (showWatermark){
+  if (watermarkToBool){
     return(
       <View style={[styles.video, style]}>
         <Image source={Watermark} style={[styles.watermark]}/>

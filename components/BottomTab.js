@@ -19,7 +19,7 @@ export default function BottomTab() {
 
   return (
     <View style={styles.container}>
-        <TouchableHighlight style={styles.buttonContainer} underlayColor={on_touch_color} onPress={() => {navigation.popTo('Generate')}}>
+        <TouchableHighlight style={styles.buttonContainer} underlayColor={on_touch_color} onPress={() => {navigation.navigate('Generate')}}>
           <View style={styles.iconContainer}>
               <View style={styles.svgContainer}>
                 <BRAIN color={(route.name === 'Generate')? svg_selected_color: svg_unselected_color}/>
@@ -28,7 +28,7 @@ export default function BottomTab() {
           </View>
         </TouchableHighlight>
 
-        <TouchableHighlight style={styles.buttonContainer} underlayColor={on_touch_color} onPress={() => {navigation.popTo('UserVideos');}}>
+        <TouchableHighlight style={styles.buttonContainer} underlayColor={on_touch_color} onPress={() => {navigation.push('UserVideos');}}>
           <View style={styles.iconContainer}>
             <View style={styles.svgContainer}>
               <PROFILE_SVG color={(route.name === 'UserVideos')? svg_selected_color: svg_unselected_color}/>
@@ -37,7 +37,7 @@ export default function BottomTab() {
           </View>
         </TouchableHighlight>
 
-          <TouchableHighlight style={styles.buttonContainer} underlayColor={on_touch_color} onPress={() => {navigation.popTo('Settings')}}>
+          <TouchableHighlight style={styles.buttonContainer} underlayColor={on_touch_color} onPress={() => {navigation.push('Settings')}}>
             <View style={styles.iconContainer}>
               <View style={styles.svgContainer}>
                 <SETTINGS color={(route.name === 'Settings')? svg_selected_color : svg_unselected_color}/>

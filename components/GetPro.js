@@ -9,7 +9,7 @@ import * as FileSystem from "expo-file-system";
 import * as ImageManipulator from 'expo-image-manipulator'
 
 
-export default function GetPro({onModalClose=() => {}, isPaid=false}){
+export default function GetPro({onGetProModalClose, onCheckoutPress, filename}){
     const [thumbnail, setThumbnail] = React.useState(null);
 
     async function getThumbnail(){
@@ -28,7 +28,7 @@ export default function GetPro({onModalClose=() => {}, isPaid=false}){
     }, [])
 
     return (
-      <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onModalClose}>
+      <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onGetProModalClose}>
         <View style={styles.rootContainer}>
             <SafeAreaView>
                 <View style={styles.headlineTextContainer}>
@@ -39,8 +39,7 @@ export default function GetPro({onModalClose=() => {}, isPaid=false}){
                     <Image source={{uri: thumbnail}} style={styles.thumbnail}/>
                     <Image source={Watermark} style={styles.watermark}/>
                 </View>
-
-                <BuyButtons/>
+                <BuyButtons onCheckoutPress={onCheckoutPress} onCancelPress={onGetProModalClose} filename={filename}/>
             </SafeAreaView>
         </View>
       </Modal>

@@ -7,47 +7,48 @@ import GetPro from './GetPro';
 
 
 
-export default function GetProButton({filename}){
+export default function GetProButton({filename, setShowWatermark=()=>{}}){
     const [showGetProScreen, setShowGetProScreen] = React.useState(false);
 
     async function onGetProPress(){
-        try{
-            await SecureStore.setItemAsync(`show_watermark_${filename}`, 'false');
-            console.log('Press Get Pro Button')
-            setShowGetProScreen(true);
-        }
-        catch(e){
-            console.log(`Get Pro Button Error: ${e}`)
+        setShowGetProScreen(true);
+    }
+
+    function onGetProModalClose(){
+        setShowGetProScreen(false);
+        console.log('Cancel Pressed')
+    }
+
+    function onCheckoutPress(){
+        setShowGetProScreen(false);
+        console.log('Checkout Pressed')
+        if (setShowWatermark){
+            setShowWatermark('false');
         }
     }
-    console.log('loaded')
+
     React.useLayoutEffect(() => {
         async function readItem(){
             const key_rn = await SecureStore.getItemAsync(`show_watermark_${filename}`);
-            console.log(key_rn);
         }
         readItem();
     }, [])
 
-    function onModalClose(){
-        setShowGetProScreen(false)
-    }
-
     if(showGetProScreen){
         return(
-            <GetPro onModalClose={onModalClose}/>
+            <GetPro onGetProModalClose={onGetProModalClose} onCheckoutPress={onCheckoutPress} filename={filename}/>
         )
     }
 
     return (
-    <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.closeButtonPressedColor} onPress={onGetProPress}>
-        <View style={styles.iconTextContainer}>
-            <View style={styles.iconContainer}>
-                <DIAMOND_SVG color={appColors.closeButtonTextColor}/>
+        <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.closeButtonPressedColor} onPress={onGetProPress}>
+            <View style={styles.iconTextContainer}>
+                <View style={styles.iconContainer}>
+                    <DIAMOND_SVG color={appColors.closeButtonTextColor}/>
+                </View>
+                <Text style={styles.text}>Remove Watermark</Text>
             </View>
-            <Text style={styles.text}>Remove Watermark</Text>
-        </View>
-    </TouchableHighlight>
+        </TouchableHighlight>
     )
 }
 
@@ -56,7 +57,7 @@ const styles = StyleSheet.create({
     rootContainer: {
         justifyContent: 'center',
         alignItems: 'center',
-        width: '90%',
+        width: '100%',
         height: 50,
         borderRadius: 10,
 
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
 
     text: {
         color: appColors.closeButtonTextColor,
-        fontSize: 15,
+        fontSize: 12,
         fontFamily: appColors.fontSemiBold,
         textAlign: 'center'
     },

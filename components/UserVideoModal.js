@@ -18,8 +18,7 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
 
         async function loadWatermarkKey(){
             const read_key = await SecureStore.getItemAsync(`show_watermark_${filename}`);
-            const keyToBool = (read_key === 'true')? true : false
-            setShowWatermark(keyToBool);
+            setShowWatermark(read_key);
             console.log(`User Video Modal Watermark Show: ${keyToBool}`);
         }
   
@@ -29,6 +28,21 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
             const fileredFiles = allFiles.filter((elem) => elem.endsWith('.mp4'));
             setFiles(fileredFiles);
             setIsOpen(false);
+        }
+
+        function RenderGetProOrSaveButton(){
+            if (showWatermark === 'false'){
+                return (
+                    <View style={[styles.buttonContainer]}>
+                        <SaveVideoButton fileUri={fileUri}/>
+                    </View>
+                )
+            }
+            return(
+                <View style={{display: 'flex', width: '48%'}}>
+                    <GetProButton filename={filename} setShowWatermark={setShowWatermark}/>
+                </View>
+            );
         }
 
         React.useLayoutEffect(() => {
@@ -45,10 +59,9 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
                     </View>
                     
                     <View style={[styles.buttonRootContainer]}>
-                        <View style={[styles.buttonContainer]}><SaveVideoButton fileUri={fileUri}/></View>
+                        <RenderGetProOrSaveButton/>
                         <View style={[styles.buttonContainer]}><DeleteVideoButton onPress={onDeleteClick}/></View>
                     </View>
-                    <GetProButton filename={filename}/>
                 </View>
             </Modal>
         )

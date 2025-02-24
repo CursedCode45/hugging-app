@@ -8,6 +8,11 @@ import { getFormattedDate, getUniqueId } from '../constant/Helpers.js';
 import MergeImages from './MergeImages.js';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { NavigationContainer, DarkTheme } from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
+
+
+const Stack = createNativeStackNavigator();
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -86,16 +91,11 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
         }
     }, [image1, image2])
 
-    React.useEffect(() => {
-        if (showModal){
-            navigation.push('GeneratingVideoModal', {showModal: showModal, gettingVideo: gettingVideo, onModalClose: onModalClose, videoStream: videoStream, videoAspectRatio: videoAspectRatio});
-        }
-    }, [showModal])
 
     return(
         <>
             {(image1 && image2 && !mergedImages) && <MergeImages image1={image1} image2={image2} mergedImages={mergedImages} setMergedImages={setMergedImages}/>}
-            {/* <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio}/> */}
+            <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio}/>
             <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress}/>
         </>
         

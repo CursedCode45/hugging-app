@@ -12,29 +12,45 @@ import path from "path-browserify";
 
 
 export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio}){
+    const [showWatermark, setShowWatermark] = React.useState('true');
 
-    if (!showModal){
-        return null;
-    }
-
-    if(gettingVideo){
+    function RenderGetProOrSaveButton(){
+        if (showWatermark === 'false'){
+            return (
+                <SaveVideoButton showWatermark={showWatermark} fileUri={videoStream}/>
+            )
+        }
         return(
-            <LoadingBarAndScreenSkeleton/>  
-        )
+            <GetProButton filename={path.basename(videoStream)} setShowWatermark={setShowWatermark}/>
+        );
     }
-    
+
+
+    function WhatToRender(){
+        if(gettingVideo){
+            return(
+                <LoadingBarAndScreenSkeleton/>
+            )
+        }
+        
+        return(
+            <View style={styles.container}>
+                <CloseVideoButton onPress={onModalClose}/>
+                <View style={{width: wp(85), height: wp(85)/videoAspectRatio}}>
+                    <Vidplays source={videoStream} showWatermark={showWatermark}/>
+                </View>
+
+                <View style={styles.bottomButtonContainer}>
+                    <RenderGetProOrSaveButton/>
+                </View>
+            </View>
+        );
+    }
+
     return(
-        <View style={styles.container}>
-            <CloseVideoButton onPress={onModalClose}/>
-            <View style={{width: wp(85), height: wp(85)/videoAspectRatio}}>
-                <Vidplays source={videoStream}></Vidplays>
-            </View>
-            
-            <View style={styles.saveButtonContainer}>
-                <SaveVideoButton fileUri={videoStream}/>
-            </View>
-            <GetProButton filename={path.basename(videoStream)}/>
-        </View>
+        <Modal animated='slide' visible={showModal} onRequestClose={onModalClose}>
+            <WhatToRender/>
+        </Modal>
     );
 
 }
@@ -61,7 +77,7 @@ const styles = StyleSheet.create({
         transform: [{ scale: 2 }]
     },
 
-    saveButtonContainer: {
+    bottomButtonContainer: {
         marginTop: 10,
         width: '90%'
     },

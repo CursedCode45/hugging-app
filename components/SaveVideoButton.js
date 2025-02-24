@@ -7,7 +7,7 @@ import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from "expo-file-system";
 
 
-export default function SaveVideoButton({fileUri}) {
+export default function SaveVideoButton({showWatermark, fileUri}) {
     const [isSaving, setIsSaving] = React.useState(false);
     
     async function onPress(){
@@ -24,26 +24,25 @@ export default function SaveVideoButton({fileUri}) {
         }
     }
 
-
     if (isSaving){
         return(
-            <View style={styles.rootContainer}>
-                <View style={styles.loadingContainer}>
-                    <Loading color={appColors.saveButtonTextColor}/>
-                </View>
+        <View style={styles.rootContainer}>
+            <View style={styles.loadingContainer}>
+                <Loading color={appColors.saveButtonTextColor}/>
             </View>
+        </View>
         )
     }
 
     return (
-        <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.saveButtonPressedColor} onPress={onPress}>
-            <View style={styles.iconTextContainer}>
-                <View style={styles.iconContainer}>
-                    <DOWNLOAD_SVG color={appColors.saveButtonTextColor}/>
-                </View>
-                <Text style={styles.text}>Save to Gallery</Text>
+    <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.saveButtonPressedColor} onPress={onPress}>
+        <View style={styles.iconTextContainer}>
+            <View style={styles.iconContainer}>
+                <DOWNLOAD_SVG color={appColors.saveButtonTextColor}/>
             </View>
-        </TouchableHighlight>
+            <Text style={styles.text}>Save to Gallery</Text>
+        </View>
+    </TouchableHighlight>
     )
 }
 

@@ -4,14 +4,19 @@ import { appColors } from '../constant/AppColors'
 import { hp, wp } from '../constant/Helpers'
 import CHECKMARK_SVG from '../assets/images/CheckmarkSvg';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import * as SecureStore from 'expo-secure-store';
 
 
-export default function BuyButtons(){
+export default function BuyButtons({onCancelPress, onCheckoutPress, filename={filename}}){
     const [select, setSelect] = React.useState(0);
     const route = useRoute();
     const navigation = useNavigation();
 
-    console.log(select);
+    async function localONcheckoutPress(){
+        await SecureStore.setItemAsync(`show_watermark_${filename}`, 'false');
+        onCheckoutPress();
+    }
+
     return (
     <View>
         {/* Buy Weekly Button */}
@@ -69,8 +74,13 @@ export default function BuyButtons(){
         </TouchableHighlight>
 
         {/* Checkout Button */}
-        <TouchableHighlight style={styles.checkoutTextContainer} underlayColor={appColors.closeButtonPressedColor} onPress={()=> {navigation.popTo('UserVideos');}}>
+        <TouchableHighlight style={styles.checkoutTextContainer} underlayColor={appColors.closeButtonPressedColor} onPress={localONcheckoutPress}>
             <Text style={styles.checkoutText}>Checkout</Text>
+        </TouchableHighlight>
+
+        {/* Cancel Button */}
+        <TouchableHighlight style={styles.cancelTextContainer} underlayColor={appColors.deleteButtonPressedColor} onPress={onCancelPress}>
+            <Text style={styles.cancelText}>Cancel</Text>
         </TouchableHighlight>
     </View>
     )
@@ -245,6 +255,28 @@ const styles = StyleSheet.create({
     checkoutText: {
         fontSize: 23,
         color: appColors.closeButtonTextColor,
+    },
+
+    cancelTextContainer:{
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: appColors.deleteButtonColor,
+        borderRadius: 5,
+
+        marginTop: 10,
+
+        width: wp(72),
+        maxWidth: 500,
+        height: 50,
+
+        borderWidth: 0.2,
+        borderColor: appColors.deleteButtonTextColor,
+    },
+
+    cancelText: {
+        fontSize: 23,
+        color: appColors.deleteButtonTextColor,
     },
 
     iconWithTextContainer: {
