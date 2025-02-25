@@ -9,11 +9,14 @@ import { getUniqueId } from '../constant/Helpers';
 import DELETE_SVG from '../assets/images/DeleteSvg';
 import TERMS_AND_USE_SVG from '../assets/images/TermsAndUseSvg';
 import LOCK_SVG from '../assets/images/LockSvg';
+import DIAMOND_SVG from '../assets/images/DiamondSvg';
+import { getCurrentAppUsesLeft } from '../constant/Helpers';
 
 
 export default function Settings(){
   const [userID, setUserID] = useState('');
   const onPressColor = appColors.weakDark;
+  // SecureStore.setItemAsync('uses_left', `5`);
 
   function deleteAllVideos(){
     FileSystem.readDirectoryAsync(FileSystem.documentDirectory).then((result) => {
@@ -25,6 +28,7 @@ export default function Settings(){
   }
 
   useEffect(() => {
+    getCurrentAppUsesLeft().then((data) => {console.log(`Uses Left Right Now: ${data}`)});
     getUniqueId().then((data) => {setUserID(data);});
   }, [])
 
@@ -61,6 +65,17 @@ export default function Settings(){
                 <DELETE_SVG color={appColors.deleteButtonTextColor}/>
               </View>
               <Text style={styles.text}>Delete All Videos</Text>
+            </View>
+          </TouchableHighlight>
+
+          <View style={styles.horizontalLine}></View>
+
+          <TouchableHighlight style={[styles.textContainer, {borderBottomLeftRadius: 10, borderBottomRightRadius: 10}]} underlayColor={onPressColor} onPress={() => {}}>
+            <View style={styles.textContainer}>
+            <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
+                <DIAMOND_SVG/>
+              </View>
+              <Text style={styles.text}>Cancel Premium</Text>
             </View>
           </TouchableHighlight>
 

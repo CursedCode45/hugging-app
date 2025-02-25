@@ -7,7 +7,7 @@ import PhotoUpload from './PhotoUpload.js';
 export function UploadPhotosContainer(){
     const [image1, setImage1] = React.useState(null);
     const [image2, setImage2] = React.useState(null);
-
+    
 
     return(
         <View style={styles.rootContainer}>

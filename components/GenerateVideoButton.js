@@ -4,13 +4,18 @@ import { appColors } from '../constant/AppColors'
 import { wp } from '../constant/Helpers';
 
 
-export default function GenerateVideoButton({image1, image2, onPress}) {
+export default function GenerateVideoButton({image1, image2, onPress, hasCredits}) {
     const [buttonStyle, setButtonStyle] = React.useState(styles.buttonContainerUnclickable);
     const [buttonPressColor, setButtonPressColor] = React.useState(appColors.lighterDark);
     const [textColor, setTextColor] = React.useState(appColors.lightColor);
 
     React.useEffect(() => {
-        if (image1 !== null && image2 !== null){
+        if (!hasCredits){
+            setButtonStyle(styles.buttonContainerUnclickable);
+            setButtonPressColor(appColors.lighterDark);
+            setTextColor(appColors.lightColor);
+        }
+        else if (image1 !== null && image2 !== null){
             setButtonStyle(styles.buttonContainerClickable);
             setButtonPressColor(appColors.closeButtonPressedColor);
             setTextColor(appColors.closeButtonTextColor);

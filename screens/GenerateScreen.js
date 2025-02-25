@@ -10,11 +10,12 @@ import * as FileSystem from "expo-file-system";
 import { Asset } from 'expo-asset';
 import LoadingComponentBreathing from '../components/LoadingComponentBreathing';
 import { wp } from '../constant/Helpers';
+import { getCurrentAppUsesLeft } from '../constant/Helpers';
 
 
 export default function GenerateScreen(){
     const [video, setVideo] = useState(null);
-
+    
     async function saveHomeVideoToStorage() {
       try{
         // If Video Exist in mobile dont save it.
@@ -42,6 +43,7 @@ export default function GenerateScreen(){
 
     useLayoutEffect(() => {
       saveHomeVideoToStorage();
+      getCurrentAppUsesLeft().then((data) => {console.log(`Uses Left Right Now: ${data}`)});
     }, [])
 
 

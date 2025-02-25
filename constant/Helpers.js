@@ -4,7 +4,7 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
 import * as Crypto from 'expo-crypto';
-
+import { USES_COUNT_ON_INSTALL, USES_COUNT_ON_PREMIUM } from './Settings';
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -54,7 +54,6 @@ export async function createNewDocumentSubDir(dirName){
 };
 
 
-
 export function getFormattedDate() {
     const date = new Date();
     
@@ -89,3 +88,129 @@ export function blobToBase64(blob){
         };
     });
 };
+
+
+export async function getAllVideoBasenames(){
+    try{
+        const results = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
+        var filtered_files = [];
+        for (const item of results){
+            if (item.endsWith('.mp4')){
+                filtered_files.push(item)
+            }
+        }
+        return filtered_files;
+    }
+    catch(e){
+        console.warn(`Error Getting All Video Basenames: ${e}`);
+        return [];
+    }
+}
+
+
+export async function getCurrentAppUsesLeft(){
+    try{
+        await resetDailyUsesIfPremium();
+        const usesCount = await SecureStore.getItemAsync(`uses_left`);
+        if (!usesCount){
+            console.log(`Initiating Uses Count with: ${USES_COUNT_ON_INSTALL} uses`)
+            await SecureStore.setItemAsync('uses_left', `${USES_COUNT_ON_INSTALL}`);
+            return USES_COUNT_ON_INSTALL;
+        }
+        const usesToInt = parseInt(usesCount)
+        return usesToInt
+    }
+    catch(e){
+        console.log(`Error Getting Uses Count: ${e}`);
+    }
+}
+
+export async function canUseApp() {
+    try{
+        let useCountInt = await getCurrentAppUsesLeft();
+        if (useCountInt <= 0){
+            return false;
+        }
+        return true;
+    }
+    catch(e){
+        console.log(`Error happend while trying to check uses: ${e}`);
+    }
+}
+
+export async function appUseCredit(){
+    try{
+        const canUse = await canUseApp();
+        if (canUse){
+            let useCountInt = await getCurrentAppUsesLeft();
+            useCountInt = useCountInt - 1;
+            const usesToString = useCountInt.toString();
+            await SecureStore.setItemAsync('uses_left', usesToString);
+        }
+        else{
+            console.log('No uses left');
+        }
+    }
+    catch(e){
+        console.log(`Error happend while trying to use app: ${e}`);
+    }
+}
+
+export async function getPremium(){
+    try{
+        let dateOfPurchase = new Date();
+        dateOfPurchase = dateOfPurchase.getTime().toString();
+        await SecureStore.setItemAsync('is_premium', 'yes');
+        await SecureStore.setItemAsync('date_of_purchase', dateOfPurchase);
+        await SecureStore.setItemAsync('uses_left', `${USES_COUNT_ON_PREMIUM}`);
+        const allVideoBasenames = await getAllVideoBasenames();
+        allVideoBasenames.forEach(element => {
+            SecureStore.setItemAsync(`show_watermark_${element}`, 'false');
+        })
+    }
+    catch(e){
+        console.log(`Error Getting Premium: ${e}`);
+    }
+}
+
+export async function getIsPremium(){
+    try{
+        const isPremium = await SecureStore.getItemAsync(`is_premium`);
+        if (!isPremium){
+            console.log(`Initiating is_premium with: no`);
+            await SecureStore.setItemAsync('is_premium', 'no');
+            return 'no';
+        }
+        return isPremium
+    }
+    catch(e){
+        console.log(`Error Checking If App Is Premium: ${e}`);
+    }
+}
+
+export async function cancelPremium(){
+    try{
+        await SecureStore.setItemAsync('is_premium', 'no');
+    }
+    catch(e){
+        console.log(`Error Canceling Premium Plan: ${e}`);
+    }
+}
+
+export async function resetDailyUsesIfPremium(){
+    try{
+        const isPremium = await SecureStore.getItemAsync(`is_premium`);
+        if(isPremium === 'yes'){
+            let dateOfPurchase = await SecureStore.getItemAsync(`date_of_purchase`);
+            dateOfPurchase = parseInt(dateOfPurchase);
+            let dateRightNow = new Date();
+            dateRightNow = dateRightNow.getTime();
+            if(dateRightNow - dateOfPurchase  >= 86400000){
+                await SecureStore.setItemAsync('uses_left', `${USES_COUNT_ON_PREMIUM}`);
+            }
+        }
+    }
+    catch(e){
+        console.log(`Error Reseting Premium Uses: ${e}`);
+    }
+}

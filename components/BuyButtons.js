@@ -3,18 +3,22 @@ import React from 'react'
 import { appColors } from '../constant/AppColors'
 import { hp, wp } from '../constant/Helpers'
 import CHECKMARK_SVG from '../assets/images/CheckmarkSvg';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import * as SecureStore from 'expo-secure-store';
+import { getPremium } from '../constant/Helpers';
 
 
 export default function BuyButtons({onCancelPress, onCheckoutPress, filename={filename}}){
     const [select, setSelect] = React.useState(0);
-    const route = useRoute();
-    const navigation = useNavigation();
 
     async function localONcheckoutPress(){
-        await SecureStore.setItemAsync(`show_watermark_${filename}`, 'false');
-        onCheckoutPress();
+        if (select === 1){
+            await SecureStore.setItemAsync(`show_watermark_${filename}`, 'false');
+            onCheckoutPress();
+        }
+        if (select === 0){
+            getPremium();
+            onCheckoutPress();
+        }
     }
 
     return (

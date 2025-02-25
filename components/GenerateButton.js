@@ -8,11 +8,7 @@ import { getFormattedDate, getUniqueId } from '../constant/Helpers.js';
 import MergeImages from './MergeImages.js';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { NavigationContainer, DarkTheme } from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-
-
-const Stack = createNativeStackNavigator();
+import { canUseApp, appUseCredit, getIsPremium } from '../constant/Helpers.js';
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -30,6 +26,10 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     // Navigation
     const route = useRoute();
     const navigation = useNavigation();
+
+    // Premium Variables
+    const [hasCredits, setHasCredits] = React.useState(false);
+    const [isPremium, setIsPremium] = React.useState(false);
 
     async function apiUploadImage() {
         try {
@@ -61,7 +61,13 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
                 setGettingVideo(false);
             };
             fr.readAsDataURL(videoBlob);
-            await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true');
+            const isPremium = await getIsPremium();
+            if(isPremium === 'no'){
+                await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true');
+            }
+            else{
+                await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'false');
+            }
 
         }
         catch (error) {
@@ -70,13 +76,14 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     }
 
     async function onGeneratePress(){
-        if (mergedImages){
+        if (mergedImages && hasCredits){
             setShowModal(true);
             setGettingVideo(true);
             apiUploadImage();
             setImage1(null);
             setImage2(null);
             setMergedImages(null);
+            appUseCredit();
         }
     }
 
@@ -89,14 +96,20 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
         if (!image1 || !image2){
             setMergedImages(null);
         }
+        canUseApp().then(data => {setHasCredits(data);});
     }, [image1, image2])
+
+    React.useEffect(() => {
+        getIsPremium().then(data => {(data === 'no')? setIsPremium('false') : setIsPremium('true') })
+    }, [])
+
 
 
     return(
         <>
             {(image1 && image2 && !mergedImages) && <MergeImages image1={image1} image2={image2} mergedImages={mergedImages} setMergedImages={setMergedImages}/>}
-            <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio}/>
-            <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress}/>
+            <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio} isPremium={isPremium}/>
+            <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress} hasCredits={hasCredits}/>
         </>
         
     );

@@ -10,6 +10,7 @@ import CloseVideoButton from './CloseVideoButton';
 import GetProButton from './GetProButton';
 import * as MediaLibrary from 'expo-media-library';
 import * as SecureStore from 'expo-secure-store';
+import { getAllVideoBasenames } from '../constant/Helpers';
 
 
 export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
@@ -24,9 +25,8 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
   
         async function onDeleteClick(){
             await FileSystem.deleteAsync(fileUri);
-            let allFiles = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-            const fileredFiles = allFiles.filter((elem) => elem.endsWith('.mp4'));
-            setFiles(fileredFiles);
+            const allVideosBasenames = await getAllVideoBasenames();
+            setFiles(allVideosBasenames);
             setIsOpen(false);
         }
 

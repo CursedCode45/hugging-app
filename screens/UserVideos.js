@@ -5,28 +5,14 @@ import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
 import { VideoItem } from '../components/VideoItem';
 import { wp } from '../constant/Helpers';
-
+import { getCurrentAppUsesLeft } from '../constant/Helpers';
+import { getAllVideoBasenames } from '../constant/Helpers';
 
 export default function GenerateScreen(){
     const [files, setFiles] = React.useState([]);
-
-    async function readVideos(){
-      try{
-        const results = await FileSystem.readDirectoryAsync(FileSystem.documentDirectory);
-        var filtered_files = [];
-        for (const item of results){
-          const itemURI = FileSystem.documentDirectory+item;
-          if (itemURI.endsWith('.mp4')){
-            filtered_files.push(item)
-          }
-        }
-        setFiles(filtered_files.sort());
-      }
-      catch(e){console.warn(e);}
-    }
-
     React.useEffect(() => {
-      readVideos();
+      getAllVideoBasenames().then(data => {setFiles(data)});
+      getCurrentAppUsesLeft().then(data => {console.log(`Uses Left Right Now: ${data}`)});
     }, [])
 
     return(

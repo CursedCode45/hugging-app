@@ -11,17 +11,18 @@ import GetProButton from './GetProButton.js';
 import path from "path-browserify";
 
 
-export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio}){
-    const [showWatermark, setShowWatermark] = React.useState('true');
-
+export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio, isPremium}){
+    const showWatermarkInit = (isPremium === 'false')? 'true' : 'false'
+    const [showWatermark, setShowWatermark] = React.useState(showWatermarkInit);
     function RenderGetProOrSaveButton(){
         if (showWatermark === 'false'){
             return (
                 <SaveVideoButton showWatermark={showWatermark} fileUri={videoStream}/>
             )
         }
+        const videoName = path.basename(videoStream);
         return(
-            <GetProButton filename={path.basename(videoStream)} setShowWatermark={setShowWatermark}/>
+            <GetProButton filename={videoName} setShowWatermark={setShowWatermark}/>
         );
     }
 
