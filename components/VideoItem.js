@@ -22,6 +22,7 @@ export function VideoItem(props){
     const [date_right_now, fileName] = props.filename.split('_')
     const fileUri = FileSystem.documentDirectory + props.filename;
 
+
     async function getThumbnail(){
         try {
             // Request permissions

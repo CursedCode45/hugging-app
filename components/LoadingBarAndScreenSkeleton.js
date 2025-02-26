@@ -2,7 +2,6 @@ import { StyleSheet, Text, View } from 'react-native'
 import * as React from 'react'
 import { hp, wp } from '../constant/Helpers'
 import { appColors } from '../constant/AppColors'
-
 import Animated, {
     useSharedValue,
     withTiming,
@@ -13,45 +12,35 @@ import Animated, {
 
 
 export default function LoadingBarAndScreenSkeleton(){
-    const [text, setText] = React.useState('Loading...');
-    const colorAnim = useSharedValue(0.2);
-    const widthAnim = useSharedValue(0);
-
-    const barAnimatedStyle =  useAnimatedStyle(() => {
-        return({
-            width: widthAnim.value
-        })
-    })
+    const [dots, setDots] = React.useState("");
+    const colorAnim = useSharedValue(0);
 
     const colorAnimatedStyle = useAnimatedStyle(() => {
         return {
-            backgroundColor: interpolateColor(colorAnim.value, [0, 1], [appColors.closeButtonColor, appColors.closeButtonTextColor])
+            backgroundColor: interpolateColor(colorAnim.value, [0, 1], [appColors.lighterDark, appColors.weakDark])
         }
     })
 
     function startAnimation(){
-        widthAnim.value = withTiming(wp(90-2.4), { duration: 28500 });
         colorAnim.value = withRepeat(
-            withTiming(0.8, { duration: 1000 }),
+            withTiming(1, { duration: 1000 }),
             -1,
             true
         )
     };
 
     React.useEffect(() => {
-        startAnimation()
+        startAnimation();
+        const interval = setInterval(() => {
+            setDots((prev) => (prev.length < 3 ? prev + "." : ""));
+          }, 1000);
+          return () => clearInterval(interval);
     }, [])
 
     return (
         <View style={styles.rootContainer}>
             <Animated.View style={[styles.videoSkeleton, colorAnimatedStyle]}>
-                <View style={styles.loadingBarContainer}>
-                    <Text style={styles.text}>{text}</Text>
-                    <View style={styles.barContainer}>
-                        <View style={styles.backgroundBar}></View>
-                        <Animated.View style={[styles.topBar, barAnimatedStyle]}></Animated.View>
-                    </View>
-                </View>
+                <Animated.Text style={styles.text}>Loading{dots}</Animated.Text>
             </Animated.View>
         </View>
     )
@@ -72,48 +61,19 @@ const styles = StyleSheet.create({
         width: wp(85),
         height: wp(85)/1.66666666,
         borderRadius: 10,
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
         
     },
 
-    loadingBarContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        top: wp(85)/1.66666666 + hp(2),
-    },
 
     text: {
-        width: '100%',
-        paddingLeft: wp(1),
+        width: 140,
         marginBottom: 3,
-        color: appColors.closeButtonTextColor,
-        fontFamily: appColors.fontExtraLight,
+        fontSize: 30,
+        textAlign: 'start',
+        color: appColors.textColor,
     },
 
-    barContainer: {
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        width: wp(90),
-        height: 30,
-        padding: wp(1.2),
-
-        borderWidth: 0.2,
-        borderColor: appColors.closeButtonTextColor,
-    },
-
-    backgroundBar: {
-        width: '100%',
-        height: 19,
-
-        backgroundColor: appColors.closeButtonColor,
-    },
-
-    topBar: {
-        position: 'absolute',
-        left: wp(1.2),
-        height: 15,
-
-        backgroundColor: appColors.closeButtonTextColor,
-    }
 })

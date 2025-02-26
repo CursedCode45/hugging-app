@@ -58,7 +58,7 @@ rootContainer:{
   },
 
   headlineTextContainer: {
-    width: wp(72),
+    width: wp(85),
     maxWidth: 500,
     maxHeight: 312.5,
   },
@@ -84,8 +84,8 @@ rootContainer:{
   },
 
   thumbnail: {
-    width: wp(72),
-    height: wp(72)/1.666666,
+    width: wp(85),
+    height: wp(85)/1.666666,
     maxWidth: 500,
     maxHeight: 312.5,
 

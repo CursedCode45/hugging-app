@@ -12,8 +12,13 @@ import path from "path-browserify";
 
 
 export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio, isPremium}){
-    const showWatermarkInit = (isPremium === 'false')? 'true' : 'false'
-    const [showWatermark, setShowWatermark] = React.useState(showWatermarkInit);
+    const [showWatermark, setShowWatermark] = React.useState('false');
+
+    React.useLayoutEffect(() =>{
+        const showWatermarkInit = (isPremium === 'false')? 'true' : 'false'
+        setShowWatermark(showWatermarkInit);
+    }, [])
+
     function RenderGetProOrSaveButton(){
         if (showWatermark === 'false'){
             return (
@@ -37,7 +42,7 @@ export default function GeneratingVideoModal({ showModal, gettingVideo, onModalC
         return(
             <View style={styles.container}>
                 <CloseVideoButton onPress={onModalClose}/>
-                <View style={{width: wp(85), height: wp(85)/videoAspectRatio}}>
+                <View style={{width: wp(90), height: wp(90)/videoAspectRatio, maxWidth: 500, maxHeight: 500/videoAspectRatio}}>
                     <Vidplays source={videoStream} showWatermark={showWatermark}/>
                 </View>
 
@@ -82,5 +87,4 @@ const styles = StyleSheet.create({
         marginTop: 10,
         width: '90%'
     },
-
 })

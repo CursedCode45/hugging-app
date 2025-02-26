@@ -2,8 +2,9 @@ import { Platform } from 'react-native';
 
 
 export const appColors = {
-    background: '#0a0a0a',
-    lighterDark: 'rgb(26, 25, 25)',
+    background: 'rgb(0, 0, 0)',
+    lighterDark: 'rgb(28, 28, 30)',
+    horizontalLine: 'rgb(45, 45, 50)',
     weakDark: 'rgb(34, 34, 34)',
     bottomTab: 'rgba(30, 30, 30, 1)',
     mediumDark: '#676575',

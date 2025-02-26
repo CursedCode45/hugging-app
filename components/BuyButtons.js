@@ -99,29 +99,23 @@ const styles = StyleSheet.create({
         backgroundColor: appColors.lighterDark,
         marginTop: 15,
 
-        width: wp(72),
+        width: wp(85),
         maxWidth: 500,
         height: 110,
 
         borderRadius: 5,
-
-        borderWidth: 0.2,
-        borderColor: appColors.lightColor,
     },
 
     weeklyButton: {
         backgroundColor: appColors.lighterDark,
         marginTop: 15,
 
-        width: wp(72),
+        width: wp(85),
         maxWidth: 500,
 
         height: 175,
 
         borderRadius: 5,
-
-        borderWidth: 0.2,
-        borderColor: appColors.lightColor,
     },
 
     weeklyContainer: {
@@ -141,12 +135,12 @@ const styles = StyleSheet.create({
     selectedWeekly: {
         position: 'absolute',
 
-        left: - 12/2,
-        top: - 12/2,
+        left: - 14/2,
+        top: - 14/2,
 
-        width: wp(72) + 12,
-        maxWidth: 500 + 12,
-        height: 175 + 12,
+        width: wp(85) + 14,
+        maxWidth: 500 + 14,
+        height: 175 + 14,
 
         borderWidth: 2,
         borderColor: appColors.saveButtonTextColor,
@@ -160,8 +154,8 @@ const styles = StyleSheet.create({
         left: -7,
         top: -8,
 
-        width: wp(72) + 12,
-        maxWidth: 500 + 12,
+        width: wp(85) + 14,
+        maxWidth: 500 + 14,
         height: 110 + 14,
 
         borderWidth: 2,
@@ -225,7 +219,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: '100%',
         borderRadius: 5,
-        backgroundColor: appColors.lightColor,
+        backgroundColor: appColors.horizontalLine,
     },
 
     salesTextContainer: {
@@ -248,12 +242,9 @@ const styles = StyleSheet.create({
 
         marginTop: 15,
 
-        width: wp(72),
+        width: wp(85),
         maxWidth: 500,
         height: 50,
-
-        borderWidth: 0.2,
-        borderColor: appColors.closeButtonTextColor,
     },
 
     checkoutText: {
@@ -270,12 +261,9 @@ const styles = StyleSheet.create({
 
         marginTop: 10,
 
-        width: wp(72),
+        width: wp(85),
         maxWidth: 500,
         height: 50,
-
-        borderWidth: 0.2,
-        borderColor: appColors.deleteButtonTextColor,
     },
 
     cancelText: {

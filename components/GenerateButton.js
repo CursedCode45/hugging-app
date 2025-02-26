@@ -9,6 +9,7 @@ import MergeImages from './MergeImages.js';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { canUseApp, appUseCredit, getIsPremium } from '../constant/Helpers.js';
+import { Alert } from 'react-native'
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -19,6 +20,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     const [videoWidth, setVideoWidth] = React.useState(0);
     const [videoHeight, setVideoHeight] = React.useState(0);
     const [videoAspectRatio, setVideoAspectRatio] = React.useState(1);
+
 
     // Variables For Merge Images Component
     const [mergedImages, setMergedImages] = React.useState(null);
@@ -84,6 +86,9 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             setImage2(null);
             setMergedImages(null);
             appUseCredit();
+        }
+        else if (mergedImages && !hasCredits){
+            Alert.alert(`You've ran out of uses for today, please try again tomorrow.`)
         }
     }
 

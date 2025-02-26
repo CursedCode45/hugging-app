@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
     height: hp(12),
     position: 'fixed',
     bottom: 0,
-    backgroundColor: appColors.bottomTab,
+    backgroundColor: 'none',
     borderTopLeftRadius: 10,
     borderTopRightRadius: 10,
     ...appColors.addShadowLarge

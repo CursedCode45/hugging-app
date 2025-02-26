@@ -15,12 +15,17 @@ import { getAllVideoBasenames } from '../constant/Helpers';
 
 export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
         const videoAspectRatio = videoWidth/videoHeight;
-        const [showWatermark, setShowWatermark] = React.useState('false');
+        const [showWatermark, setShowWatermark] = React.useState('true');
 
         async function loadWatermarkKey(){
-            const read_key = await SecureStore.getItemAsync(`show_watermark_${filename}`);
-            setShowWatermark(read_key);
-            console.log(`User Video Modal Watermark Show: ${keyToBool}`);
+            try{
+                const read_key = await SecureStore.getItemAsync(`show_watermark_${filename}`);
+                setShowWatermark(read_key);
+                console.log(`User Video Modal Watermark Show: ${read_key}`);
+            }
+            catch(e){
+                console.log(e);
+            }
         }
   
         async function onDeleteClick(){

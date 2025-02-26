@@ -91,8 +91,8 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        marginLeft: 10,
-        marginRight: 10,
+        marginLeft: 5,
+        marginRight: 5,
     },
 
     uploadTouchable: {
@@ -105,45 +105,34 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: wp(40),
-        height: wp(40),
+        width: wp(43),
+        height: wp(43),
 
-        maxWidth: 230,
-        maxHeight: 230,
-
-        borderWidth: 0.4,
-        borderColor: appColors.veryLightColor,
-
-        ...appColors.addShadow
+        maxWidth: 240,
+        maxHeight: 240,
     },
 
     svgContainer:{
-        width: wp(24),
-        height: wp(24),
-        maxWidth: 138,
-        maxHeight: 138,
-        marginBottom: 10,
+        width: wp(15),
+        height: wp(15),
+        maxWidth: 100,
+        maxHeight: 100,
     },
 
     text: {
         color: appColors.textColor,
-        fontSize: 17,
+        fontSize: 15,
         fontFamily: appColors.fontSemiBold,
     },
 
     previewImage: {
         display: 'flex',
         borderRadius: 10,
-        width: wp(40),
-        height: wp(40),
+        width: wp(43),
+        height: wp(43),
 
-        maxWidth: 230,
-        maxHeight: 230,
-
-        ...appColors.addShadow,
-
-        borderWidth: 0.3,
-        borderColor: appColors.veryLightColor,
+        maxWidth: 240,
+        maxHeight: 240,
     },
 
     touchableX: {
@@ -155,5 +144,6 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: -15,
         top: -15,
+        zIndex: 30,
     },
 });

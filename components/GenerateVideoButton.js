@@ -1,21 +1,16 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, Alert } from 'react-native'
 import * as React from 'react'
 import { appColors } from '../constant/AppColors'
 import { wp } from '../constant/Helpers';
 
 
-export default function GenerateVideoButton({image1, image2, onPress, hasCredits}) {
+export default function GenerateVideoButton({image1, image2, onPress}) {
     const [buttonStyle, setButtonStyle] = React.useState(styles.buttonContainerUnclickable);
     const [buttonPressColor, setButtonPressColor] = React.useState(appColors.lighterDark);
     const [textColor, setTextColor] = React.useState(appColors.lightColor);
 
     React.useEffect(() => {
-        if (!hasCredits){
-            setButtonStyle(styles.buttonContainerUnclickable);
-            setButtonPressColor(appColors.lighterDark);
-            setTextColor(appColors.lightColor);
-        }
-        else if (image1 !== null && image2 !== null){
+        if (image1 !== null && image2 !== null){
             setButtonStyle(styles.buttonContainerClickable);
             setButtonPressColor(appColors.closeButtonPressedColor);
             setTextColor(appColors.closeButtonTextColor);
@@ -49,7 +44,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
 
-        width: '85%',
+        width: '90%',
         maxWidth: 500,
         height: 50,
         marginTop: 10,
@@ -58,15 +53,11 @@ const styles = StyleSheet.create({
     },
 
     buttonContainerClickable: {
-        borderWidth: 0.2,
-        borderColor: appColors.closeButtonTextColor,
         backgroundColor: appColors.closeButtonColor,
     },
 
 
     buttonContainerUnclickable: {
-        borderWidth: 0.2,
-        borderColor: appColors.lightColor,
         backgroundColor: appColors.lighterDark,
     },
 

@@ -28,8 +28,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         flex: 1,
 
-        borderWidth: 0.2,
-        borderColor: appColors.deleteButtonTextColor,
         backgroundColor: appColors.deleteButtonColor,
     },
 

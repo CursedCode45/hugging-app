@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, Alert } from 'react-native';
 import BottomTab from '../components/BottomTab'  
 import { appColors } from '../constant/AppColors';
-import { useEffect, useState } from 'react';
+import { useEffect, useLayoutEffect, useState } from 'react';
 import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
 import { wp } from '../constant/Helpers';
@@ -10,67 +10,64 @@ import DELETE_SVG from '../assets/images/DeleteSvg';
 import TERMS_AND_USE_SVG from '../assets/images/TermsAndUseSvg';
 import LOCK_SVG from '../assets/images/LockSvg';
 import DIAMOND_SVG from '../assets/images/DiamondSvg';
-import { getCurrentAppUsesLeft } from '../constant/Helpers';
-
+import { cancelPremium, getIsPremium, getCurrentAppUsesLeft } from '../constant/Helpers';
+import { getAllVideoBasenames } from '../constant/Helpers';
 
 export default function Settings(){
-  const [userID, setUserID] = useState('');
+  const [isPremium, setIsPremium] = useState();
+  const [usesLeft, setUsesLeft] = useState();
   const onPressColor = appColors.weakDark;
-  // SecureStore.setItemAsync('uses_left', `5`);
 
-  function deleteAllVideos(){
-    FileSystem.readDirectoryAsync(FileSystem.documentDirectory).then((result) => {
-      result.map(async(elem, idx) => {
+  async function deleteAllVideos(){
+    const allBaseNames = await getAllVideoBasenames();
+    if(allBaseNames.length !== 0){
+      allBaseNames.map(async(elem, idx) => {
         const fileUri = FileSystem.documentDirectory + elem;
         await FileSystem.deleteAsync(fileUri)
       })
-    });
+      Alert.alert('All videos are now deleted')
+    }
+    else{
+      Alert.alert('No videos found')
+    }
   }
 
-  useEffect(() => {
-    getCurrentAppUsesLeft().then((data) => {console.log(`Uses Left Right Now: ${data}`)});
-    getUniqueId().then((data) => {setUserID(data);});
+  async function onCancelPremiumPress(){
+    if (isPremium === 'yes'){
+      cancelPremium();
+      Alert.alert('Premium Canceled')
+      setIsPremium('no');
+    }
+    else{
+      Alert.alert(`You don't have a premium plan`)
+    }
+  }
+  
+  async function onGetPremiumPress() {
+    Alert.alert('Hi')
+  }
+
+  useLayoutEffect(() => {
+    getIsPremium().then((data) => { setIsPremium(data)});
+    getCurrentAppUsesLeft().then((data) => {setUsesLeft(data)});
   }, [])
 
-  return(
-    <View style={styles.rootContainer}>
-      <View style={styles.container}>
-        <View style={styles.btnContainer}>
-
-          <TouchableHighlight style={[styles.textContainer, {borderTopLeftRadius: 10, borderTopRightRadius: 10}]} underlayColor={onPressColor} onPress={()=>{}}>
+  function GetPremiumOrCancelPremium(){
+    if (isPremium === 'no'){
+      return(
+        <TouchableHighlight style={[styles.textContainer, {borderBottomLeftRadius: 15, borderBottomRightRadius: 15}]} underlayColor={onPressColor} onPress={onGetPremiumPress}>
             <View style={styles.textContainer}>
               <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
-                <LOCK_SVG color={appColors.deleteButtonTextColor}/>
+                <DIAMOND_SVG/>
               </View>
-              <Text style={styles.text}>Privacy Policy</Text>
+              <Text style={styles.text}>Get Premium</Text>
             </View>
           </TouchableHighlight>
-        
-          <View style={styles.horizontalLine}></View>
+      )
+    }
 
-          <TouchableHighlight style={styles.textContainer} underlayColor={onPressColor} onPress={()=>{}}>
-            <View style={styles.textContainer}>
-              <View style={[styles.svgContainer, {backgroundColor: appColors.orangeDarkColor}]}>
-                <TERMS_AND_USE_SVG color={appColors.deleteButtonTextColor}/>
-              </View>
-              <Text style={styles.text}>Terms of Use</Text>
-            </View>
-          </TouchableHighlight>
-
-          <View style={styles.horizontalLine}></View>
-
-          <TouchableHighlight style={[styles.textContainer, {borderBottomLeftRadius: 10, borderBottomRightRadius: 10}]} underlayColor={onPressColor} onPress={deleteAllVideos}>
-            <View style={styles.textContainer}>
-            <View style={[styles.svgContainer, {backgroundColor: appColors.deleteButtonColor}]}>
-                <DELETE_SVG color={appColors.deleteButtonTextColor}/>
-              </View>
-              <Text style={styles.text}>Delete All Videos</Text>
-            </View>
-          </TouchableHighlight>
-
-          <View style={styles.horizontalLine}></View>
-
-          <TouchableHighlight style={[styles.textContainer, {borderBottomLeftRadius: 10, borderBottomRightRadius: 10}]} underlayColor={onPressColor} onPress={() => {}}>
+    return(
+      <TouchableHighlight style={[styles.textContainer, {borderBottomLeftRadius: 15, borderBottomRightRadius: 15}]} underlayColor={onPressColor} onPress={onCancelPremiumPress}>
             <View style={styles.textContainer}>
             <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
                 <DIAMOND_SVG/>
@@ -78,6 +75,53 @@ export default function Settings(){
               <Text style={styles.text}>Cancel Premium</Text>
             </View>
           </TouchableHighlight>
+    );
+  }
+
+  return(
+    <View style={styles.rootContainer}>
+      <View style={styles.container}>
+        <View style={styles.btnContainer}>
+
+          <TouchableHighlight style={[styles.textContainer, {borderTopLeftRadius: 15, borderTopRightRadius: 15}]} underlayColor={onPressColor} onPress={()=>{}}>
+            <View style={styles.textContainer}>
+              <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
+                <LOCK_SVG color={appColors.deleteButtonTextColor}/>
+              </View>
+              <Text style={styles.text}>Privacy Policy</Text>
+              <View style={styles.horizontalLine}/>
+            </View>
+          </TouchableHighlight>
+        
+
+          <TouchableHighlight style={styles.textContainer} underlayColor={onPressColor} onPress={()=>{}}>
+            <View style={styles.textContainer}>
+              <View style={[styles.svgContainer, {backgroundColor: appColors.orangeDarkColor}]}>
+                <TERMS_AND_USE_SVG color={appColors.deleteButtonTextColor}/>
+              </View>
+              <Text style={styles.text}>Terms of Use</Text>
+              <View style={styles.horizontalLine}/>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight style={styles.textContainer} underlayColor={onPressColor} onPress={()=>{}}>
+            <View style={styles.textContainer}>
+              <Text style={styles.text}>Uses Left: {usesLeft}</Text>
+              <View style={styles.horizontalLine}/>
+            </View>
+          </TouchableHighlight>
+
+          <TouchableHighlight style={[styles.textContainer]} underlayColor={onPressColor} onPress={deleteAllVideos}>
+            <View style={styles.textContainer}>
+            <View style={[styles.svgContainer, {backgroundColor: appColors.deleteButtonColor}]}>
+                <DELETE_SVG color={appColors.deleteButtonTextColor}/>
+              </View>
+              <Text style={styles.text}>Delete All Videos</Text>
+              <View style={styles.horizontalLine}/>
+            </View>
+          </TouchableHighlight>
+
+          <GetPremiumOrCancelPremium/>
 
         </View>
       </View>
@@ -103,16 +147,14 @@ const styles = StyleSheet.create({
     },
 
     btnContainer: {
-      width: wp(80),
+      position: 'relative',
+      width: wp(92),
+      maxWidth: 500,
       backgroundColor: appColors.lighterDark,
-      borderRadius: 10,
+      borderRadius: 15,
       justifyContent: 'center',
       alignItems: 'center',
 
-      borderWidth: 0.2,
-      borderTopWidth: 0,
-      borderLeftWidth: 0,
-      borderColor: appColors.lightColor,
     },
 
     textContainer: {
@@ -121,13 +163,13 @@ const styles = StyleSheet.create({
       justifyContent: 'start',
       alignItems: 'center',
       width: '100%',
-      paddingLeft: wp(2.5),
-      height: 60,
+      paddingLeft: 10,
+      height: 45,
     },
 
     svgContainer: {
-      height: 35,
-      width: 35,
+      height: 30,
+      width: 30,
       padding: 5,
       borderRadius: 4,
       marginLeft: 15,
@@ -140,14 +182,15 @@ const styles = StyleSheet.create({
       color: appColors.textColor,
       marginLeft: 15,
       fontSize: 20,
-      fontFamily: appColors.fontExtraLight,
     },
 
     horizontalLine: {
-      position: 'relative',
-      width: wp(74),
-      right: -wp(3),
-      height: 0.4,
-      backgroundColor: appColors.lightColor,
+      position: 'absolute',
+      width: wp(71),
+      right: 0,
+      bottom: 0,
+      maxWidth: 420,
+      height: 0.8,
+      backgroundColor: appColors.horizontalLine,
     },
   });

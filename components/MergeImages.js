@@ -12,6 +12,7 @@ export default function MergeImages({ image1, image2, mergedImages, setMergedIma
     const maxHeight = 1080
     // const [loadCount, setLoadCount] = useState(0);
     const loadCount = useRef(0);
+    console.log('Merge Images here');
 
     async function saveImage(){
         try {
@@ -59,7 +60,7 @@ export default function MergeImages({ image1, image2, mergedImages, setMergedIma
 const styles = StyleSheet.create({
     rootContainer: {
         flex: 1,
-        top: hp(200),
+        top: hp(-200),
         position: 'absolute',
     }
 })

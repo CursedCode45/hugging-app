@@ -83,17 +83,14 @@ const styles = StyleSheet.create({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: wp(82.5),
-    height: wp(49.5),
+    width: wp(83),
+    height: wp(49.8),
     maxWidth: 500,
     maxHeight: 312.5,
 
     backgroundColor: appColors.lightColor,
     ...appColors.addShadow,
     borderRadius: 10,
-
-    borderWidth: 0.6,
-    borderColor: appColors.veryLightColor,
   },
     text: {
       fontWeight: 1000,

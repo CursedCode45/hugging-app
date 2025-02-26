@@ -28,8 +28,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginBottom: 10,
 
-        borderWidth: 0.2,
-        borderColor: appColors.closeButtonTextColor,
         backgroundColor: appColors.closeButtonColor,
     },
 
