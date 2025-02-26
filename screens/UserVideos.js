@@ -3,7 +3,7 @@ import * as React from 'react';
 import BottomTab from '../components/BottomTab'  
 import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
-import { VideoItem } from '../components/VideoItem';
+import VideoItem from '../components/VideoItem';
 import { wp } from '../constant/Helpers';
 import { getCurrentAppUsesLeft } from '../constant/Helpers';
 import { getAllVideoBasenames } from '../constant/Helpers';
@@ -12,7 +12,6 @@ export default function GenerateScreen(){
     const [files, setFiles] = React.useState([]);
     React.useEffect(() => {
       getAllVideoBasenames().then(data => {setFiles(data)});
-      getCurrentAppUsesLeft().then(data => {console.log(`Uses Left Right Now: ${data}`)});
     }, [])
 
     return(
@@ -25,7 +24,7 @@ export default function GenerateScreen(){
               numColumns={3} // Number of columns
               renderItem={({ item, index }) => (
                 <View style={styles.item}>
-                  <VideoItem fileIndex={index} setFiles={setFiles} filename={item}></VideoItem>
+                  <VideoItem fileIndex={index} setFiles={setFiles} filename={item}/>
                 </View>
               )}
             />

@@ -31,7 +31,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
 
     // Premium Variables
     const [hasCredits, setHasCredits] = React.useState(false);
-    const [isPremium, setIsPremium] = React.useState(false);
+    const [isPremium, setIsPremium] = React.useState('no');
 
     async function apiUploadImage() {
         try {
@@ -63,7 +63,6 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
                 setGettingVideo(false);
             };
             fr.readAsDataURL(videoBlob);
-            const isPremium = await getIsPremium();
             if(isPremium === 'no'){
                 await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true');
             }
@@ -105,10 +104,8 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     }, [image1, image2])
 
     React.useEffect(() => {
-        getIsPremium().then(data => {(data === 'no')? setIsPremium('false') : setIsPremium('true') })
+        getIsPremium().then(data => {setIsPremium(data)})
     }, [])
-
-
 
     return(
         <>

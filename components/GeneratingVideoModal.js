@@ -14,8 +14,9 @@ import path from "path-browserify";
 export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio, isPremium}){
     const [showWatermark, setShowWatermark] = React.useState('false');
 
-    React.useLayoutEffect(() =>{
-        const showWatermarkInit = (isPremium === 'false')? 'true' : 'false'
+    React.useEffect(() =>{
+        const showWatermarkInit = (isPremium === 'no')? 'true' : 'false'
+        console.log(`Show Init: ${showWatermarkInit}`);
         setShowWatermark(showWatermarkInit);
     }, [])
 

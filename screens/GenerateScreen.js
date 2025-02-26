@@ -43,7 +43,6 @@ export default function GenerateScreen(){
 
     useLayoutEffect(() => {
       saveHomeVideoToStorage();
-      getCurrentAppUsesLeft().then((data) => {console.log(`Uses Left Right Now: ${data}`)});
     }, [])
 
 

@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as MediaLibrary from 'expo-media-library';
 
 
-export function VideoItem(props){
+const VideoItem = React.memo((props) => {
     // Navigation
     const navigation = useNavigation();
 
@@ -70,8 +70,8 @@ export function VideoItem(props){
             {isOpen && <UserVideoModal thumbnail={thumbnail} filename={props.filename} videoWidth={thumbnailWidth} videoHeight={thumbnailHeight} isOpen={isOpen} setIsOpen={setIsOpen} fileUri={fileUri} setFiles={props.setFiles}/>}
         </View>
     )
-}
-
+});
+export default VideoItem;
 
 const styles = StyleSheet.create({
     videoItemContainer: {

@@ -12,10 +12,13 @@ import LOCK_SVG from '../assets/images/LockSvg';
 import DIAMOND_SVG from '../assets/images/DiamondSvg';
 import { cancelPremium, getIsPremium, getCurrentAppUsesLeft } from '../constant/Helpers';
 import { getAllVideoBasenames } from '../constant/Helpers';
+import GetProWeeklyOnly from '../components/GetProWeeklyOnly';
+
 
 export default function Settings(){
   const [isPremium, setIsPremium] = useState();
   const [usesLeft, setUsesLeft] = useState();
+  const [showGetProModal, setShowGetProModal] = useState(false);
   const onPressColor = appColors.weakDark;
 
   async function deleteAllVideos(){
@@ -44,13 +47,20 @@ export default function Settings(){
   }
   
   async function onGetPremiumPress() {
-    Alert.alert('Hi')
+    setShowGetProModal(true);
+  }
+
+  async function onCheckoutPress(){
+    setShowGetProModal(false);
+    setIsPremium('yes');
+    getCurrentAppUsesLeft().then((data) => {setUsesLeft(data)});
   }
 
   useLayoutEffect(() => {
     getIsPremium().then((data) => { setIsPremium(data)});
     getCurrentAppUsesLeft().then((data) => {setUsesLeft(data)});
   }, [])
+
 
   function GetPremiumOrCancelPremium(){
     if (isPremium === 'no'){
@@ -61,6 +71,7 @@ export default function Settings(){
                 <DIAMOND_SVG/>
               </View>
               <Text style={styles.text}>Get Premium</Text>
+              { showGetProModal && <GetProWeeklyOnly onGetProModalClose={()=>{setShowGetProModal(false)}} onCheckoutPress={onCheckoutPress} isVisible={showGetProModal}/>}
             </View>
           </TouchableHighlight>
       )
