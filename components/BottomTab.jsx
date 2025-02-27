@@ -3,8 +3,9 @@ import { useNavigation, useRoute } from '@react-navigation/native';
 import SETTINGS from '../assets/images/Settings.js';
 import BRAIN from '../assets/images/Brain.js';
 import PROFILE_SVG from '../assets/images/ProfileSvg.js';
-import { appColors } from '../constant/AppColors';
-import { wp, hp } from '../constant/Helpers'
+import { appColors } from '../constant/AppColors.js';
+import { wp, hp } from '../constant/Helpers.js'
+import { memo } from 'react';
 
 
 const on_touch_color = 'rgba(0, 0, 0, 0)';
@@ -48,6 +49,7 @@ export default function BottomTab() {
     </View>
   );
 }
+
 
 const styles = StyleSheet.create({
   container: {

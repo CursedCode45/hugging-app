@@ -1,13 +1,13 @@
 import { View, StyleSheet, TouchableHighlight, Text, Modal, ActivityIndicator, Button } from 'react-native';
 import * as React from 'react'
-import { appColors } from '../constant/AppColors';
-import { Vidplays } from './Vidplays.js';
+import { appColors } from '../constant/AppColors.js';
+import { Vidplays } from './Vidplays.jsx';
 import { wp, hp } from '../constant/Helpers.js';
 
-import SaveVideoButton from './SaveVideoButton.js';
-import CloseVideoButton from './CloseVideoButton.js'
-import LoadingBarAndScreenSkeleton from './LoadingBarAndScreenSkeleton.js';
-import GetProButton from './GetProButton.js';
+import SaveVideoButton from './SaveVideoButton.jsx';
+import CloseVideoButton from './CloseVideoButton.jsx'
+import LoadingBarAndScreenSkeleton from './LoadingBarAndScreenSkeleton.jsx';
+import GetProButton from './GetProButton.jsx';
 import path from "path-browserify";
 
 

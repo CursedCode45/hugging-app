@@ -136,7 +136,6 @@ export default function Settings(){
 
         </View>
       </View>
-      <BottomTab></BottomTab>
     </View>
   );
 }

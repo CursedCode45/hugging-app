@@ -28,7 +28,6 @@ export default function GenerateScreen(){
                 </View>
               )}
             />
-            <BottomTab></BottomTab>
         </View>
     );
 }
@@ -42,7 +41,6 @@ const styles = StyleSheet.create({
     },
 
     flatList:{
-      marginTop: 60,
       flex: 1,
       display: 'flex',
       backgroundColor: appColors.background,

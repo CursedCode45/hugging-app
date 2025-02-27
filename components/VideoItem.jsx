@@ -10,7 +10,7 @@ import { useNavigation } from '@react-navigation/native';
 import * as MediaLibrary from 'expo-media-library';
 
 
-const VideoItem = React.memo((props) => {
+export default function VideoItem(props){
     // Navigation
     const navigation = useNavigation();
 
@@ -25,33 +25,28 @@ const VideoItem = React.memo((props) => {
 
     async function getThumbnail(){
         try {
-            // Request permissions
-            const { status } = await MediaLibrary.requestPermissionsAsync();
-            if (status !== 'granted') {
-                Alert.alert('Permission required', 'Please allow access to save images.');
-                return;
-             }
             const thumbnailUri = fileUri.replace('.mp4', '.jpg')
             const thumbnailExists = (await FileSystem.getInfoAsync(thumbnailUri)).exists;
             if (thumbnailExists){
-                await setImageSize(thumbnailUri, setThumbnailWidth, setThumbnailHeight);
                 setThumbnail(thumbnailUri);
-                return;
+                setImageSize(thumbnailUri, setThumbnailWidth, setThumbnailHeight);
+                return thumbnailUri;
             }
+
             const { uri } = await VideoThumbnails.getThumbnailAsync(fileUri, {time: 0});
+            FileSystem.copyAsync({from: uri, to: thumbnailUri});
             setThumbnail(uri);
-            await setImageSize(uri, setThumbnailWidth, setThumbnailHeight);
-            await FileSystem.copyAsync({from: uri, to: thumbnailUri});
+            setImageSize(uri, setThumbnailWidth, setThumbnailHeight);
+            return uri;
         }
         catch (e) {
-            console.log('VideoItem.js')
             console.warn(e);
         }
     };
 
     React.useLayoutEffect(() => {
         getThumbnail();
-    }, [])
+    })
 
     function onVideoItemClick(){
         setIsOpen(true);
@@ -70,8 +65,7 @@ const VideoItem = React.memo((props) => {
             {isOpen && <UserVideoModal thumbnail={thumbnail} filename={props.filename} videoWidth={thumbnailWidth} videoHeight={thumbnailHeight} isOpen={isOpen} setIsOpen={setIsOpen} fileUri={fileUri} setFiles={props.setFiles}/>}
         </View>
     )
-});
-export default VideoItem;
+};
 
 const styles = StyleSheet.create({
     videoItemContainer: {

@@ -27,8 +27,8 @@ function WithoutImage({filename, onPress}){
 function WithImage({image, onRemoveImage}){
     return(
         <View style={styles.container}>
-            <View style={styles.previewImage}>
-                <Image source={{ uri: image.uri }} style={styles.previewImage} />
+            <View style={styles.iconTextContainer}>
+                <Image source={{ uri: image.uri }} style={styles.iconTextContainer} />
             </View>
             <TouchableHighlight style={styles.touchableX} underlayColor={appColors.buttonColor} onPress={onRemoveImage}>
                 <X_SVG color={appColors.lighterDark}/>
@@ -105,11 +105,10 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        width: wp(43),
-        height: wp(43),
-
-        maxWidth: 240,
-        maxHeight: 240,
+        width: wp(47),
+        height: wp(47),
+        maxWidth: 300,
+        maxHeight: 300,
     },
 
     svgContainer:{
@@ -125,25 +124,15 @@ const styles = StyleSheet.create({
         fontFamily: appColors.fontSemiBold,
     },
 
-    previewImage: {
-        display: 'flex',
-        borderRadius: 10,
-        width: wp(43),
-        height: wp(43),
-
-        maxWidth: 240,
-        maxHeight: 240,
-    },
-
     touchableX: {
         backgroundColor: appColors.lightColor,
         borderRadius: 1000,
         borderWidth: 0,
-        width: 40,
-        height: 40,
+        width: 35,
+        height: 35,
         position: 'absolute',
-        right: -15,
-        top: -15,
+        right: 5,
+        top: 5,
         zIndex: 30,
     },
 });

@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
 import DOWNLOAD_SVG from '../assets/images/DownloadSvg'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
-import { Loading } from '../components/Loading';
+import { Loading } from './Loading';
 import * as MediaLibrary from 'expo-media-library';
 import * as FileSystem from "expo-file-system";
 

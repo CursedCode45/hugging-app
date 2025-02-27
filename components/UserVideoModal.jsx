@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, Modal, TouchableHighlight, Image } from 'react-
 import * as React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
-import { Vidplays } from '../components/Vidplays';
+import { Vidplays } from './Vidplays';
 import { hp, wp } from '../constant/Helpers';
 import SaveVideoButton from './SaveVideoButton';
 import DeleteVideoButton from './DeleteVideoButton';

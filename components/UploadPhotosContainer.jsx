@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { View, StyleSheet } from 'react-native';
-import GenerateButton from './GenerateButton.js';
-import PhotoUpload from './PhotoUpload.js';
+import GenerateButton from './GenerateButton.jsx';
+import PhotoUpload from './PhotoUpload.jsx';
 
 
 export function UploadPhotosContainer(){

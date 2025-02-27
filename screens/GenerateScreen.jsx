@@ -54,8 +54,6 @@ export default function GenerateScreen(){
             </View>
             <UploadPhotosContainer/>
         </View>
-        <BottomTab/>
-
       </View>
 
     );
@@ -74,18 +72,18 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%',
-    justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: appColors.background,
+    marginTop: 0,
   },
+
   videoContainer: {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: wp(83),
-    height: wp(49.8),
+    width: wp(100),
+    height: wp(100)/1.66666666666,
     maxWidth: 500,
-    maxHeight: 312.5,
+    maxHeight: 500/1.666666666666,
 
     backgroundColor: appColors.lightColor,
     ...appColors.addShadow,

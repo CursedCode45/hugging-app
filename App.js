@@ -3,18 +3,33 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GenerateScreen from './screens/GenerateScreen';
 import UserVideos from './screens/UserVideos';
 import Settings from './screens/Settings';
-import { UserVideoModal } from './components/UserVideoModal';
 import { appColors } from './constant/AppColors';
 import { View, StatusBar } from 'react-native';
 import { StrictMode } from 'react';
-import GetPro from './components/GetPro';
-import GeneratingVideoModal from './components/GeneratingVideoModal';
+import { hp } from './constant/Helpers';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
 
-const Stack = createNativeStackNavigator();
-const stack_options = {
-  headerShown: false,
-  animation: 'none',
+const Tab = createBottomTabNavigator({
+  tabBar: () => <BottomTab/>,
+  screens: {
+    Generate: GenerateScreen,
+    UserVideos: UserVideos,
+    Settings: Settings,
+  },
+});
+const tabOptions = {
+  unmountOnBlur: false,
+  headerShown: 'false',
+  tabBarStyle: {
+    backgroundColor: 'none',
+    height: hp(12),
+    ...appColors.addShadowLarge,
+  },
+
+  tabBarItemStyle: {
+    height: hp(11),
+  }
 }
 
 
@@ -22,16 +37,13 @@ export default function App() {
   return (
     <StrictMode>
       <View style={{ flex: 1, backgroundColor: appColors.background }}>
-        <StatusBar animated={true} backgroundColor="#61dafb" barStyle='light-content'/>
+        <StatusBar animated={true} backgroundColor="rgb(0, 0, 0)" barStyle='light-content'/>
         <NavigationContainer theme={DarkTheme}>
-            <Stack.Navigator screenOptions={{unmountOnBlur: false, presentation: 'transparentModal'}}>
-              <Stack.Screen name='Generate' component={GenerateScreen} options={stack_options}/>
-              <Stack.Screen name='UserVideos' component={UserVideos} options={stack_options}/>
-              <Stack.Screen name='Settings' component={Settings} options={stack_options}/>
-              <Stack.Screen name='UserVideoModal' component={UserVideoModal} options={stack_options}/>
-              <Stack.Screen name='GetPro' component={GetPro} options={stack_options}/>
-              <Stack.Screen name='GeneratingVideoModal' component={GeneratingVideoModal} options={stack_options}/>
-            </Stack.Navigator>
+            <Tab.Navigator screenOptions={tabOptions}>
+              <Tab.Screen name='Generate' component={GenerateScreen} options={tabOptions}/>
+              <Tab.Screen name='My Videos' component={UserVideos} options={tabOptions}/>
+              <Tab.Screen name='Settings' component={Settings} options={tabOptions}/>
+            </Tab.Navigator>
         </NavigationContainer>
       </View>
     </StrictMode>
