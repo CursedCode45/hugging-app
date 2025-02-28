@@ -2,9 +2,7 @@ import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
 import DIAMOND_SVG from '../assets/images/DiamondSvg'
-import * as SecureStore from 'expo-secure-store';
 import GetPro from './GetPro';
-
 
 
 export default function GetProButton({filename, setShowWatermark=()=>{}}){
@@ -16,23 +14,16 @@ export default function GetProButton({filename, setShowWatermark=()=>{}}){
 
     function onGetProModalClose(){
         setShowGetProScreen(false);
-        console.log('Cancel Pressed')
     }
 
     function onCheckoutPress(){
         setShowGetProScreen(false);
-        console.log('Checkout Pressed')
+
         if (setShowWatermark){
             setShowWatermark('false');
         }
     }
 
-    React.useLayoutEffect(() => {
-        async function readItem(){
-            const key_rn = await SecureStore.getItemAsync(`show_watermark_${filename}`);
-        }
-        readItem();
-    }, [])
 
     if(showGetProScreen){
         return(

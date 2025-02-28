@@ -207,6 +207,11 @@ export async function resetDailyUsesIfPremium(){
             dateRightNow = dateRightNow.getTime();
             if(dateRightNow - dateOfPurchase  >= 86400000){
                 await SecureStore.setItemAsync('uses_left', `${USES_COUNT_ON_PREMIUM}`);
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+                console.log('Reseted Uses From Daily');
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
+                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
             }
         }
     }

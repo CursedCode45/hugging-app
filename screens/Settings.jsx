@@ -4,7 +4,7 @@ import { appColors } from '../constant/AppColors';
 import { useEffect, useLayoutEffect, useState } from 'react';
 import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
-import { wp } from '../constant/Helpers';
+import { getPremium, wp } from '../constant/Helpers';
 import { getUniqueId } from '../constant/Helpers';
 import DELETE_SVG from '../assets/images/DeleteSvg';
 import TERMS_AND_USE_SVG from '../assets/images/TermsAndUseSvg';
@@ -13,13 +13,15 @@ import DIAMOND_SVG from '../assets/images/DiamondSvg';
 import { cancelPremium, getIsPremium, getCurrentAppUsesLeft } from '../constant/Helpers';
 import { getAllVideoBasenames } from '../constant/Helpers';
 import GetProWeeklyOnly from '../components/GetProWeeklyOnly';
+import { useAppContext } from '../AppContext';
+import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
 
 
 export default function Settings(){
-  const [isPremium, setIsPremium] = useState();
-  const [usesLeft, setUsesLeft] = useState();
   const [showGetProModal, setShowGetProModal] = useState(false);
   const onPressColor = appColors.weakDark;
+  const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
+
 
   async function deleteAllVideos(){
     const allBaseNames = await getAllVideoBasenames();
@@ -53,13 +55,9 @@ export default function Settings(){
   async function onCheckoutPress(){
     setShowGetProModal(false);
     setIsPremium('yes');
-    getCurrentAppUsesLeft().then((data) => {setUsesLeft(data)});
+    setUsesLeft(USES_COUNT_ON_PREMIUM);
+    getPremium();
   }
-
-  useLayoutEffect(() => {
-    getIsPremium().then((data) => { setIsPremium(data)});
-    getCurrentAppUsesLeft().then((data) => {setUsesLeft(data)});
-  }, [])
 
 
   function GetPremiumOrCancelPremium(){

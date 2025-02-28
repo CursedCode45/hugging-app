@@ -5,10 +5,13 @@ import { hp, wp } from '../constant/Helpers'
 import CHECKMARK_SVG from '../assets/images/CheckmarkSvg';
 import * as SecureStore from 'expo-secure-store';
 import { getPremium } from '../constant/Helpers';
+import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
+import { useAppContext } from '../AppContext';
 
 
 export default function BuyButtons({onCancelPress, onCheckoutPress, filename={filename}}){
     const [select, setSelect] = React.useState(0);
+    const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
     async function localONcheckoutPress(){
         if (select === 1){
@@ -16,6 +19,8 @@ export default function BuyButtons({onCancelPress, onCheckoutPress, filename={fi
             onCheckoutPress();
         }
         if (select === 0){
+            setIsPremium('yes');
+            setUsesLeft(USES_COUNT_ON_PREMIUM);
             getPremium();
             onCheckoutPress();
         }

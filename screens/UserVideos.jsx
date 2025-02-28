@@ -1,18 +1,15 @@
 import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
 import * as React from 'react';
-import BottomTab from '../components/BottomTab'  
 import { appColors } from '../constant/AppColors';
-import * as FileSystem from "expo-file-system";
 import VideoItem from '../components/VideoItem';
 import { wp } from '../constant/Helpers';
-import { getCurrentAppUsesLeft } from '../constant/Helpers';
 import { getAllVideoBasenames } from '../constant/Helpers';
 
 export default function GenerateScreen(){
     const [files, setFiles] = React.useState([]);
     React.useEffect(() => {
       getAllVideoBasenames().then(data => {setFiles(data)});
-    }, [])
+    }, [files])
 
     return(
         <View style={styles.container}>

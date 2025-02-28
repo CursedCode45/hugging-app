@@ -10,6 +10,7 @@ import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { canUseApp, appUseCredit, getIsPremium } from '../constant/Helpers.js';
 import { Alert } from 'react-native'
+import { useAppContext } from '../AppContext.js';
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -30,8 +31,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     const navigation = useNavigation();
 
     // Premium Variables
-    const [hasCredits, setHasCredits] = React.useState(false);
-    const [isPremium, setIsPremium] = React.useState('no');
+    const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
     async function apiUploadImage() {
         try {
@@ -50,7 +50,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             fileName = fileName.substr(fileName.length-7);
             var date_right_now = getFormattedDate().replaceAll(/\s/g,'_').replaceAll('-', '_');
             date_right_now = date_right_now.trim();
-            fileName = `${date_right_now}_${fileName}.mp4`;
+            fileName = `${fileName}_${date_right_now}.mp4`;
             const fileUri = FileSystem.documentDirectory + fileName;
 
             const response = await fetch(apiURL, {method: 'post', body :formData, headers:{"Content-Type": "multipart/form-data"}})
@@ -77,16 +77,17 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     }
 
     async function onGeneratePress(){
-        if (mergedImages && hasCredits){
+        if (mergedImages && usesLeft > 0){
             setShowModal(true);
             setGettingVideo(true);
             apiUploadImage();
             setImage1(null);
             setImage2(null);
             setMergedImages(null);
+            setUsesLeft(usesLeft-1);
             appUseCredit();
         }
-        else if (mergedImages && !hasCredits){
+        else if (mergedImages && usesLeft <= 0){
             Alert.alert(`You've ran out of uses for today, please try again tomorrow.`)
         }
     }
@@ -100,18 +101,13 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
         if (!image1 || !image2){
             setMergedImages(null);
         }
-        canUseApp().then(data => {setHasCredits(data);});
     }, [image1, image2])
-
-    React.useEffect(() => {
-        getIsPremium().then(data => {setIsPremium(data)})
-    }, [])
 
     return(
         <>
             {(image1 && image2 && !mergedImages) && <MergeImages image1={image1} image2={image2} mergedImages={mergedImages} setMergedImages={setMergedImages}/>}
             <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio} isPremium={isPremium}/>
-            <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress} hasCredits={hasCredits}/>
+            <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress}/>
         </>
         
     );

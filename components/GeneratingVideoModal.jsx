@@ -13,12 +13,12 @@ import path from "path-browserify";
 
 export default function GeneratingVideoModal({ showModal, gettingVideo, onModalClose, videoStream, videoAspectRatio, isPremium}){
     const [showWatermark, setShowWatermark] = React.useState('false');
-
+    
     React.useEffect(() =>{
+        console.log(`Generating Video Modal Is Pro: ${isPremium}`)
         const showWatermarkInit = (isPremium === 'no')? 'true' : 'false'
-        console.log(`Show Init: ${showWatermarkInit}`);
         setShowWatermark(showWatermarkInit);
-    }, [])
+    }, [isPremium])
 
     function RenderGetProOrSaveButton(){
         if (showWatermark === 'false'){

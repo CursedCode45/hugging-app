@@ -1,5 +1,4 @@
 import { NavigationContainer, DarkTheme } from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import GenerateScreen from './screens/GenerateScreen';
 import UserVideos from './screens/UserVideos';
 import Settings from './screens/Settings';
@@ -8,46 +7,55 @@ import { View, StatusBar } from 'react-native';
 import { StrictMode } from 'react';
 import { hp } from './constant/Helpers';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import * as React from 'react';
+import { AppProvider } from './AppContext';
+import BottomTab from './components/BottomTab';
 
 
 const Tab = createBottomTabNavigator({
-  tabBar: () => <BottomTab/>,
   screens: {
     Generate: GenerateScreen,
     UserVideos: UserVideos,
     Settings: Settings,
   },
 });
-const tabOptions = {
+
+const screenOptions = ({ route }) => ({
   unmountOnBlur: false,
   headerShown: 'false',
   tabBarStyle: {
-    backgroundColor: 'none',
+    backgroundColor: 'rgba(0, 0, 0, 0)',
     height: hp(12),
     ...appColors.addShadowLarge,
   },
-
   tabBarItemStyle: {
-    height: hp(11),
-  }
-}
+    margin: 5,
+  },
+  tabBarLabelStyle: {
+    marginTop: 7,
+  },
+  tabBarIcon: ({ focused }) => {
+    return <BottomTab route={route} focused={focused}/>;
+  },
+
+})
 
 
 export default function App() {
   return (
     <StrictMode>
-      <View style={{ flex: 1, backgroundColor: appColors.background }}>
-        <StatusBar animated={true} backgroundColor="rgb(0, 0, 0)" barStyle='light-content'/>
-        <NavigationContainer theme={DarkTheme}>
-            <Tab.Navigator screenOptions={tabOptions}>
-              <Tab.Screen name='Generate' component={GenerateScreen} options={tabOptions}/>
-              <Tab.Screen name='My Videos' component={UserVideos} options={tabOptions}/>
-              <Tab.Screen name='Settings' component={Settings} options={tabOptions}/>
-            </Tab.Navigator>
-        </NavigationContainer>
-      </View>
+      <AppProvider>
+        <View style={{ flex: 1, backgroundColor: appColors.background }}>
+          <StatusBar animated={true} backgroundColor="rgb(0, 0, 0)" barStyle='light-content'/>
+          <NavigationContainer theme={DarkTheme}>
+              <Tab.Navigator initialRouteName='Generate' screenOptions={screenOptions}>
+                <Tab.Screen name='Generate' component={GenerateScreen}/>
+                <Tab.Screen name='My Videos' component={UserVideos}/>
+                <Tab.Screen name='Settings' component={Settings}/>
+              </Tab.Navigator>
+          </NavigationContainer>
+        </View>
+      </AppProvider>
     </StrictMode>
   );
 }
-
-
