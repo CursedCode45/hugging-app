@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
         width: '90%',
         height: 50,
         marginTop: 10,
-        borderRadius: 10,
+        borderRadius: 5,
         marginBottom: 10,
 
         backgroundColor: appColors.closeButtonColor,

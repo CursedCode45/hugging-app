@@ -25,7 +25,7 @@ const styles = StyleSheet.create({
 
         width: '100%',
         height: 50,
-        borderRadius: 10,
+        borderRadius: 5,
         flex: 1,
 
         backgroundColor: appColors.deleteButtonColor,

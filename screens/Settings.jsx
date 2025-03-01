@@ -15,10 +15,15 @@ import { getAllVideoBasenames } from '../constant/Helpers';
 import GetProWeeklyOnly from '../components/GetProWeeklyOnly';
 import { useAppContext } from '../AppContext';
 import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
+import TermsOfServicesModal from '../components/TermsOfServicesModal';
+import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 
 
 export default function Settings(){
   const [showGetProModal, setShowGetProModal] = useState(false);
+  const [showTOS, setShowTOS] = useState(false);
+  const [showPP, setShowPP] = useState(false);
+
   const onPressColor = appColors.weakDark;
   const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
@@ -77,13 +82,13 @@ export default function Settings(){
 
     return(
       <TouchableHighlight style={[styles.textContainer, {borderBottomLeftRadius: 15, borderBottomRightRadius: 15}]} underlayColor={onPressColor} onPress={onCancelPremiumPress}>
-            <View style={styles.textContainer}>
-            <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
-                <DIAMOND_SVG/>
-              </View>
-              <Text style={styles.text}>Cancel Premium</Text>
+          <View style={styles.textContainer}>
+          <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
+              <DIAMOND_SVG/>
             </View>
-          </TouchableHighlight>
+            <Text style={styles.text}>Cancel Premium</Text>
+          </View>
+        </TouchableHighlight>
     );
   }
 
@@ -92,7 +97,7 @@ export default function Settings(){
       <View style={styles.container}>
         <View style={styles.btnContainer}>
 
-          <TouchableHighlight style={[styles.textContainer, {borderTopLeftRadius: 15, borderTopRightRadius: 15}]} underlayColor={onPressColor} onPress={()=>{}}>
+          <TouchableHighlight style={[styles.textContainer, {borderTopLeftRadius: 15, borderTopRightRadius: 15}]} underlayColor={onPressColor} onPress={()=>{setShowPP(true)}}>
             <View style={styles.textContainer}>
               <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
                 <LOCK_SVG color={appColors.deleteButtonTextColor}/>
@@ -103,7 +108,7 @@ export default function Settings(){
           </TouchableHighlight>
         
 
-          <TouchableHighlight style={styles.textContainer} underlayColor={onPressColor} onPress={()=>{}}>
+          <TouchableHighlight style={styles.textContainer} underlayColor={onPressColor} onPress={()=>{setShowTOS(true)}}>
             <View style={styles.textContainer}>
               <View style={[styles.svgContainer, {backgroundColor: appColors.orangeDarkColor}]}>
                 <TERMS_AND_USE_SVG color={appColors.deleteButtonTextColor}/>
@@ -134,6 +139,10 @@ export default function Settings(){
 
         </View>
       </View>
+
+
+      <TermsOfServicesModal showModal={showTOS} onModalClose={() => {setShowTOS(false)}}/>
+      <PrivacyPolicyModal showModal={showPP} onModalClose={() => {setShowPP(false)}}/>
     </View>
   );
 }

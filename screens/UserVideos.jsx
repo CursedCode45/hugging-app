@@ -4,13 +4,17 @@ import { appColors } from '../constant/AppColors';
 import VideoItem from '../components/VideoItem';
 import { wp } from '../constant/Helpers';
 import { getAllVideoBasenames } from '../constant/Helpers';
+import { useFocusEffect } from '@react-navigation/native';
+
 
 export default function GenerateScreen(){
     const [files, setFiles] = React.useState([]);
-    React.useEffect(() => {
-      getAllVideoBasenames().then(data => {setFiles(data)});
-    }, [files])
 
+    useFocusEffect(
+      React.useCallback(() => {
+        getAllVideoBasenames().then((data) => {setFiles(data)});
+      }, []
+    ))
     return(
         <View style={styles.container}>
             <FlatList

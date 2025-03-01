@@ -5,10 +5,9 @@ import DIAMOND_SVG from '../assets/images/DiamondSvg'
 import GetPro from './GetPro';
 
 
-export default function GetProButton({filename, setShowWatermark=()=>{}}){
+export default function GetProButton({filename, setShowWatermark}){
     const [showGetProScreen, setShowGetProScreen] = React.useState(false);
-
-    async function onGetProPress(){
+    function onGetProPress(){
         setShowGetProScreen(true);
     }
 
@@ -24,13 +23,11 @@ export default function GetProButton({filename, setShowWatermark=()=>{}}){
         }
     }
 
-
     if(showGetProScreen){
         return(
             <GetPro onGetProModalClose={onGetProModalClose} onCheckoutPress={onCheckoutPress} filename={filename}/>
         )
     }
-
     return (
         <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.closeButtonPressedColor} onPress={onGetProPress}>
             <View style={styles.iconTextContainer}>
@@ -50,7 +47,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: 50,
-        borderRadius: 10,
+        borderRadius: 5,
 
         backgroundColor: appColors.closeButtonColor,
         marginTop: 10,

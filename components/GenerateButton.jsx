@@ -1,16 +1,14 @@
 import * as React from 'react';
 import { backend_domain } from '../constant/Settings.js';
 import * as FileSystem from "expo-file-system";
-import { setVideoSize } from '../constant/Helpers.js';
 import GenerateVideoButton from './GenerateVideoButton.jsx';
 import GeneratingVideoModal from './GeneratingVideoModal.jsx';
-import { getFormattedDate, getUniqueId } from '../constant/Helpers.js';
 import MergeImages from './MergeImages.jsx';
 import * as SecureStore from 'expo-secure-store';
 import { useNavigation, useRoute } from '@react-navigation/native';
-import { canUseApp, appUseCredit, getIsPremium } from '../constant/Helpers.js';
 import { Alert } from 'react-native'
 import { useAppContext } from '../AppContext.js';
+import { appUseCredit, getAllVideoBasenames, getFormattedDate, getUniqueId, setVideoSizeAndSaveThumbnail } from '../constant/Helpers.js';
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -45,7 +43,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             });
 
             // Make a new Video file name
-            var fileName = (await FileSystem.readDirectoryAsync(FileSystem.documentDirectory)).length;
+            var fileName = (await getAllVideoBasenames()).length;
             fileName = '000000' + fileName;
             fileName = fileName.substr(fileName.length-7);
             var date_right_now = getFormattedDate().replaceAll(/\s/g,'_').replaceAll('-', '_');
@@ -58,7 +56,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             const fr = new FileReader();
             fr.onload = async function(e) {
                 await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], { encoding: FileSystem.EncodingType.Base64 });
-                setVideoSize(fileUri, setVideoWidth, setVideoHeight, setVideoAspectRatio);
+                setVideoSizeAndSaveThumbnail(fileUri, setVideoWidth, setVideoHeight, setVideoAspectRatio);
                 setVideoStream(fileUri);
                 setGettingVideo(false);
             };

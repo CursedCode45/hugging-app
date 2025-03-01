@@ -20,7 +20,7 @@ export function hp(percentage){
     return ((screenHeight*percentage)/100);
 }
 
-export async function setVideoSize(videoURI, setWidth, setHeight, setAspectRatio=() => {}){
+export async function setVideoSizeAndSaveThumbnail(videoURI, setWidth, setHeight, setAspectRatio=() => {}){
     try {
         const thumbnailURI = await VideoThumbnails.getThumbnailAsync(videoURI, {time: 0});
         const {width, height} = await Image.getSize(thumbnailURI.uri);
@@ -99,6 +99,7 @@ export async function getAllVideoBasenames(){
                 filtered_files.push(item)
             }
         }
+        filtered_files.sort();
         return filtered_files;
     }
     catch(e){

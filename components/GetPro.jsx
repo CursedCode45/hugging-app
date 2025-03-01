@@ -3,15 +3,13 @@ import React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import Watermark from './../assets/images/Watermark.png';
-import { hp, wp } from '../constant/Helpers';
+import { wp } from '../constant/Helpers';
 import BuyButtons from './BuyButtons';
 import * as FileSystem from "expo-file-system";
-import * as ImageManipulator from 'expo-image-manipulator'
 
 
 export default function GetPro({onGetProModalClose, onCheckoutPress, filename}){
     const [thumbnail, setThumbnail] = React.useState(null);
-
     async function getThumbnail(){
         try{
             const fileUri = `${FileSystem.documentDirectory}home_videos/home_hugging_video.mp4`;

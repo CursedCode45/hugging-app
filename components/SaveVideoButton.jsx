@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         height: 50,
-        borderRadius: 10,
+        borderRadius: 5,
 
         backgroundColor: appColors.saveButtonColor,
     },

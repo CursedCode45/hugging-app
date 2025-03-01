@@ -1,16 +1,16 @@
-import { StyleSheet, Text, View, Modal, TouchableHighlight, Image } from 'react-native';
+import { StyleSheet, Text, View, Modal } from 'react-native';
 import * as React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
 import { Vidplays } from './Vidplays';
-import { hp, wp } from '../constant/Helpers';
+import { wp } from '../constant/Helpers';
 import SaveVideoButton from './SaveVideoButton';
 import DeleteVideoButton from './DeleteVideoButton';
 import CloseVideoButton from './CloseVideoButton';
 import GetProButton from './GetProButton';
-import * as MediaLibrary from 'expo-media-library';
 import * as SecureStore from 'expo-secure-store';
 import { getAllVideoBasenames } from '../constant/Helpers';
+import path from "path-browserify";
 
 
 export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
@@ -21,7 +21,6 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
             try{
                 const read_key = await SecureStore.getItemAsync(`show_watermark_${filename}`);
                 setShowWatermark(read_key);
-                console.log(`User Video Modal Watermark Show: ${read_key}`);
             }
             catch(e){
                 console.log(e);
@@ -49,7 +48,6 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
                 </View>
             );
         }
-
         React.useLayoutEffect(() => {
             loadWatermarkKey();
         }, [])
@@ -57,6 +55,7 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
         return(
             <Modal color={appColors.background} animationType="none" transparent={false} visible={true} onRequestClose={()=>{}}>
                 <View style={styles.modalContainer}>
+                    <Text style={{color: 'white'}}>{path.basename(fileUri)}</Text>
                     <CloseVideoButton onPress={()=>{setIsOpen(false);}}/>
 
                     <View style={[styles.modalVideoContainer, {width: wp(90), height:  wp(90)/videoAspectRatio}]}>

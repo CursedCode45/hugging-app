@@ -15,7 +15,6 @@ export default function GeneratingVideoModal({ showModal, gettingVideo, onModalC
     const [showWatermark, setShowWatermark] = React.useState('false');
     
     React.useEffect(() =>{
-        console.log(`Generating Video Modal Is Pro: ${isPremium}`)
         const showWatermarkInit = (isPremium === 'no')? 'true' : 'false'
         setShowWatermark(showWatermarkInit);
     }, [isPremium])
@@ -31,8 +30,6 @@ export default function GeneratingVideoModal({ showModal, gettingVideo, onModalC
             <GetProButton filename={videoName} setShowWatermark={setShowWatermark}/>
         );
     }
-
-
     function WhatToRender(){
         if(gettingVideo){
             return(

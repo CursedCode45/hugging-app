@@ -34,9 +34,9 @@ export default function VideoItem(props){
             }
 
             const { uri } = await VideoThumbnails.getThumbnailAsync(fileUri, {time: 0});
-            FileSystem.copyAsync({from: uri, to: thumbnailUri});
-            setThumbnail(uri);
+            await FileSystem.copyAsync({from: uri, to: thumbnailUri});
             setImageSize(uri, setThumbnailWidth, setThumbnailHeight);
+            setThumbnail(uri);
             return uri;
         }
         catch (e) {

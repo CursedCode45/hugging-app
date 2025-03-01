@@ -56,7 +56,10 @@ export const appColors = {
         shadowOpacity: 0.13,
     },
 
+    fontBlack: Platform.select({android: 'Inter_900Black', ios: 'Inter-black'}),
+    fontExtraBold: Platform.select({android: 'Inter_800ExtraBold', ios: 'Inter-ExtraBold'}),
     fontSemiBold: Platform.select({android: 'Inter_600SemiBold', ios: 'Inter-SemiBold'}),
+    fontRegular: Platform.select({android: 'Inter_400Regular', ios: 'Inter-Regular'}),
     fontExtraLight: Platform.select({android: 'Inter_200ExtraLight', ios: 'Inter-ExtraLight'}),
     fontThin: Platform.select({android: 'Inter_100Thin', ios: 'Inter-Thin'}),
 

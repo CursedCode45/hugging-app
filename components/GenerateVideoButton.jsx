@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
         maxWidth: 500,
         height: 50,
         marginTop: 10,
-        borderRadius: 10,
+        borderRadius: 5,
         marginBottom: 10,
     },
 
