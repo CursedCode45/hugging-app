@@ -8,8 +8,13 @@ import { getPremium } from '../constant/Helpers';
 
 export default function BuyButtonsWeeklyOnly({onCancelPress, onCheckoutPress }){
     async function localONcheckoutPress(){
-        getPremium();
-        onCheckoutPress();
+        const successful = await getPremium();
+        if (successful){
+            onCheckoutPress();
+        }
+        else{
+            onCancelPress();
+        }
     }
 
     return (

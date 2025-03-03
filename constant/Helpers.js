@@ -5,6 +5,9 @@ import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
 import * as Crypto from 'expo-crypto';
 import { USES_COUNT_ON_INSTALL, USES_COUNT_ON_PREMIUM } from './Settings';
+import { Alert } from 'react-native';
+import { backend_domain } from './Settings';
+
 
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
@@ -24,7 +27,6 @@ export async function setVideoSizeAndSaveThumbnail(videoURI, setWidth, setHeight
     try {
         const thumbnailURI = await VideoThumbnails.getThumbnailAsync(videoURI, {time: 0});
         const {width, height} = await Image.getSize(thumbnailURI.uri);
-        console.log(`Image is here width: ${width} and height ${height}`)
         setWidth(width);
         setHeight(height);
         setAspectRatio(width/height);
@@ -159,6 +161,20 @@ export async function appUseCredit(){
 
 export async function getPremium(){
     try{
+        const userID = await getUniqueId();
+        const apiURL = `${backend_domain}/buy-premium?id=${userID}`
+        const response = await fetch(apiURL);
+        if (!response.ok) {
+            Alert.alert('Failed to buy premium, try again later');
+            return false;
+        }
+        const responseJson = await response.json();
+        console.log(`Response result: ${responseJson.purchase}`);
+        if (responseJson.purchase === false){
+            Alert.alert('Failed to buy premium, try again later');
+            return false;
+        }
+
         let dateOfPurchase = new Date();
         dateOfPurchase = dateOfPurchase.getTime().toString();
         await SecureStore.setItemAsync('is_premium', 'yes');
@@ -168,9 +184,11 @@ export async function getPremium(){
         allVideoBasenames.forEach(element => {
             SecureStore.setItemAsync(`show_watermark_${element}`, 'false');
         })
+        return true;
     }
     catch(e){
         console.log(`Error Getting Premium: ${e}`);
+        return false;
     }
 }
 

@@ -10,9 +10,7 @@ import { hp } from '../constant/Helpers';
 export default function MergeImages({ image1, image2, mergedImages, setMergedImages }){
     const svgRef = useRef();
     const maxHeight = 1080
-    // const [loadCount, setLoadCount] = useState(0);
     const loadCount = useRef(0);
-    console.log('Merge Images here');
 
     async function saveImage(){
         try {

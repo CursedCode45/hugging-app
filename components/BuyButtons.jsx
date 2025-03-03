@@ -19,10 +19,15 @@ export default function BuyButtons({onCancelPress, onCheckoutPress, filename={fi
             onCheckoutPress();
         }
         if (select === 0){
-            setIsPremium('yes');
-            setUsesLeft(USES_COUNT_ON_PREMIUM);
-            getPremium();
-            onCheckoutPress();
+            const successful = await getPremium();
+            if (successful){
+                setIsPremium('yes');
+                setUsesLeft(USES_COUNT_ON_PREMIUM);
+                onCheckoutPress();
+            }
+            else{
+                onCancelPress();
+            }
         }
     }
 

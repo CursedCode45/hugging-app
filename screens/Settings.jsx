@@ -61,7 +61,6 @@ export default function Settings(){
     setShowGetProModal(false);
     setIsPremium('yes');
     setUsesLeft(USES_COUNT_ON_PREMIUM);
-    getPremium();
   }
 
 
