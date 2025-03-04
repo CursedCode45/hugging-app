@@ -8,40 +8,45 @@ import BuyButtons from './BuyButtons';
 import * as FileSystem from "expo-file-system";
 
 
-export default function GetPro({onGetProModalClose, onCheckoutPress, filename}){
-    const [thumbnail, setThumbnail] = React.useState(null);
-    async function getThumbnail(){
-        try{
-            const fileUri = `${FileSystem.documentDirectory}home_videos/home_hugging_video.mp4`;
-            const { uri } = await VideoThumbnails.getThumbnailAsync(fileUri, {time: 4000});
-            setThumbnail(uri);
-        }
-        catch(e){
-            console.log(`Get Pro Thumbnail Error: ${e}`)
-        }
-    }
+export default function GetPro({setShowGetProScreen, setShowWatermark, filename}){
+  const [thumbnail, setThumbnail] = React.useState(null);
 
-    React.useEffect(() => {
-        getThumbnail();
-    }, [])
+  function onGetProModalClose(){
+    setShowGetProScreen(false);
+  }
 
-    return (
-      <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onGetProModalClose}>
-        <View style={styles.rootContainer}>
-            <SafeAreaView>
-                <View style={styles.headlineTextContainer}>
-                    <Text style={[styles.headlineText]}>Download Video</Text>
-                    <Text style={styles.headlineText}><Text style={styles.withoutText}>Without</Text> Watermark</Text>
-                </View>
-                <View style={styles.imageContainer}>
-                    <Image source={{uri: thumbnail}} style={styles.thumbnail}/>
-                    <Image source={Watermark} style={styles.watermark}/>
-                </View>
-                <BuyButtons onCheckoutPress={onCheckoutPress} onCancelPress={onGetProModalClose} filename={filename}/>
-            </SafeAreaView>
-        </View>
-      </Modal>
-    )
+  async function getThumbnail(){
+      try{
+          const fileUri = `${FileSystem.documentDirectory}home_videos/home_hugging_video.mp4`;
+          const { uri } = await VideoThumbnails.getThumbnailAsync(fileUri, {time: 4000});
+          setThumbnail(uri);
+      }
+      catch(e){
+          console.log(`Get Pro Thumbnail Error: ${e}`)
+      }
+  }
+
+  React.useEffect(() => {
+      getThumbnail();
+  }, [])
+
+  return (
+    <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onGetProModalClose}>
+      <View style={styles.rootContainer}>
+          <SafeAreaView>
+              <View style={styles.headlineTextContainer}>
+                  <Text style={[styles.headlineText]}>Download Video</Text>
+                  <Text style={styles.headlineText}><Text style={styles.withoutText}>Without</Text> Watermark</Text>
+              </View>
+              <View style={styles.imageContainer}>
+                  <Image source={{uri: thumbnail}} style={styles.thumbnail}/>
+                  <Image source={Watermark} style={styles.watermark}/>
+              </View>
+              <BuyButtons setShowGetProScreen={setShowGetProScreen} setShowWatermark={setShowWatermark} filename={filename}/>
+          </SafeAreaView>
+      </View>
+    </Modal>
+  )
 }
 
 

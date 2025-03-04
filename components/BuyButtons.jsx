@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, ActivityIndicator } from 'react-native'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
 import { hp, wp } from '../constant/Helpers'
@@ -7,28 +7,40 @@ import * as SecureStore from 'expo-secure-store';
 import { getPremium } from '../constant/Helpers';
 import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
 import { useAppContext } from '../AppContext';
+import { buyOneVideo } from '../constant/Helpers';
 
 
-export default function BuyButtons({onCancelPress, onCheckoutPress, filename={filename}}){
+export default function BuyButtons({ setShowGetProScreen, setShowWatermark, filename={filename}}){
     const [select, setSelect] = React.useState(0);
+    const [loading, setLoading] = React.useState(false);
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
+    function onCancelPress(){
+        setShowGetProScreen(false);
+    }
+
     async function localONcheckoutPress(){
+        setLoading(true);
+
         if (select === 1){
-            await SecureStore.setItemAsync(`show_watermark_${filename}`, 'false');
-            onCheckoutPress();
+            const isSuccessful = await buyOneVideo(filename);
+            if (isSuccessful){
+                setShowWatermark('false');
+            }
+            setShowGetProScreen(false);
         }
+
         if (select === 0){
-            const successful = await getPremium();
-            if (successful){
+            const isSuccessful = await getPremium();
+            if (isSuccessful){
                 setIsPremium('yes');
                 setUsesLeft(USES_COUNT_ON_PREMIUM);
-                onCheckoutPress();
+                setShowWatermark('false');
             }
-            else{
-                onCancelPress();
-            }
+            setShowGetProScreen(false);
         }
+
+        setLoading(false);
     }
 
     return (
@@ -89,7 +101,9 @@ export default function BuyButtons({onCancelPress, onCheckoutPress, filename={fi
 
         {/* Checkout Button */}
         <TouchableHighlight style={styles.checkoutTextContainer} underlayColor={appColors.closeButtonPressedColor} onPress={localONcheckoutPress}>
-            <Text style={styles.checkoutText}>Checkout</Text>
+            {loading
+            ? <ActivityIndicator size={'small'} color={appColors.closeButtonTextColor}/>
+            : <Text style={styles.checkoutText}>Checkout</Text>}
         </TouchableHighlight>
 
         {/* Cancel Button */}

@@ -11,21 +11,9 @@ export default function GetProButton({filename, setShowWatermark}){
         setShowGetProScreen(true);
     }
 
-    function onGetProModalClose(){
-        setShowGetProScreen(false);
-    }
-
-    function onCheckoutPress(){
-        setShowGetProScreen(false);
-
-        if (setShowWatermark){
-            setShowWatermark('false');
-        }
-    }
-
     if(showGetProScreen){
         return(
-            <GetPro onGetProModalClose={onGetProModalClose} onCheckoutPress={onCheckoutPress} filename={filename}/>
+            <GetPro setShowGetProScreen={setShowGetProScreen} setShowWatermark={setShowWatermark} filename={filename}/>
         )
     }
     return (

@@ -19,7 +19,6 @@ export default function VideoItem(props){
     const [thumbnailHeight, setThumbnailHeight] = React.useState(0);
 
     const [isOpen, setIsOpen] = React.useState(false);
-    const [date_right_now, fileName] = props.filename.split('_')
     const fileUri = FileSystem.documentDirectory + props.filename;
 
 

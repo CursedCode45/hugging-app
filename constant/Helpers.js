@@ -169,7 +169,6 @@ export async function getPremium(){
             return false;
         }
         const responseJson = await response.json();
-        console.log(`Response result: ${responseJson.purchase}`);
         if (responseJson.purchase === false){
             Alert.alert('Failed to buy premium, try again later');
             return false;
@@ -192,6 +191,32 @@ export async function getPremium(){
     }
 }
 
+export async function buyOneVideo(fileName){
+    try{
+        const videoID = parseInt(fileName.split('.')[0]);
+        const apiURL = `${backend_domain}/buy-one-video?id=${videoID}`
+        const response = await fetch(apiURL);
+        if (!response.ok) {
+            Alert.alert('Failed to buy video, try again later');
+            return false;
+        }
+
+        const responseJson = await response.json();
+        if (responseJson.purchase === false){
+            Alert.alert('Failed to buy video, try again later');
+            return false;
+        }
+
+        await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'false');
+        return true;
+
+    }
+    catch(e){
+        console.warn(`Error Buying Video: ${e}`);
+        return false;
+    }
+}
+
 export async function getIsPremium(){
     try{
         const isPremium = await SecureStore.getItemAsync(`is_premium`);
@@ -209,10 +234,25 @@ export async function getIsPremium(){
 
 export async function cancelPremium(){
     try{
-        await SecureStore.setItemAsync('is_premium', 'no');
+        const userID = await getUniqueId();
+        const apiURL = `${backend_domain}/cancel-premium?id=${userID}`
+        const cancelResponse = await fetch(apiURL);
+        const cancelJson = await cancelResponse.json();
+        console.log(cancelJson.cancel);
+        if (cancelJson.cancel === true){   
+            await SecureStore.setItemAsync('is_premium', 'no');
+            Alert.alert('Premium Canceled')
+            return true;
+        }
+        else{
+            Alert.alert("Couldn't cancel, something went wrong, please try again later or email us");
+            return false;
+        }
     }
     catch(e){
         console.log(`Error Canceling Premium Plan: ${e}`);
+        Alert.alert("Couldn't cancel, something went wrong, please try again later or email us");
+        return false;
     }
 }
 
@@ -236,5 +276,40 @@ export async function resetDailyUsesIfPremium(){
     }
     catch(e){
         console.log(`Error Reseting Premium Uses: ${e}`);
+    }
+}
+
+export async function restoreAllVideos(){
+    try{
+        const isPremium = await getIsPremium();
+        const userID = await getUniqueId();
+        const apiURL = `${backend_domain}/get-all-video-urls?id=${userID}`
+        const video_info_response = await fetch(apiURL);
+        const video_info_json = await video_info_response.json();
+
+        if (video_info_json.videos.length === 0){
+            Alert.alert('No videos found!');
+            return;
+        }
+        
+        for (const video_info of video_info_json.videos){
+            let fileName = `${parseInt(video_info.name.split('.')[0])}`;
+            fileName = '00000000000' + fileName;
+            fileName = fileName.substr(fileName.length-12);
+            fileName = `${fileName}.mp4`;
+            const fileUri = FileSystem.documentDirectory + fileName;
+
+            console.log(`Getting Video: ${fileName}`);
+            console.log(`Video url: ${video_info.url}`);
+            await FileSystem.downloadAsync(video_info.url, fileUri);
+            console.log(`Downloaded: ${fileName}`);
+            (isPremium === 'no')
+            ? await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true')
+            : await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'false');
+            console.log(`Setting watermark settings: ${isPremium}`);
+        }
+    }
+    catch(e){
+        console.warn(`Error getting all videos: ${e}`)
     }
 }

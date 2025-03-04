@@ -34,6 +34,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     async function apiUploadImage() {
         try {
             const userID = await getUniqueId();
+
             const apiURL = `${backend_domain}/upload-merged-image?id=${userID}`
             const formData = new FormData() ;
             formData.append('image', {
@@ -42,17 +43,19 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
                 name: 'merged.jpg', 
             });
 
+            const response = await fetch(apiURL, {method: 'post', body :formData, headers:{"Content-Type": "multipart/form-data"}})
+            const metadataEncoded = response.headers.get('X-Metadata');
+            const metadata = JSON.parse(decodeURIComponent(metadataEncoded));
+            const videoBlob = await response.blob();
+
+
             // Make a new Video file name
-            var fileName = (await getAllVideoBasenames()).length;
-            fileName = '000000' + fileName;
-            fileName = fileName.substr(fileName.length-7);
-            var date_right_now = getFormattedDate().replaceAll(/\s/g,'_').replaceAll('-', '_');
-            date_right_now = date_right_now.trim();
-            fileName = `${fileName}_${date_right_now}.mp4`;
+            var fileName = metadata.video_id;
+            fileName = '00000000000' + fileName;
+            fileName = fileName.substr(fileName.length-12);
+            fileName = `${fileName}.mp4`;
             const fileUri = FileSystem.documentDirectory + fileName;
 
-            const response = await fetch(apiURL, {method: 'post', body :formData, headers:{"Content-Type": "multipart/form-data"}})
-            const videoBlob = await response.blob();
             const fr = new FileReader();
             fr.onload = async function(e) {
                 await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], { encoding: FileSystem.EncodingType.Base64 });

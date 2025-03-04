@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, ActivityIndicator, Alert } from 'react-native'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
 import { wp } from '../constant/Helpers'
@@ -7,7 +7,14 @@ import { getPremium } from '../constant/Helpers';
 
 
 export default function BuyButtonsWeeklyOnly({onCancelPress, onCheckoutPress }){
+    const [loading, setLoading] = React.useState(false);
+
     async function localONcheckoutPress(){
+        if(loading){
+            return;
+        }
+
+        setLoading(true);
         const successful = await getPremium();
         if (successful){
             onCheckoutPress();
@@ -15,6 +22,7 @@ export default function BuyButtonsWeeklyOnly({onCancelPress, onCheckoutPress }){
         else{
             onCancelPress();
         }
+        setLoading(false);
     }
 
     return (
@@ -55,7 +63,10 @@ export default function BuyButtonsWeeklyOnly({onCancelPress, onCheckoutPress }){
 
         {/* Checkout Button */}
         <TouchableHighlight style={styles.checkoutTextContainer} underlayColor={appColors.closeButtonPressedColor} onPress={localONcheckoutPress}>
-            <Text style={styles.checkoutText}>Checkout</Text>
+            {loading
+            ? <ActivityIndicator size={'small'} color={appColors.closeButtonTextColor}/>
+            : <Text style={styles.checkoutText}>Checkout</Text>}
+            
         </TouchableHighlight>
 
         {/* Cancel Button */}

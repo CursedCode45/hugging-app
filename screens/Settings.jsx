@@ -10,13 +10,16 @@ import DELETE_SVG from '../assets/images/DeleteSvg';
 import TERMS_AND_USE_SVG from '../assets/images/TermsAndUseSvg';
 import LOCK_SVG from '../assets/images/LockSvg';
 import DIAMOND_SVG from '../assets/images/DiamondSvg';
-import { cancelPremium, getIsPremium, getCurrentAppUsesLeft } from '../constant/Helpers';
+import { cancelPremium } from '../constant/Helpers';
 import { getAllVideoBasenames } from '../constant/Helpers';
 import GetProWeeklyOnly from '../components/GetProWeeklyOnly';
 import { useAppContext } from '../AppContext';
 import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
 import TermsOfServicesModal from '../components/TermsOfServicesModal';
 import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
+import { restoreAllVideos } from '../constant/Helpers';
+import SettingsPremiumButton from '../components/SettingsPremiumButton';
+import RestorePurchasesButton from '../components/RestorePurchasesButton';
 
 
 export default function Settings(){
@@ -29,67 +32,25 @@ export default function Settings(){
 
 
   async function deleteAllVideos(){
-    const allBaseNames = await getAllVideoBasenames();
-    if(allBaseNames.length !== 0){
-      allBaseNames.map(async(elem, idx) => {
-        const fileUri = FileSystem.documentDirectory + elem;
-        await FileSystem.deleteAsync(fileUri)
-      })
-      Alert.alert('All videos are now deleted')
+    try{
+      const allBaseNames = await getAllVideoBasenames();
+      if(allBaseNames.length !== 0){
+        allBaseNames.map(async(elem, idx) => {
+          const fileUri = FileSystem.documentDirectory + elem;
+          await FileSystem.deleteAsync(fileUri)
+        })
+        Alert.alert('All videos are now deleted')
+      }
+      else{
+        Alert.alert('No videos found')
+      }
     }
-    else{
-      Alert.alert('No videos found')
-    }
-  }
-
-  async function onCancelPremiumPress(){
-    if (isPremium === 'yes'){
-      cancelPremium();
-      Alert.alert('Premium Canceled')
-      setIsPremium('no');
-    }
-    else{
-      Alert.alert(`You don't have a premium plan`)
-    }
-  }
   
-  async function onGetPremiumPress() {
-    setShowGetProModal(true);
-  }
-
-  async function onCheckoutPress(){
-    setShowGetProModal(false);
-    setIsPremium('yes');
-    setUsesLeft(USES_COUNT_ON_PREMIUM);
-  }
-
-
-  function GetPremiumOrCancelPremium(){
-    if (isPremium === 'no'){
-      return(
-        <TouchableHighlight style={[styles.textContainer, {borderBottomLeftRadius: 15, borderBottomRightRadius: 15}]} underlayColor={onPressColor} onPress={onGetPremiumPress}>
-            <View style={styles.textContainer}>
-              <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
-                <DIAMOND_SVG/>
-              </View>
-              <Text style={styles.text}>Get Premium</Text>
-              { showGetProModal && <GetProWeeklyOnly onGetProModalClose={()=>{setShowGetProModal(false)}} onCheckoutPress={onCheckoutPress} isVisible={showGetProModal}/>}
-            </View>
-          </TouchableHighlight>
-      )
+    catch(e){
+      console.warn(`Error happened while deliting videos: ${e}`)
     }
+}
 
-    return(
-      <TouchableHighlight style={[styles.textContainer, {borderBottomLeftRadius: 15, borderBottomRightRadius: 15}]} underlayColor={onPressColor} onPress={onCancelPremiumPress}>
-          <View style={styles.textContainer}>
-          <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
-              <DIAMOND_SVG/>
-            </View>
-            <Text style={styles.text}>Cancel Premium</Text>
-          </View>
-        </TouchableHighlight>
-    );
-  }
 
   return(
     <View style={styles.rootContainer}>
@@ -134,7 +95,8 @@ export default function Settings(){
             </View>
           </TouchableHighlight>
 
-          <GetPremiumOrCancelPremium/>
+          <RestorePurchasesButton/>
+          <SettingsPremiumButton/>
 
         </View>
       </View>
