@@ -11,7 +11,7 @@ import GetProButton from './GetProButton';
 import * as SecureStore from 'expo-secure-store';
 import { getAllVideoBasenames } from '../constant/Helpers';
 import path from "path-browserify";
-
+import { deleteVideo } from '../constant/Helpers';
 
 export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
         const videoAspectRatio = videoWidth/videoHeight;
@@ -28,7 +28,7 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
         }
   
         async function onDeleteClick(){
-            await FileSystem.deleteAsync(fileUri);
+            await deleteVideo(filename);
             const allVideosBasenames = await getAllVideoBasenames();
             setFiles(allVideosBasenames);
             setIsOpen(false);

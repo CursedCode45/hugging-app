@@ -2,7 +2,7 @@ import { StyleSheet, Text, View, TouchableHighlight, ActivityIndicator, Alert } 
 import React from 'react'
 import DIAMOND_SVG from '../assets/images/DiamondSvg';
 import { appColors } from '../constant/AppColors';
-import { restoreAllVideos } from '../constant/Helpers';
+import { restoreMissingVideos } from '../constant/Helpers';
 import { useAppContext } from '../AppContext';
 import { wp } from '../constant/Helpers';
 
@@ -13,15 +13,11 @@ const RestorePurchasesButton = () => {
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
     async function onRestoreClick() {
-        if (isPremium === 'no'){
-            Alert.alert('This feature requires premium');
-            return;
-        }
         if (loading){
             return;
         }
         setLoading(true);
-        await restoreAllVideos();
+        await restoreMissingVideos();
         setLoading(false);
     }
 
@@ -39,7 +35,7 @@ const RestorePurchasesButton = () => {
                 <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
                     <DIAMOND_SVG/>
                 </View>
-                {loading? <LoadingContainer/> : <Text style={styles.text}>Restore Purchases</Text> }
+                {loading? <LoadingContainer/> : <Text style={styles.text}>Restore Deleted Videos</Text> }
                 <View style={styles.horizontalLine}/>
             </View>
         </TouchableHighlight>

@@ -1,29 +1,19 @@
 import { StyleSheet, Text, View, TouchableHighlight, Alert } from 'react-native';
-import BottomTab from '../components/BottomTab'  
 import { appColors } from '../constant/AppColors';
-import { useEffect, useLayoutEffect, useState } from 'react';
+import { useState } from 'react';
 import * as FileSystem from "expo-file-system";
-import * as SecureStore from 'expo-secure-store';
-import { getPremium, wp } from '../constant/Helpers';
-import { getUniqueId } from '../constant/Helpers';
 import DELETE_SVG from '../assets/images/DeleteSvg';
 import TERMS_AND_USE_SVG from '../assets/images/TermsAndUseSvg';
 import LOCK_SVG from '../assets/images/LockSvg';
-import DIAMOND_SVG from '../assets/images/DiamondSvg';
-import { cancelPremium } from '../constant/Helpers';
-import { getAllVideoBasenames } from '../constant/Helpers';
-import GetProWeeklyOnly from '../components/GetProWeeklyOnly';
+import { getAllVideoBasenames, wp, deleteVideo } from '../constant/Helpers';
 import { useAppContext } from '../AppContext';
-import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
 import TermsOfServicesModal from '../components/TermsOfServicesModal';
 import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
-import { restoreAllVideos } from '../constant/Helpers';
 import SettingsPremiumButton from '../components/SettingsPremiumButton';
 import RestorePurchasesButton from '../components/RestorePurchasesButton';
 
 
 export default function Settings(){
-  const [showGetProModal, setShowGetProModal] = useState(false);
   const [showTOS, setShowTOS] = useState(false);
   const [showPP, setShowPP] = useState(false);
 
@@ -35,9 +25,8 @@ export default function Settings(){
     try{
       const allBaseNames = await getAllVideoBasenames();
       if(allBaseNames.length !== 0){
-        allBaseNames.map(async(elem, idx) => {
-          const fileUri = FileSystem.documentDirectory + elem;
-          await FileSystem.deleteAsync(fileUri)
+        allBaseNames.map(async(elem) => {
+          deleteVideo(elem);
         })
         Alert.alert('All videos are now deleted')
       }

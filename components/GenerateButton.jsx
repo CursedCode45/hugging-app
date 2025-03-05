@@ -16,17 +16,11 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     const [showModal, setShowModal] = React.useState(false);
     const [gettingVideo, setGettingVideo] = React.useState(false);
     const [videoStream, setVideoStream] = React.useState(null);
-    const [videoWidth, setVideoWidth] = React.useState(0);
-    const [videoHeight, setVideoHeight] = React.useState(0);
-    const [videoAspectRatio, setVideoAspectRatio] = React.useState(1);
+    const [videoAspectRatio, setVideoAspectRatio] = React.useState(1.66666666);
 
 
     // Variables For Merge Images Component
     const [mergedImages, setMergedImages] = React.useState(null);
-
-    // Navigation
-    const route = useRoute();
-    const navigation = useNavigation();
 
     // Premium Variables
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
@@ -44,10 +38,13 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             });
 
             const response = await fetch(apiURL, {method: 'post', body :formData, headers:{"Content-Type": "multipart/form-data"}})
+            if (!response.ok){
+                return false;  
+            }
+            
             const metadataEncoded = response.headers.get('X-Metadata');
             const metadata = JSON.parse(decodeURIComponent(metadataEncoded));
             const videoBlob = await response.blob();
-
 
             // Make a new Video file name
             var fileName = metadata.video_id;
@@ -59,7 +56,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             const fr = new FileReader();
             fr.onload = async function(e) {
                 await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], { encoding: FileSystem.EncodingType.Base64 });
-                setVideoSizeAndSaveThumbnail(fileUri, setVideoWidth, setVideoHeight, setVideoAspectRatio);
+                setVideoSizeAndSaveThumbnail(fileUri, setVideoAspectRatio);
                 setVideoStream(fileUri);
                 setGettingVideo(false);
             };
@@ -70,10 +67,12 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             else{
                 await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'false');
             }
+            return true
 
         }
         catch (error) {
-            console.error('Error uploading image:', error);
+            console.error('Error Getting Video:', error);
+            return false
         }
     }
 
@@ -81,21 +80,31 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
         if (mergedImages && usesLeft > 0){
             setShowModal(true);
             setGettingVideo(true);
-            apiUploadImage();
+            const isSuccessful = await apiUploadImage();
             setImage1(null);
             setImage2(null);
             setMergedImages(null);
-            setUsesLeft(usesLeft-1);
-            appUseCredit();
+            if (isSuccessful){
+                setUsesLeft(usesLeft-1);
+                appUseCredit();
+            }
+            else{
+                onModalClose();
+                Alert.alert('Something went wrong please try again later');
+            }
         }
-        else if (mergedImages && usesLeft <= 0){
-            Alert.alert(`You've ran out of uses for today, please try again tomorrow.`)
+        else if (mergedImages && usesLeft <= 0 && isPremium !== 'no'){
+            Alert.alert(`You've ran out of uses for today, please try again tomorrow`)
+        }
+        else if (mergedImages && usesLeft <= 0 && isPremium === 'no'){
+            Alert.alert(`You've ran out of uses, please buy premium to use the app.`)
         }
     }
 
     function onModalClose(){
         setGettingVideo(false);
         setShowModal(false);
+        setVideoStream(null);
     }
 
     React.useEffect(() => {

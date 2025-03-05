@@ -31,7 +31,7 @@ export default function GeneratingVideoModal({ showModal, gettingVideo, onModalC
         );
     }
     function WhatToRender(){
-        if(gettingVideo){
+        if(gettingVideo || videoStream === null){
             return(
                 <LoadingBarAndScreenSkeleton/>
             )
@@ -43,7 +43,6 @@ export default function GeneratingVideoModal({ showModal, gettingVideo, onModalC
                 <View style={{width: wp(90), height: wp(90)/videoAspectRatio, maxWidth: 500, maxHeight: 500/videoAspectRatio}}>
                     <Vidplays source={videoStream} showWatermark={showWatermark}/>
                 </View>
-
                 <View style={styles.bottomButtonContainer}>
                     <RenderGetProOrSaveButton/>
                 </View>

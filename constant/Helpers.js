@@ -12,6 +12,16 @@ import { backend_domain } from './Settings';
 const screenWidth = Dimensions.get('window').width;
 const screenHeight = Dimensions.get('window').height;
 
+function arraysEqual(a, b) {
+    if (a === b) return true;
+    if (a == null || b == null) return false;
+    if (a.length !== b.length) return false;
+
+    for (var i = 0; i < a.length; ++i) {
+        if (a[i] !== b[i]) return false;
+    }
+    return true;
+}
 
 // Returns Width Percentage
 export function wp(percentage){
@@ -23,12 +33,10 @@ export function hp(percentage){
     return ((screenHeight*percentage)/100);
 }
 
-export async function setVideoSizeAndSaveThumbnail(videoURI, setWidth, setHeight, setAspectRatio=() => {}){
+export async function setVideoSizeAndSaveThumbnail(videoURI, setAspectRatio=() => {}){
     try {
         const thumbnailURI = await VideoThumbnails.getThumbnailAsync(videoURI, {time: 0});
         const {width, height} = await Image.getSize(thumbnailURI.uri);
-        setWidth(width);
-        setHeight(height);
         setAspectRatio(width/height);
     }
     catch(e){
@@ -74,10 +82,8 @@ export async function getUniqueId() {
     if (userId) {
         return userId;
     }
-    else{
-        userId = Crypto.randomUUID();
-        await SecureStore.setItemAsync('userId', userId);
-    } 
+    userId = Crypto.randomUUID();
+    await SecureStore.setItemAsync('userId', userId);
 }
 
 
@@ -110,6 +116,23 @@ export async function getAllVideoBasenames(){
     }
 }
 
+export async function deleteVideo(videoBasename) {
+    try{
+
+        const videoUri = FileSystem.documentDirectory + videoBasename;
+        const thumbnailUri = FileSystem.documentDirectory + videoBasename.split('.')[0] + '.jpg';
+        if (await FileSystem.getInfoAsync(thumbnailUri)){
+            await FileSystem.deleteAsync(thumbnailUri)
+        }
+        if (await FileSystem.getInfoAsync(videoUri)){
+            await FileSystem.deleteAsync(videoUri)
+        }
+    }
+    catch(e){
+        console.warn(`Error Deleting Video: ${e}`)
+    }
+}
+
 
 export async function getCurrentAppUsesLeft(){
     try{
@@ -128,36 +151,22 @@ export async function getCurrentAppUsesLeft(){
     }
 }
 
-export async function canUseApp() {
-    try{
-        let useCountInt = await getCurrentAppUsesLeft();
-        if (useCountInt <= 0){
-            return false;
-        }
-        return true;
-    }
-    catch(e){
-        console.log(`Error happend while trying to check uses: ${e}`);
-    }
-}
+
 
 export async function appUseCredit(){
     try{
-        const canUse = await canUseApp();
-        if (canUse){
-            let useCountInt = await getCurrentAppUsesLeft();
-            useCountInt = useCountInt - 1;
-            const usesToString = useCountInt.toString();
-            await SecureStore.setItemAsync('uses_left', usesToString);
-        }
-        else{
-            console.log('No uses left');
-        }
+        let useCountInt = await getCurrentAppUsesLeft();
+        useCountInt = useCountInt - 1;
+        const usesToString = useCountInt.toString();
+        await SecureStore.setItemAsync('uses_left', usesToString);
+
     }
     catch(e){
         console.log(`Error happend while trying to use app: ${e}`);
     }
 }
+
+
 
 export async function getPremium(){
     try{
@@ -190,6 +199,8 @@ export async function getPremium(){
         return false;
     }
 }
+
+
 
 export async function buyOneVideo(fileName){
     try{
@@ -279,19 +290,39 @@ export async function resetDailyUsesIfPremium(){
     }
 }
 
-export async function restoreAllVideos(){
+export async function restoreMissingVideos(){
     try{
         const isPremium = await getIsPremium();
         const userID = await getUniqueId();
+        let allLocalVideos = await getAllVideoBasenames();
         const apiURL = `${backend_domain}/get-all-video-urls?id=${userID}`
         const video_info_response = await fetch(apiURL);
+        if (!video_info_response.ok){
+            Alert.alert("Couldn't get the videos try again later");
+            return;
+        }
         const video_info_json = await video_info_response.json();
 
         if (video_info_json.videos.length === 0){
             Alert.alert('No videos found!');
             return;
         }
-        
+
+        let serverVideoBasenames = [];
+        for (const video_info of video_info_json.videos){
+            let modifyName = `${parseInt(video_info.name.split('.')[0])}`;
+            modifyName = '00000000000' + modifyName;
+            modifyName = modifyName.substr(modifyName.length-12);
+            modifyName = `${modifyName}.mp4`;
+            serverVideoBasenames.push(modifyName);
+        }
+
+        serverVideoBasenames.sort();
+        if (arraysEqual(allLocalVideos, serverVideoBasenames)){
+            Alert.alert('There are no missing videos');
+            return;
+        }
+
         for (const video_info of video_info_json.videos){
             let fileName = `${parseInt(video_info.name.split('.')[0])}`;
             fileName = '00000000000' + fileName;
@@ -299,14 +330,17 @@ export async function restoreAllVideos(){
             fileName = `${fileName}.mp4`;
             const fileUri = FileSystem.documentDirectory + fileName;
 
-            console.log(`Getting Video: ${fileName}`);
-            console.log(`Video url: ${video_info.url}`);
+            if (allLocalVideos.includes(fileName)) continue;
+
+
             await FileSystem.downloadAsync(video_info.url, fileUri);
             console.log(`Downloaded: ${fileName}`);
-            (isPremium === 'no')
-            ? await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true')
-            : await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'false');
-            console.log(`Setting watermark settings: ${isPremium}`);
+            if (isPremium === 'yes' || video_info.is_paid){
+                await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'false')
+            }
+            else{
+                await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true');
+            }
         }
     }
     catch(e){
