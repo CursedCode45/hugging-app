@@ -24,7 +24,6 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
 
     // Premium Variables
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
-
     async function apiUploadImage() {
         try {
             const userID = await getUniqueId();
@@ -61,7 +60,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
                 setGettingVideo(false);
             };
             fr.readAsDataURL(videoBlob);
-            if(isPremium === 'no'){
+            if(!isPremium){
                 await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true');
             }
             else{
@@ -77,6 +76,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     }
 
     async function onGeneratePress(){
+        console.log(`Uses at: ${usesLeft}`);
         if (mergedImages && usesLeft > 0){
             setShowModal(true);
             setGettingVideo(true);
@@ -86,18 +86,20 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             setMergedImages(null);
             if (isSuccessful){
                 setUsesLeft(usesLeft-1);
-                appUseCredit();
             }
             else{
                 onModalClose();
                 Alert.alert('Something went wrong please try again later');
             }
         }
-        else if (mergedImages && usesLeft <= 0 && isPremium !== 'no'){
+        else if (mergedImages && usesLeft === 0 && isPremium){
             Alert.alert(`You've ran out of uses for today, please try again tomorrow`)
         }
-        else if (mergedImages && usesLeft <= 0 && isPremium === 'no'){
+        else if (mergedImages && usesLeft === 0 && !isPremium){
             Alert.alert(`You've ran out of uses, please buy premium to use the app.`)
+        }
+        else if (mergedImages && usesLeft === null){
+            Alert.alert(`Not connect to the server, please restart the app or try again later`);
         }
     }
 

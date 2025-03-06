@@ -33,7 +33,7 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
         if (select === 0){
             const isSuccessful = await getPremium();
             if (isSuccessful){
-                setIsPremium('yes');
+                setIsPremium(true);
                 setUsesLeft(USES_COUNT_ON_PREMIUM);
                 setShowWatermark('false');
             }

@@ -15,7 +15,7 @@ export default function GeneratingVideoModal({ showModal, gettingVideo, onModalC
     const [showWatermark, setShowWatermark] = React.useState('false');
     
     React.useEffect(() =>{
-        const showWatermarkInit = (isPremium === 'no')? 'true' : 'false'
+        const showWatermarkInit = (!isPremium)? 'true' : 'false'
         setShowWatermark(showWatermarkInit);
     }, [isPremium])
 

@@ -13,12 +13,18 @@ const RestorePurchasesButton = () => {
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
     async function onRestoreClick() {
-        if (loading){
-            return;
+        try{
+
+            if (loading){
+                return;
+            }
+            setLoading(true);
+            await restoreMissingVideos(isPremium);
+            setLoading(false);
         }
-        setLoading(true);
-        await restoreMissingVideos();
-        setLoading(false);
+        catch(e){
+            console.log(`Error Getting Missing Videos: ${e}`);
+        }
     }
 
     const LoadingContainer = () =>{

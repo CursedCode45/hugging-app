@@ -21,7 +21,7 @@ const SettingsPremiumButton = () => {
             return;
         }
         setShowGetProModal(false);
-        setIsPremium('yes');
+        setIsPremium(true);
         setUsesLeft(USES_COUNT_ON_PREMIUM);
     }
 
@@ -41,10 +41,10 @@ const SettingsPremiumButton = () => {
         }
 
         setLoading(true);
-        if (isPremium === 'yes'){
+        if (isPremium){
             const isCanceled = await cancelPremium();
             if (isCanceled){
-                setIsPremium('no');
+                setIsPremium(false);
             }
         }
         else{
@@ -89,7 +89,7 @@ const SettingsPremiumButton = () => {
         )
     }
 
-    if (isPremium === 'yes'){
+    if (isPremium){
         return <CancelPremium/>
     }
     return <GetPremium/>

@@ -136,36 +136,25 @@ export async function deleteVideo(videoBasename) {
 
 export async function getCurrentAppUsesLeft(){
     try{
-        await resetDailyUsesIfPremium();
-        const usesCount = await SecureStore.getItemAsync(`uses_left`);
-        if (!usesCount){
-            console.log(`Initiating Uses Count with: ${USES_COUNT_ON_INSTALL} uses`)
-            await SecureStore.setItemAsync('uses_left', `${USES_COUNT_ON_INSTALL}`);
-            return USES_COUNT_ON_INSTALL;
+        const userID = await getUniqueId();
+        const apiURL = `${backend_domain}/get-current-uses?id=${userID}`
+        const currentUsesResponse = await fetch(apiURL);
+        if (!currentUsesResponse.ok) {
+            Alert.alert("Issue connecting with the Servers");
+            return null;
         }
-        const usesToInt = parseInt(usesCount)
-        return usesToInt
+
+        const currentUsesJson = await currentUsesResponse.json();
+        const currentUses = currentUsesJson.uses;
+        console.log(`Got Current Uses: ${currentUses}`);
+        return currentUses
     }
     catch(e){
-        console.log(`Error Getting Uses Count: ${e}`);
+        console.warn(`Error Reading Uses: ${e}`);
+        Alert.alert("Issue connecting with the Servers");
+        return null;
     }
 }
-
-
-
-export async function appUseCredit(){
-    try{
-        let useCountInt = await getCurrentAppUsesLeft();
-        useCountInt = useCountInt - 1;
-        const usesToString = useCountInt.toString();
-        await SecureStore.setItemAsync('uses_left', usesToString);
-
-    }
-    catch(e){
-        console.log(`Error happend while trying to use app: ${e}`);
-    }
-}
-
 
 
 export async function getPremium(){
@@ -196,6 +185,7 @@ export async function getPremium(){
     }
     catch(e){
         console.log(`Error Getting Premium: ${e}`);
+        Alert.alert('Error Connecting with the server, please try again later');
         return false;
     }
 }
@@ -224,22 +214,29 @@ export async function buyOneVideo(fileName){
     }
     catch(e){
         console.warn(`Error Buying Video: ${e}`);
+        Alert.alert('Failed to buy video, try again later');
         return false;
     }
 }
 
-export async function getIsPremium(){
+export async function getIsPremium(clientId){
     try{
-        const isPremium = await SecureStore.getItemAsync(`is_premium`);
-        if (!isPremium){
-            console.log(`Initiating is_premium with: no`);
-            await SecureStore.setItemAsync('is_premium', 'no');
-            return 'no';
+        const apiURL = `${backend_domain}/get-is-premium?id=${clientId}`
+        const isPremiumResponse = await fetch(apiURL);
+        if (!isPremiumResponse.ok) {
+            Alert.alert("Issue connecting with the Servers");
+            return false;
         }
+
+        const isPremiumJson = await isPremiumResponse.json();
+        const isPremium = isPremiumJson.is_premium;
+        console.log(`Got premium request: ${isPremium}`);
         return isPremium
     }
     catch(e){
-        console.log(`Error Checking If App Is Premium: ${e}`);
+        console.warn(`Error Reading Premium: ${e}`);
+        Alert.alert("Issue connecting with the Servers");
+        return false;
     }
 }
 
@@ -269,7 +266,7 @@ export async function cancelPremium(){
 
 export async function resetDailyUsesIfPremium(){
     try{
-        const isPremium = await SecureStore.getItemAsync(`is_premium`);
+        const isPremium = true;
         if(isPremium === 'yes'){
             let dateOfPurchase = await SecureStore.getItemAsync(`date_of_purchase`);
             dateOfPurchase = parseInt(dateOfPurchase);
@@ -290,10 +287,8 @@ export async function resetDailyUsesIfPremium(){
     }
 }
 
-export async function restoreMissingVideos(){
+export async function restoreMissingVideos(isPremium){
     try{
-        const isPremium = await getIsPremium();
-        const userID = await getUniqueId();
         let allLocalVideos = await getAllVideoBasenames();
         const apiURL = `${backend_domain}/get-all-video-urls?id=${userID}`
         const video_info_response = await fetch(apiURL);
@@ -344,6 +339,7 @@ export async function restoreMissingVideos(){
         }
     }
     catch(e){
+        Alert.alert('Error Connecting with the server, please try again later');
         console.warn(`Error getting all videos: ${e}`)
     }
 }
