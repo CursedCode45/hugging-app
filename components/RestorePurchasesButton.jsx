@@ -41,7 +41,7 @@ const RestorePurchasesButton = () => {
                 <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
                     <DIAMOND_SVG/>
                 </View>
-                {loading? <LoadingContainer/> : <Text style={styles.text}>Restore Deleted Videos</Text> }
+                {loading? <LoadingContainer/> : <Text style={styles.text}>Restore Missing Videos</Text> }
                 <View style={styles.horizontalLine}/>
             </View>
         </TouchableHighlight>

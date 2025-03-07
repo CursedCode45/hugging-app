@@ -289,6 +289,7 @@ export async function resetDailyUsesIfPremium(){
 
 export async function restoreMissingVideos(isPremium){
     try{
+        const userID = await getUniqueId();
         let allLocalVideos = await getAllVideoBasenames();
         const apiURL = `${backend_domain}/get-all-video-urls?id=${userID}`
         const video_info_response = await fetch(apiURL);

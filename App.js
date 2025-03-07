@@ -46,7 +46,6 @@ export default function App() {
     <StrictMode>
       <AppProvider>
         <View style={{ flex: 1, backgroundColor: appColors.background }}>
-          <StatusBar animated={true} backgroundColor="rgb(0, 0, 0)" barStyle='light-content'/>
           <NavigationContainer theme={DarkTheme}>
               <Tab.Navigator initialRouteName='Generate' screenOptions={screenOptions}>
                 <Tab.Screen name='Generate' component={GenerateScreen}/>
