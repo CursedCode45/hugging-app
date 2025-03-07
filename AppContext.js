@@ -1,4 +1,4 @@
-import { getIsPremium, getCurrentAppUsesLeft } from './constant/Helpers';
+import { getIsPremium, getCurrentAppUsesLeft, getInfoOnstartUp } from './constant/Helpers';
 import * as React from 'react';
 import { getUniqueId } from './constant/Helpers';
 
@@ -12,9 +12,10 @@ export function AppProvider({ children }) {
     React.useLayoutEffect(() => {
         async function onStartUp(){
             const idClient = await getUniqueId();
+            const [uses, is_premium] = await getInfoOnstartUp(idClient);
             setClientId(idClient);
-            setIsPremium(await getIsPremium(idClient));
-            setUsesLeft(await getCurrentAppUsesLeft());
+            setIsPremium(is_premium);
+            setUsesLeft(uses);
         }
         onStartUp();
     }, [])

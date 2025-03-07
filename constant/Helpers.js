@@ -264,26 +264,25 @@ export async function cancelPremium(){
     }
 }
 
-export async function resetDailyUsesIfPremium(){
+export async function getInfoOnstartUp(idClient){
     try{
-        const isPremium = true;
-        if(isPremium === 'yes'){
-            let dateOfPurchase = await SecureStore.getItemAsync(`date_of_purchase`);
-            dateOfPurchase = parseInt(dateOfPurchase);
-            let dateRightNow = new Date();
-            dateRightNow = dateRightNow.getTime();
-            if(dateRightNow - dateOfPurchase  >= 86400000){
-                await SecureStore.setItemAsync('uses_left', `${USES_COUNT_ON_PREMIUM}`);
-                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-                console.log('Reseted Uses From Daily');
-                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-                console.log('~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~')
-            }
+        const apiURL = `${backend_domain}/get-info-on-startup?id=${idClient}`
+        const startUpResponse = await fetch(apiURL);
+
+        if (!startUpResponse.ok) {
+            Alert.alert("Issue connecting with the Servers");
+            return false;
         }
+
+        const startUpJson = await startUpResponse.json();
+        const uses = startUpJson.uses;
+        const is_premium = startUpJson.is_premium;
+        return [uses, is_premium]
     }
     catch(e){
-        console.log(`Error Reseting Premium Uses: ${e}`);
+        console.log(`Error Getting Startup Info: ${e}`);
+        Alert.alert("Issue connecting with the Servers");
+        return null;
     }
 }
 
