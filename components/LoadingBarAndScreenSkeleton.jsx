@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 import * as React from 'react'
 import { hp, wp } from '../constant/Helpers'
 import { appColors } from '../constant/AppColors'
@@ -39,9 +39,10 @@ export default function LoadingBarAndScreenSkeleton(){
 
     return (
         <View style={styles.rootContainer}>
-            <Animated.View style={[styles.videoSkeleton, colorAnimatedStyle]}>
-                <Animated.Text style={styles.text}>Loading{dots}</Animated.Text>
-            </Animated.View>
+            <View style={styles.loadingContainer}>
+                <ActivityIndicator size={'large'} color={appColors.lightColor} />
+            </View>
+            <Animated.Text style={styles.text}>Generating{dots}</Animated.Text>
         </View>
     )
 }
@@ -69,11 +70,17 @@ const styles = StyleSheet.create({
 
 
     text: {
-        width: 140,
-        marginBottom: 3,
-        fontSize: 30,
+        marginBottom: 5,
+        marginTop: 10,
+        fontSize: 16,
         textAlign: 'start',
-        color: appColors.textColor,
+        color: appColors.lightColor,
+    },
+
+    loadingContainer: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
     },
 
 })

@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, Alert } from 'react-native'
 import DOWNLOAD_SVG from '../assets/images/DownloadSvg'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
@@ -18,8 +18,10 @@ export default function SaveVideoButton({showWatermark, fileUri}) {
             setTimeout(()=>{
                 setIsSaving(false);
             }, 600)
+            Alert.alert('Video saved to gallery');
         }
         catch(e){
+            Alert.alert("Video couldn't be saved to gallery");
             console.log(e);
         }
     }
@@ -28,19 +30,19 @@ export default function SaveVideoButton({showWatermark, fileUri}) {
         return(
         <View style={styles.rootContainer}>
             <View style={styles.loadingContainer}>
-                <Loading color={appColors.saveButtonTextColor}/>
+                <Loading color={appColors.veryLightColor}/>
             </View>
         </View>
         )
     }
 
     return (
-    <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.saveButtonPressedColor} onPress={onPress}>
+    <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.generateButtonPressedColor} onPress={onPress}>
         <View style={styles.iconTextContainer}>
             <View style={styles.iconContainer}>
-                <DOWNLOAD_SVG color={appColors.saveButtonTextColor}/>
+                <DOWNLOAD_SVG color={appColors.veryLightColor}/>
             </View>
-            <Text style={styles.text}>Save to Gallery</Text>
+            <Text style={styles.text}>Save to gallery</Text>
         </View>
     </TouchableHighlight>
     )
@@ -51,10 +53,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        height: 50,
-        borderRadius: 5,
+        height: 60,
+        borderRadius: 10,
 
-        backgroundColor: appColors.saveButtonColor,
+        backgroundColor: appColors.generateButtonColor,
     },
 
     loadingContainer: {
@@ -74,14 +76,14 @@ const styles = StyleSheet.create({
     },
 
     iconContainer: {
-        height: '100%',
-        width: '20%',
+        height: '70%',
+        width: '10%',
         marginRight: 6,
     },
 
     text: {
-        color: appColors.saveButtonTextColor,
-        fontSize: 15,
+        color: appColors.veryLightColor,
+        fontSize: 17,
         fontFamily: appColors.fontSemiBold,
         textAlign: 'center'
     },

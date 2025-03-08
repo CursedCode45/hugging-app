@@ -17,12 +17,9 @@ export default function GetProButton({filename, setShowWatermark}){
         )
     }
     return (
-        <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.closeButtonPressedColor} onPress={onGetProPress}>
+        <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.generateButtonPressedColor} onPress={onGetProPress}>
             <View style={styles.iconTextContainer}>
-                <View style={styles.iconContainer}>
-                    <DIAMOND_SVG color={appColors.closeButtonTextColor}/>
-                </View>
-                <Text style={styles.text}>Remove Watermark</Text>
+                <Text style={styles.text}>Save without watermark</Text>
             </View>
         </TouchableHighlight>
     )
@@ -34,10 +31,10 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
-        height: 50,
-        borderRadius: 5,
+        height: 60,
+        borderRadius: 10,
 
-        backgroundColor: appColors.closeButtonColor,
+        backgroundColor: appColors.generateButtonColor,
         marginTop: 10,
     },
 
@@ -55,8 +52,8 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        color: appColors.closeButtonTextColor,
-        fontSize: 12,
+        color: appColors.veryLightColor,
+        fontSize: 18,
         fontFamily: appColors.fontSemiBold,
         textAlign: 'center'
     },

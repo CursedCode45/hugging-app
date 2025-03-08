@@ -67,23 +67,6 @@ export default function Settings(){
             </View>
           </TouchableHighlight>
 
-          <TouchableHighlight style={styles.textContainer} underlayColor={onPressColor} onPress={()=>{}}>
-            <View style={styles.textContainer}>
-              <Text style={styles.text}>Uses Left: {usesLeft}</Text>
-              <View style={styles.horizontalLine}/>
-            </View>
-          </TouchableHighlight>
-
-          <TouchableHighlight style={[styles.textContainer]} underlayColor={onPressColor} onPress={deleteAllVideos}>
-            <View style={styles.textContainer}>
-            <View style={[styles.svgContainer, {backgroundColor: appColors.deleteButtonColor}]}>
-                <DELETE_SVG color={appColors.deleteButtonTextColor}/>
-              </View>
-              <Text style={styles.text}>Delete All Videos</Text>
-              <View style={styles.horizontalLine}/>
-            </View>
-          </TouchableHighlight>
-
           <RestorePurchasesButton/>
           <SettingsPremiumButton/>
 
@@ -108,9 +91,9 @@ const styles = StyleSheet.create({
     container: {
       display: 'flex',
       flex: 1,
-      justifyContent: 'center',
       alignItems: 'center',
       backgroundColor: appColors.background,
+      marginTop: 10,
     },
 
     btnContainer: {
@@ -139,7 +122,7 @@ const styles = StyleSheet.create({
       width: 30,
       padding: 5,
       borderRadius: 4,
-      marginLeft: 15,
+      marginLeft: 0,
       display: 'flex',
       justifyContent: 'center',
       alignContent: 'center'
@@ -148,7 +131,7 @@ const styles = StyleSheet.create({
     text: {
       color: appColors.textColor,
       marginLeft: 15,
-      fontSize: 20,
+      fontSize: 17,
     },
 
     horizontalLine: {

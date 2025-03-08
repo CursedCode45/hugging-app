@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableHighlight } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, Button } from 'react-native'
 import DELETE_SVG from '../assets/images/DeleteSvg'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
@@ -6,15 +6,9 @@ import { appColors } from '../constant/AppColors'
 
 export default function DeleteVideoButton({onPress}) {
   return (
-    <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.deleteButtonPressedColor} onPress={onPress}>
-        <View style={styles.iconTextContainer}>
-            <View style={styles.iconContainer}>
-                <DELETE_SVG color={appColors.deleteButtonTextColor}/>
-            </View>
-            <Text style={styles.text}>Delete</Text>
-        </View>
-        
-    </TouchableHighlight>
+    <View style={styles.rootContainer}>
+        <Button color={appColors.deleteButtonTextColor} title='Delete this video' style={styles.text} onPress={onPress}/>        
+    </View>
   )
 }
 
@@ -24,11 +18,10 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
         width: '100%',
-        height: 50,
+        height: 60,
         borderRadius: 5,
         flex: 1,
 
-        backgroundColor: appColors.deleteButtonColor,
     },
 
     iconTextContainer: {

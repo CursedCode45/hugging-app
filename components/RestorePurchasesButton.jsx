@@ -41,7 +41,7 @@ const RestorePurchasesButton = () => {
                 <View style={[styles.svgContainer, {backgroundColor: appColors.closeButtonColor}]}>
                     <DIAMOND_SVG/>
                 </View>
-                {loading? <LoadingContainer/> : <Text style={styles.text}>Restore Missing Videos</Text> }
+                {loading? <LoadingContainer/> : <Text style={styles.text}>Restore missing videos</Text> }
                 <View style={styles.horizontalLine}/>
             </View>
         </TouchableHighlight>
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
         width: 30,
         padding: 5,
         borderRadius: 4,
-        marginLeft: 15,
+        marginLeft: 0,
         display: 'flex',
         justifyContent: 'center',
         alignContent: 'center'
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     text: {
         color: appColors.textColor,
         marginLeft: 15,
-        fontSize: 20,
+        fontSize: 17,
     },
 
     horizontalLine: {

@@ -12,8 +12,8 @@ export default function GenerateVideoButton({image1, image2, onPress}) {
     React.useEffect(() => {
         if (image1 !== null && image2 !== null){
             setButtonStyle(styles.buttonContainerClickable);
-            setButtonPressColor(appColors.closeButtonPressedColor);
-            setTextColor(appColors.closeButtonTextColor);
+            setButtonPressColor(appColors.generateButtonPressedColor);
+            setTextColor(appColors.veryLightColor);
         }
         else{
             setButtonStyle(styles.buttonContainerUnclickable);
@@ -26,7 +26,7 @@ export default function GenerateVideoButton({image1, image2, onPress}) {
         <View style={styles.rootContainer}>
             <TouchableHighlight style={[styles.buttonContainer, buttonStyle]} underlayColor={buttonPressColor} onPress={onPress}>
                 <View style={styles.iconTextContainer}>
-                    <Text style={[styles.text, {color: textColor}]}>Generate</Text>
+                    <Text style={[styles.text, {color: textColor}]}>Create</Text>
                 </View>
             </TouchableHighlight>
         </View>
@@ -46,14 +46,14 @@ const styles = StyleSheet.create({
 
         width: '96%',
         maxWidth: 500,
-        height: 50,
-        marginTop: 10,
-        borderRadius: 5,
+        height: 60,
+        marginTop: 30,
+        borderRadius: 10,
         marginBottom: 10,
     },
 
     buttonContainerClickable: {
-        backgroundColor: appColors.closeButtonColor,
+        backgroundColor: appColors.generateButtonColor,
     },
 
 
@@ -70,7 +70,7 @@ const styles = StyleSheet.create({
     },
 
     text: {
-        fontSize: 18,
+        fontSize: 17,
         fontFamily: appColors.fontSemiBold,
         textAlign: 'center',
 

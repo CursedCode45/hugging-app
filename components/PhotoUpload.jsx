@@ -15,7 +15,7 @@ function WithoutImage({filename, onPress}){
             <TouchableHighlight style={styles.uploadTouchable} underlayColor={appColors.buttonColor} onPress={onPress}>
                 <View style={styles.iconTextContainer}>
                     <View style={styles.svgContainer}>
-                        <UPLOAD_SVG color={'rgb(255, 255, 255)'}/>
+                        <UPLOAD_SVG color={appColors.lightColor}/>
                     </View>
                     <Text style={styles.text}>{(filename === '1.jpg')? 'Image 1': 'Image 2'}</Text>
                 </View>
@@ -112,16 +112,16 @@ const styles = StyleSheet.create({
     },
 
     svgContainer:{
-        width: wp(15),
-        height: wp(15),
+        width: wp(11),
+        height: wp(11),
         maxWidth: 100,
         maxHeight: 100,
     },
 
     text: {
-        color: appColors.textColor,
+        marginTop: 8,
+        color: appColors.lightColor,
         fontSize: 15,
-        fontFamily: appColors.fontSemiBold,
     },
 
     touchableX: {

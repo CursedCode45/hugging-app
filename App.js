@@ -14,7 +14,7 @@ import BottomTab from './components/BottomTab';
 
 const Tab = createBottomTabNavigator({
   screens: {
-    Generate: GenerateScreen,
+    Huggify: GenerateScreen,
     UserVideos: UserVideos,
     Settings: Settings,
   },
@@ -25,14 +25,16 @@ const screenOptions = ({ route }) => ({
   headerShown: 'false',
   tabBarStyle: {
     backgroundColor: 'rgba(0, 0, 0, 0)',
-    height: hp(12),
+    height: hp(14),
     ...appColors.addShadowLarge,
   },
   tabBarItemStyle: {
     margin: 5,
+
   },
   tabBarLabelStyle: {
     marginTop: 7,
+    color: appColors.veryLightColor,
   },
   tabBarIcon: ({ focused }) => {
     return <BottomTab route={route} focused={focused}/>;
@@ -47,8 +49,9 @@ export default function App() {
       <AppProvider>
         <View style={{ flex: 1, backgroundColor: appColors.background }}>
           <NavigationContainer theme={DarkTheme}>
-              <Tab.Navigator initialRouteName='Generate' screenOptions={screenOptions}>
-                <Tab.Screen name='Generate' component={GenerateScreen}/>
+              <StatusBar color={'dark-content'} x></StatusBar>
+              <Tab.Navigator initialRouteName='Huggify' screenOptions={screenOptions}>
+                <Tab.Screen name='Huggify' component={GenerateScreen}/>
                 <Tab.Screen name='My Videos' component={UserVideos}/>
                 <Tab.Screen name='Settings' component={Settings}/>
               </Tab.Navigator>

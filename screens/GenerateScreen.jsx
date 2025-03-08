@@ -50,6 +50,7 @@ export default function GenerateScreen(){
             <View style={styles.videoContainer}>
               {(video)? <Vidplays source={video} style={styles.videoContainer}/> : <LoadingComponentBreathing style={styles.videoContainer} breathColor1={appColors.mediumDark} breathColor2={appColors.lighterDark}/>}
             </View>
+            <Text style={styles.textDescription}>Make two people come to life with a hug.</Text>
             <UploadPhotosContainer/>
         </View>
       </View>
@@ -71,7 +72,7 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     alignItems: 'center',
-    marginTop: 0,
+    marginTop: 10,
   },
 
   videoContainer: {
@@ -90,5 +91,16 @@ const styles = StyleSheet.create({
     text: {
       fontWeight: 1000,
       color: appColors.textColor,
+    },
+
+    textDescription: {
+      color: appColors.lightColor,
+      textAlign: 'center',
+      fontSize: 16,
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      margin: 15,
+      
     }
   });

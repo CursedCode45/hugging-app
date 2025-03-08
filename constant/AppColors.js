@@ -26,11 +26,17 @@ export const appColors = {
 
     deleteButtonColor: '#3b1219', // 3
     deleteButtonPressedColor: '#72232d', // 6
-    deleteButtonTextColor: '#ff9592', // 11
+    deleteButtonTextColor: '#D94C42', // 11
 
     orangeDarkColor: '#331e0b',
     orangeMediumColor: '#66350c',
     orangeLightColor: '#ffa057',
+
+    tryAgainButtonColor: '#F2F5F9',
+    tryAgainButtonPressedColor: '#E7ECF4',
+    
+    generateButtonColor: '#3477f2',
+    generateButtonPressedColor: '#0d4fc9',
 
     addShadow: {
         shadowColor: '#000',

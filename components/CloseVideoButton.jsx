@@ -6,12 +6,12 @@ import BACK_SVG from '../assets/images/BackSvg'
 
 export default function CloseVideoButton({onPress}) {
     return (
-        <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.closeButtonPressedColor} onPress={onPress}>
+        <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.tryAgainButtonPressedColor} onPress={onPress}>
             <View style={styles.iconTextContainer}>
                 <View style={styles.iconContainer}>
-                    <BACK_SVG color={appColors.closeButtonTextColor}/>
+                    <BACK_SVG color={appColors.generateButtonColor}/>
                 </View>
-                <Text style={styles.text}>Go Back</Text>
+                <Text style={styles.text}>Try again</Text>
             </View>
         </TouchableHighlight>
     )
@@ -23,12 +23,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
 
         width: '90%',
-        height: 50,
+        height: 60,
         marginTop: 10,
-        borderRadius: 5,
+        borderRadius: 10,
         marginBottom: 10,
 
-        backgroundColor: appColors.closeButtonColor,
+        backgroundColor: appColors.tryAgainButtonColor,
     },
 
     iconTextContainer: {
@@ -39,14 +39,14 @@ const styles = StyleSheet.create({
     },
 
     iconContainer: {
-        height: 25,
-        width: 25,
+        height: 23,
+        width: 23,
         marginRight: 6,
     },
 
     text: {
-        color: appColors.closeButtonTextColor,
-        fontSize: 18,
+        color: appColors.generateButtonColor,
+        fontSize: 17,
         fontFamily: appColors.fontSemiBold,
         textAlign: 'center'
     },

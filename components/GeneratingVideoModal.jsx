@@ -38,13 +38,13 @@ export default function GeneratingVideoModal({ showModal, gettingVideo, onModalC
         
         return(
             <View style={styles.container}>
-                <CloseVideoButton onPress={onModalClose}/>
                 <View style={{width: wp(90), height: wp(90)/videoAspectRatio, maxWidth: 500, maxHeight: 500/videoAspectRatio}}>
                     <Vidplays source={videoStream} showWatermark={showWatermark}/>
                 </View>
                 <View style={styles.bottomButtonContainer}>
                     <RenderGetProOrSaveButton/>
                 </View>
+                <CloseVideoButton onPress={onModalClose}/>
             </View>
         );
     }

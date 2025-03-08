@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
       display: 'flex',
       flex: 1,
       backgroundColor: appColors.background,
+      marginTop: 10,
     },
 
     flatList:{

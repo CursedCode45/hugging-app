@@ -9,7 +9,7 @@ export default function BottomTab({ route, focused }) {
   const svg_unselected_color = appColors.lightColor;
   const svg_selected_color = appColors.textColor;
 
-  if (route.name === 'Generate') {
+  if (route.name === 'Huggify') {
     return(
     <View style={styles.svgContainer}>
       <BRAIN color={(focused)? svg_selected_color: svg_unselected_color}/>
@@ -37,8 +37,8 @@ export default function BottomTab({ route, focused }) {
 
 const styles = StyleSheet.create({
   svgContainer: {
-    width: '120%',
-    height: '120%',
+    width: '100%',
+    height: '100%',
     maxHeight: 100,
   }
 });

@@ -43,7 +43,7 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
                 )
             }
             return(
-                <View style={{display: 'flex', width: '48%'}}>
+                <View style={{display: 'flex', width: '90%'}}>
                     <GetProButton filename={filename} setShowWatermark={setShowWatermark}/>
                 </View>
             );
@@ -53,18 +53,17 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
         }, [])
 
         return(
-            <Modal color={appColors.background} animationType="none" transparent={false} visible={true} onRequestClose={()=>{}}>
+            <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={()=>{}}>
                 <View style={styles.modalContainer}>
-                    <Text style={{color: 'white'}}>{path.basename(fileUri)}</Text>
                     <CloseVideoButton onPress={()=>{setIsOpen(false);}}/>
 
                     <View style={[styles.modalVideoContainer, {width: wp(90), height:  wp(90)/videoAspectRatio}]}>
                         <Vidplays source={fileUri} showWatermark={showWatermark}/>
                     </View>
                     
+                    <RenderGetProOrSaveButton/>
                     <View style={[styles.buttonRootContainer]}>
-                        <RenderGetProOrSaveButton/>
-                        <View style={[styles.buttonContainer]}><DeleteVideoButton onPress={onDeleteClick}/></View>
+                        <DeleteVideoButton onPress={onDeleteClick}/>
                     </View>
                 </View>
             </Modal>
@@ -96,6 +95,6 @@ const styles = StyleSheet.create({
     buttonContainer:{
         display: 'flex',
         marginTop: 10,
-        width: '48%',
+        width: '90%',
     }
 });
