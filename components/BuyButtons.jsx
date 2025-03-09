@@ -50,32 +50,16 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
             <View style={styles.weeklyContainer}>
                 {(select === 0)? <View style={styles.selectedWeekly}/> : null}
                 <View style={styles.weeklyTextContainer}>
-                    <Text style={styles.text}>Weekly Access</Text>
+                    <View style={styles.leftTextContainer}>
+                    <Text style={styles.text}>Yearly Access</Text>
+                    <Text style={styles.salesText}>Just $49.99 per year</Text>
+                    </View>
                     <View style={styles.weekPriceTextContainer}>
-                        <Text style={styles.weekPriceText}>$5.99</Text>
+                        <Text style={styles.weekPriceText}>$0.96</Text>
                         <Text style={styles.weekDescriptionText}>per week</Text>
                     </View>
                 </View>
 
-                <View style={styles.lineContainer}><View style={styles.horizontalLine}/></View>
-                    
-
-                <View style={styles.salesTextContainer}>
-                    <View style={styles.iconWithTextContainer}>
-                        <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
-                        <Text style={styles.salesText}>Remove All Watermarks From Videos</Text>
-                    </View>
-
-                    <View style={styles.iconWithTextContainer}>
-                        <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
-                        <Text style={styles.salesText}>Generate 5 Videos Everyday</Text>
-                    </View>
-
-                    <View style={styles.iconWithTextContainer}>
-                        <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
-                        <Text style={styles.salesText}>Cancel Anytime Easily</Text>
-                    </View>
-                </View>
             </View>
         </TouchableHighlight>
 
@@ -83,17 +67,14 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
         <TouchableHighlight style={[styles.optionButton]} underlayColor={appColors.weakDark} onPressIn={()=> {setSelect(1)}}>
             <View style={styles.oneTimeContainer}>
                 {(select === 1)? <View style={styles.selectedOneTime}/> : null}
-                <View style={styles.textContainer}>
-                    <Text style={styles.text}>Buy Video</Text>
-                    <Text style={styles.weekPriceText}>$3.99</Text>
-                </View>
-
-                <View style={styles.lineContainer}><View style={styles.horizontalLine}/></View>
-                    
-                <View style={styles.salesTextContainer}>
-                    <View style={styles.iconWithTextContainer}>
-                        <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
-                        <Text style={styles.salesText}>Download This Video Without Watermark</Text>
+                <View style={styles.weeklyTextContainer}>
+                    <View style={styles.leftTextContainer}>
+                    <Text style={styles.text}>Weekly Access</Text>
+                    <Text style={styles.salesText}>Cancel anytime</Text>
+                    </View>
+                    <View style={styles.weekPriceTextContainer}>
+                        <Text style={styles.weekPriceText}>$5.99</Text>
+                        <Text style={styles.weekDescriptionText}>per week</Text>
                     </View>
                 </View>
             </View>
@@ -125,7 +106,7 @@ const styles = StyleSheet.create({
 
         width: wp(85),
         maxWidth: 500,
-        height: 110,
+        height: 65,
 
         borderRadius: 5,
     },
@@ -137,7 +118,7 @@ const styles = StyleSheet.create({
         width: wp(85),
         maxWidth: 500,
 
-        height: 175,
+        height: 65,
 
         borderRadius: 5,
     },
@@ -149,24 +130,28 @@ const styles = StyleSheet.create({
         height: '100%',
     },
 
+    leftTextContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+    },
+
     oneTimeContainer: {
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        height: '100%',
     },
 
     selectedWeekly: {
         position: 'absolute',
 
-        left: - 14/2,
-        top: - 14/2,
+        left: - 10/2,
+        top: - 10/2,
 
-        width: wp(85) + 14,
-        maxWidth: 500 + 14,
-        height: 175 + 14,
+        width: wp(85) + 10,
+        maxWidth: 500 + 10,
+        height: 65 + 10,
 
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: appColors.saveButtonTextColor,
 
         borderRadius: 9,
@@ -175,14 +160,14 @@ const styles = StyleSheet.create({
     selectedOneTime: {
         position: 'absolute',
 
-        left: -7,
-        top: -8,
+        left: -10/2,
+        top: -10/2 - 3,
 
-        width: wp(85) + 14,
-        maxWidth: 500 + 14,
-        height: 110 + 14,
+        width: wp(85) + 10,
+        maxWidth: 500 + 10,
+        height: 65 + 10,
 
-        borderWidth: 2,
+        borderWidth: 1,
         borderColor: appColors.saveButtonTextColor,
 
         borderRadius: 9,

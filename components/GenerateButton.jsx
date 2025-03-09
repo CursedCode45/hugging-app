@@ -96,10 +96,21 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             Alert.alert(`You've ran out of uses for today, please try again tomorrow`)
         }
         else if (mergedImages && usesLeft === 0 && !isPremium){
-            Alert.alert(`You've ran out of uses, please buy premium to use the app.`)
+            Alert.alert('Are you sure?', 'This action will permanently delete the video', [
+                {
+                    text: 'Cancel',
+                    onPress: () => console.log('Cancel Pressed'),
+                    style: 'cancel',
+                },
+                {
+                    text: 'Delete',
+                    style: 'destructive',
+                    onPress: () => console.log('Delete Pressed')
+                },
+            ]);
         }
         else if (mergedImages && usesLeft === null){
-            Alert.alert(`Not connect to the server, please restart the app or try again later`);
+            Alert.alert(`Not connected to the server, please restart the app or try again later`);
         }
     }
 

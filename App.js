@@ -10,6 +10,8 @@ import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import * as React from 'react';
 import { AppProvider } from './AppContext';
 import BottomTab from './components/BottomTab';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 
 const Tab = createBottomTabNavigator({
@@ -45,19 +47,23 @@ const screenOptions = ({ route }) => ({
 
 export default function App() {
   return (
-    <StrictMode>
-      <AppProvider>
-        <View style={{ flex: 1, backgroundColor: appColors.background }}>
-          <NavigationContainer theme={DarkTheme}>
-              <StatusBar color={'dark-content'} x></StatusBar>
-              <Tab.Navigator initialRouteName='Huggify' screenOptions={screenOptions}>
-                <Tab.Screen name='Huggify' component={GenerateScreen}/>
-                <Tab.Screen name='My Videos' component={UserVideos}/>
-                <Tab.Screen name='Settings' component={Settings}/>
-              </Tab.Navigator>
-          </NavigationContainer>
-        </View>
-      </AppProvider>
-    </StrictMode>
+      <GestureHandlerRootView>
+        <BottomSheetModalProvider>
+
+        <AppProvider>
+          <View style={{ flex: 1, backgroundColor: appColors.background }}>
+            <NavigationContainer theme={DarkTheme}>
+                <StatusBar color={'dark-content'} x></StatusBar>
+                <Tab.Navigator initialRouteName='Huggify' screenOptions={screenOptions}>
+                  <Tab.Screen name='Huggify' component={GenerateScreen}/>
+                  <Tab.Screen name='My Videos' component={UserVideos}/>
+                  <Tab.Screen name='Settings' component={Settings}/>
+                </Tab.Navigator>
+            </NavigationContainer>
+          </View>
+        </AppProvider>
+
+        </BottomSheetModalProvider>
+      </GestureHandlerRootView>
   );
 }

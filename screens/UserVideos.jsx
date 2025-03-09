@@ -5,6 +5,7 @@ import VideoItem from '../components/VideoItem';
 import { wp } from '../constant/Helpers';
 import { getAllVideoBasenames } from '../constant/Helpers';
 import { useFocusEffect } from '@react-navigation/native';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 
 export default function GenerateScreen(){
@@ -15,8 +16,10 @@ export default function GenerateScreen(){
         getAllVideoBasenames().then((data) => {setFiles(data)});
       }, []
     ))
+
     return(
         <View style={styles.container}>
+
             <FlatList
               style={styles.flatList}
               data={files}
@@ -28,7 +31,7 @@ export default function GenerateScreen(){
                   <VideoItem fileIndex={index} setFiles={setFiles} filename={item}/>
                 </View>
               )}
-            />
+              />
         </View>
     );
 }
