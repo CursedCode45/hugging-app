@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, Modal } from 'react-native';
+import { StyleSheet, Text, View, Image, SafeAreaView, Modal, StatusBar } from 'react-native';
 import React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as VideoThumbnails from 'expo-video-thumbnails';
@@ -6,12 +6,26 @@ import Watermark from './../assets/images/Watermark.png';
 import { wp } from '../constant/Helpers';
 import BuyButtons from './BuyButtons';
 import * as FileSystem from "expo-file-system";
+import LoadingComponentBreathing from './LoadingComponentBreathing';
+import { Vidplays } from './Vidplays';
+
 
 
 export default function GetPro({setShowGetProScreen, setShowWatermark, filename}){
   const [thumbnail, setThumbnail] = React.useState(null);
+  const [video, setVideo] = React.useState(null);
 
-  function onGetProModalClose(){
+  async function loadVideo(){
+    try{
+      const fileUri = `${FileSystem.documentDirectory}home_videos/home_hugging_video.mp4`;
+      setVideo(fileUri);
+    }
+    catch(e){
+      console.warn(`Error loading video at get pro: ${e}`)
+    }
+  }
+    
+    function onGetProModalClose(){
     setShowGetProScreen(false);
   }
 
@@ -26,24 +40,18 @@ export default function GetPro({setShowGetProScreen, setShowWatermark, filename}
       }
   }
 
-  React.useEffect(() => {
+  React.useLayoutEffect(() => {
       getThumbnail();
+      loadVideo();
   }, [])
 
   return (
     <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onGetProModalClose}>
       <View style={styles.rootContainer}>
-          <SafeAreaView>
-              <View style={styles.headlineTextContainer}>
-                  <Text style={[styles.headlineText]}>Download Video</Text>
-                  <Text style={styles.headlineText}><Text style={styles.withoutText}>Without</Text> Watermark</Text>
-              </View>
-              <View style={styles.imageContainer}>
-                  <Image source={{uri: thumbnail}} style={styles.thumbnail}/>
-                  <Image source={Watermark} style={styles.watermark}/>
+              <View style={[styles.imageContainer]}>
+                  {(video)? <Vidplays source={video} style={[styles.videoContainer,  {top: -70}]}/> : <LoadingComponentBreathing style={styles.videoContainer} breathColor1={appColors.mediumDark} breathColor2={appColors.lighterDark}/>}
               </View>
               <BuyButtons setShowGetProScreen={setShowGetProScreen} setShowWatermark={setShowWatermark} filename={filename}/>
-          </SafeAreaView>
       </View>
     </Modal>
   )
@@ -83,26 +91,15 @@ rootContainer:{
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 10,
   },
 
-  thumbnail: {
-    width: wp(85),
-    height: wp(85)/1.666666,
-    maxWidth: 500,
-    maxHeight: 312.5,
+  videoContainer: {
+    width: wp(180),
+    height: wp(180)/1.66666666666,
 
-    backgroundColor: appColors.lighterDark,
-    borderRadius: 5,
-  },
-
-  watermark: {
-    width: wp(72),
-    height: wp(72)/1.666666,
-    maxWidth: 500,
-    maxHeight: 312.5,
-    position: 'absolute',
-    borderRadius: 5,
+    backgroundColor: appColors.lightColor,
+    ...appColors.addShadow,
+    borderRadius: 10,
   },
 
 
