@@ -9,7 +9,7 @@ import * as FileSystem from "expo-file-system";
 import LoadingComponentBreathing from './LoadingComponentBreathing';
 import { Vidplays } from './Vidplays';
 import X_SVG from '../assets/images/XSVG';
-
+import { AppProvider } from '../AppContext';
 
 
 export default function GetPro({setShowGetProScreen, setShowWatermark, filename}){
@@ -54,7 +54,7 @@ export default function GetPro({setShowGetProScreen, setShowWatermark, filename}
     <Modal color={appColors.background} animationType="slide" transparent={false} visible={true} onRequestClose={onGetProModalClose}>
       <StatusBar translucent backgroundColor="transparent" barStyle="dark-content" />
       <View style={styles.rootContainer}>
-          <TouchableHighlight style={styles.cancelTextContainer} underlayColor={appColors.deleteButtonPressedColor} onPress={onCancelPress}><X_SVG color={appColors.deleteButtonTextColor}/></TouchableHighlight>
+          <TouchableHighlight style={styles.cancelTextContainer} underlayColor={appColors.mediumDark} onPress={onCancelPress}><X_SVG color={appColors.lighterDark}/></TouchableHighlight>
           {(video)? <Vidplays source={video} style={[styles.videoContainer]}/> : <LoadingComponentBreathing style={styles.videoContainer} breathColor1={appColors.mediumDark} breathColor2={appColors.lighterDark}/>}
           <View style={styles.buttonContainer}>
             <BuyButtons setShowGetProScreen={setShowGetProScreen} setShowWatermark={setShowWatermark} filename={filename}/>
@@ -92,14 +92,14 @@ rootContainer:{
   },
 
   videoContainer: {
-    width: wp(220),
-    height: wp(220)/1.66666666666,
+    width: wp(210),
+    height: wp(210)/1.66666666666,
     marginTop: -44,
 
     backgroundColor: appColors.lightColor,
     ...appColors.addShadow,
     borderRadius: 10,
-    left: -wp(30),
+    left: -wp(40),
     zIndex: 1
   },
 
@@ -132,9 +132,9 @@ rootContainer:{
 
 
     shadowColor: appColors.background,
-    shadowOffset: { width: 0, height: -50 },
+    shadowOffset: { width: 0, height: -100 },
     shadowOpacity: 1,
-    shadowRadius: 20,
+    shadowRadius: 46,
     elevation: 5,
     zIndex: 3,
   }

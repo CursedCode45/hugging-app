@@ -13,7 +13,7 @@ import { getAllVideoBasenames } from '../constant/Helpers';
 import path from "path-browserify";
 import { deleteVideo } from '../constant/Helpers';
 import BottomSheet, { BottomSheetView, BottomSheetBackdrop, BottomSheetModal, BottomSheetModalProvider } from '@gorhom/bottom-sheet';
-
+import { AppProvider } from '../AppContext';
 
 export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, isOpen, setIsOpen, fileUri, setFiles}){
         const videoAspectRatio = videoWidth/videoHeight;
@@ -23,11 +23,14 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
 
 
         const renderBackdrop = React.useCallback((props) => <BottomSheetBackdrop opacity={0.85} appearsOnIndex={0} disappearsOnIndex={-1} {...props} />, []);
-        React.useEffect(()=>{bottomSheetRef.current?.present();}, [])
+        React.useEffect(()=>{
+            bottomSheetRef.current?.present();
+        }, [])
+
         const handleSheetChanges = React.useCallback((index) => {
             if (index === -1){
                 setIsOpen(false);
-                console.log('handleSheetChanges', index);
+                bottomSheetRef.current?.close();
             }
         }, []);
 
@@ -79,25 +82,24 @@ export function UserVideoModal({thumbnail, filename, videoWidth, videoHeight, is
         React.useLayoutEffect(() => {
             loadWatermarkKey();
         }, [])
-        console.log('show');
         
         return(
+            
             <BottomSheetModal
-                ref={bottomSheetRef}
-                index={0}
-                enableDynamicSizing={false}
-                snapPoints={snapPoints}
-                enablePanDownToClose={true}
-                onChange={handleSheetChanges}
-                backdropComponent={renderBackdrop}
-                backgroundStyle={{backgroundColor: appColors.lighterDark}}
-                handleIndicatorStyle={{backgroundColor: appColors.veryLightColor}}
+            ref={bottomSheetRef}
+            index={0}
+            enableDynamicSizing={false}
+            snapPoints={snapPoints}
+            enablePanDownToClose={true}
+            onChange={handleSheetChanges}
+            backdropComponent={renderBackdrop}
+            backgroundStyle={{backgroundColor: appColors.lighterDark}}
+            handleIndicatorStyle={{backgroundColor: appColors.veryLightColor}}
             >
                 <View style={styles.modalContainer}>
                     <View style={[styles.modalVideoContainer, {width: wp(90), height:  wp(90)/videoAspectRatio, maxWidth: 500, maxHeight: 500/videoAspectRatio}]}>
                         <Vidplays source={fileUri} showWatermark={showWatermark}/>
                     </View>
-                    
                     <RenderGetProOrSaveButton/>
                     <View style={[styles.buttonRootContainer]}>
                         <DeleteVideoButton onPress={deleteAlert}/>

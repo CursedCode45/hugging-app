@@ -108,7 +108,7 @@ const TermsOfServicesModal = ({showModal, onModalClose}) => {
 
         </ScrollView>
         <View style={styles.closeButtonContainer}>
-            <CloseVideoButton onPress={onModalClose}/>
+            <CloseVideoButton onPress={onModalClose} displayText='Go Back'/>
         </View>
 
         </View>

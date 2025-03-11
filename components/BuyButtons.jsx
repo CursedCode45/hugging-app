@@ -1,19 +1,23 @@
-import { StyleSheet, Text, View, TouchableHighlight, ActivityIndicator } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, ActivityIndicator, Button, Pressable } from 'react-native'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
 import { hp, wp } from '../constant/Helpers'
 import CHECKMARK_SVG from '../assets/images/CheckmarkSvg';
-import * as SecureStore from 'expo-secure-store';
 import { getPremium } from '../constant/Helpers';
-import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
 import { useAppContext } from '../AppContext';
 import { buyOneVideo } from '../constant/Helpers';
-import X_SVG from '../assets/images/XSVG';
-
+import TermsOfServicesModal from './TermsOfServicesModal';
+import PrivacyPolicyModal from './PrivacyPolicyModal';
+import CHECKMARK_CIRCLE_SVG from '../assets/images/CheckmarkCircleSvg';
+import { USES_COUNT_ON_PREMIUM, USES_COUNT_ON_YEARLY_PREMIUM } from '../constant/Settings';
 
 export default function BuyButtons({ setShowGetProScreen, setShowWatermark, filename={filename}}){
     const [select, setSelect] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
+    const [showTos, setShowTos] = React.useState(false);
+    const [showPp, setShowPp] = React.useState(false);
+    const [restorePurchases, setRestorePurchases] = React.useState(false);
+
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
     function onCancelPress(){
@@ -21,27 +25,23 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
     }
 
     async function localONcheckoutPress(){
-        setLoading(true);
+        try{
 
-        if (select === 1){
-            const isSuccessful = await buyOneVideo(filename);
+            setLoading(true);
+            let isYearlyBought = (select===0)? true : false
+            let usesBought = isYearlyBought? USES_COUNT_ON_YEARLY_PREMIUM : USES_COUNT_ON_PREMIUM
+            const isSuccessful = await getPremium(isYearlyBought);
             if (isSuccessful){
                 setShowWatermark('false');
-            }
-            setShowGetProScreen(false);
-        }
-
-        if (select === 0){
-            const isSuccessful = await getPremium();
-            if (isSuccessful){
                 setIsPremium(true);
-                setUsesLeft(USES_COUNT_ON_PREMIUM);
-                setShowWatermark('false');
+                setUsesLeft(usesBought);
             }
             setShowGetProScreen(false);
+            setLoading(false);
         }
-
-        setLoading(false);
+        catch(e){
+            console.warn(`Error on checkout: ${e}`)
+        }
     }
 
     return (
@@ -51,19 +51,19 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
         <View style={styles.salesPointContainer}>
             <Text style={styles.sellingPointTitle}>Get Pro Access</Text>
             <View style={styles.saleTextAndIcon}>
-                <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
+                <View style={styles.svgContainer}><CHECKMARK_CIRCLE_SVG color={appColors.generateButtonColor}/></View>
                 <Text style={styles.sellingPointText}>Save videos without watermarks</Text>
             </View>
             <View style={styles.saleTextAndIcon}>
-                <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
+                <View style={styles.svgContainer}><CHECKMARK_CIRCLE_SVG color={appColors.generateButtonColor}/></View>
                 <Text style={styles.sellingPointText}>Downlaod HD videos</Text>
             </View>
             <View style={styles.saleTextAndIcon}>
-                <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
+                <View style={styles.svgContainer}><CHECKMARK_CIRCLE_SVG color={appColors.generateButtonColor}/></View>
                 <Text style={styles.sellingPointText}>Generate up to 5 videos daily</Text>
             </View>
             <View style={styles.saleTextAndIcon}>
-                <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
+                <View style={styles.svgContainer}><CHECKMARK_CIRCLE_SVG color={appColors.generateButtonColor}/></View>
                 <Text style={styles.sellingPointText}>Fast video processing</Text>
             </View>
         </View>
@@ -75,9 +75,12 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
                     {(select === 0)? <View style={styles.selectedWeekly}/> : null}
                     <View style={styles.weeklyTextContainer}>
                         <View style={styles.leftTextContainer}>
-                        <Text style={styles.text}>Yearly Access</Text>
-                        <Text style={styles.salesText}>Just $49.99 per year</Text>
+                            <Text style={styles.text}>Yearly Access</Text>
+                            <Text style={styles.salesText}>Just $49.99 per year</Text>
                         </View>
+
+                        <View style={styles.percentageContainer}><Text style={styles.percentageText}>84% OFF</Text></View>
+
                         <View style={styles.weekPriceTextContainer}>
                             <Text style={styles.weekPriceText}>$0.96</Text>
                             <Text style={styles.weekDescriptionText}>per week</Text>
@@ -117,10 +120,16 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
                 : <Text style={styles.checkoutText}>Try it now</Text>}
             </TouchableHighlight>
 
-            <View style={styles.smallTextContainer}>
-                <Text style={styles.smallText}>Terms of Use • Privacy Policy • Restore</Text>
+            <View style={[styles.legalTextContainer]}>
+                <Pressable onPress={() => {setShowTos(true)}}><Text style={styles.bottomText}>Terms of Use </Text></Pressable >
+                <Text style={{color: appColors.mediumDark, fontSize: 25}}>•</Text>
+                <Pressable onPress={() => {setShowPp(true)}}><Text style={styles.bottomText}> Privacy Policy </Text></Pressable >
+                <Text style={{color: appColors.mediumDark, fontSize: 25}}>•</Text>
+                <Pressable onPress={() => {}}><Text style={styles.bottomText}> Restore </Text></Pressable >
             </View>
         </View>
+        <TermsOfServicesModal showModal={showTos} onModalClose={() => {setShowTos(false)}}/>
+        <PrivacyPolicyModal showModal={showPp} onModalClose={() => {setShowPp(false)}}/>
     </View>
     )
 }
@@ -175,44 +184,22 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
     },
 
-    oneTimeContainer: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-    },
-
     selectedWeekly: {
         position: 'absolute',
 
-        left: - 10/2,
-        top: - 10/2,
+        left: - 6/2,
+        top: - 6/2,
 
-        width: wp(85) + 10,
-        maxWidth: 500 + 10,
-        height: 65 + 10,
+        width: wp(85) + 6,
+        maxWidth: 500 + 6,
+        height: 65 + 6,
 
-        borderWidth: 1,
-        borderColor: appColors.saveButtonTextColor,
+        borderWidth: 3,
+        borderColor: appColors.generateButtonColor,
 
-        borderRadius: 13,
+        borderRadius: 14,
     },
 
-    selectedOneTime: {
-        position: 'absolute',
-
-        left: -10/2,
-        top: -10/2 - 3,
-
-        width: wp(85) + 10,
-        maxWidth: 500 + 10,
-        height: 65 + 10,
-
-        borderWidth: 1,
-        borderColor: appColors.saveButtonTextColor,
-
-        borderRadius: 13,
-        
-    },
 
     weeklyTextContainer: {
         display: 'flex',
@@ -289,8 +276,9 @@ const styles = StyleSheet.create({
     },
 
     checkoutText: {
-        color: appColors.veryLightColor,
-        fontSize: 17,
+        color: appColors.background,
+        fontFamily: appColors.fontSemiBold,
+        fontSize: 20,
         textAlign: 'center'
     },
 
@@ -312,6 +300,18 @@ const styles = StyleSheet.create({
         color: appColors.deleteButtonTextColor,
     },
 
+    percentageContainer:{
+        backgroundColor: appColors.generateButtonColor,
+        padding: 7,
+        borderRadius: 1000
+    },
+
+    percentageText: {
+        fontSize: 14,
+        fontFamily: appColors.fontSemiBold,
+        color: appColors.veryLightColor,
+    },
+
     iconWithTextContainer: {
         display: 'flex',
         flexDirection: 'row',
@@ -329,8 +329,8 @@ const styles = StyleSheet.create({
     },
 
     svgContainer: {
-        width: 25,
-        height: 25,
+        width: 23,
+        height: 23,
         marginRight: 5,
     },
 
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        margin: 3,
+        margin: 5,
     },
 
     sellingPointText: {
@@ -358,11 +358,25 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         justifyContent: 'center',
-        marginTop: 10,
+        alignItems: 'center',
+        marginTop: 15,
+    },
+
+    legalTextContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 7,
     },
 
     smallText: {
         fontSize: 13,
         color: appColors.veryLightColor,
     },
+
+    bottomText: {
+        fontSize: 14,
+        color: appColors.mediumDark
+    }
 })

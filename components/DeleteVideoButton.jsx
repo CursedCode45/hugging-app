@@ -7,7 +7,7 @@ import { appColors } from '../constant/AppColors'
 export default function DeleteVideoButton({onPress}) {
   return (
     <View style={styles.rootContainer}>
-        <Button color={appColors.deleteButtonTextColor} title='Delete this video' style={styles.text} onPress={onPress}/>        
+        <Button color={appColors.deleteButtonTextColor} title='Delete this video' style={styles.text} onPress={onPress}/>
     </View>
   )
 }

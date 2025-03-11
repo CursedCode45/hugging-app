@@ -4,7 +4,7 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
 import * as Crypto from 'expo-crypto';
-import { USES_COUNT_ON_INSTALL, USES_COUNT_ON_PREMIUM } from './Settings';
+import { USES_COUNT_ON_INSTALL, USES_COUNT_ON_PREMIUM, USES_COUNT_ON_YEARLY_PREMIUM } from './Settings';
 import { Alert } from 'react-native';
 import { backend_domain } from './Settings';
 
@@ -157,10 +157,11 @@ export async function getCurrentAppUsesLeft(){
 }
 
 
-export async function getPremium(){
+export async function getPremium(yearly=false){
     try{
         const userID = await getUniqueId();
-        const apiURL = `${backend_domain}/buy-premium?id=${userID}`
+        const apiURL = (yearly)? `${backend_domain}/buy-yearly-premium?id=${userID}` : `${backend_domain}/buy-premium?id=${userID}`
+        const usesBought = (yearly)? USES_COUNT_ON_YEARLY_PREMIUM : USES_COUNT_ON_PREMIUM
         const response = await fetch(apiURL);
         if (!response.ok) {
             Alert.alert('Failed to buy premium, try again later');
@@ -176,7 +177,7 @@ export async function getPremium(){
         dateOfPurchase = dateOfPurchase.getTime().toString();
         await SecureStore.setItemAsync('is_premium', 'yes');
         await SecureStore.setItemAsync('date_of_purchase', dateOfPurchase);
-        await SecureStore.setItemAsync('uses_left', `${USES_COUNT_ON_PREMIUM}`);
+        await SecureStore.setItemAsync('uses_left', `${usesBought}`);
         const allVideoBasenames = await getAllVideoBasenames();
         allVideoBasenames.forEach(element => {
             SecureStore.setItemAsync(`show_watermark_${element}`, 'false');

@@ -47,23 +47,23 @@ const screenOptions = ({ route }) => ({
 
 export default function App() {
   return (
-      <GestureHandlerRootView>
-        <BottomSheetModalProvider>
+      <AppProvider>
+        <GestureHandlerRootView>
+          <BottomSheetModalProvider>
 
-        <AppProvider>
-          <View style={{ flex: 1, backgroundColor: appColors.background }}>
-            <NavigationContainer theme={DarkTheme}>
-                
-                <Tab.Navigator initialRouteName='Huggify' screenOptions={screenOptions}>
-                  <Tab.Screen name='Huggify' component={GenerateScreen}/>
-                  <Tab.Screen name='My Videos' component={UserVideos}/>
-                  <Tab.Screen name='Settings' component={Settings}/>
-                </Tab.Navigator>
-            </NavigationContainer>
-          </View>
-        </AppProvider>
+            <View style={{ flex: 1, backgroundColor: appColors.background }}>
+              <NavigationContainer theme={DarkTheme}>
+                  
+                  <Tab.Navigator initialRouteName='Huggify' screenOptions={screenOptions}>
+                    <Tab.Screen name='Huggify' component={GenerateScreen}/>
+                    <Tab.Screen name='My Videos' component={UserVideos}/>
+                    <Tab.Screen name='Settings' component={Settings}/>
+                  </Tab.Navigator>
+              </NavigationContainer>
+            </View>
 
-        </BottomSheetModalProvider>
-      </GestureHandlerRootView>
+          </BottomSheetModalProvider>
+        </GestureHandlerRootView>
+      </AppProvider>
   );
 }

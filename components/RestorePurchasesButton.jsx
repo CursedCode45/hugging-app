@@ -14,7 +14,6 @@ const RestorePurchasesButton = () => {
 
     async function onRestoreClick() {
         try{
-
             if (loading){
                 return;
             }

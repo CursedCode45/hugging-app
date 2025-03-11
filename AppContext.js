@@ -1,4 +1,4 @@
-import { getIsPremium, getCurrentAppUsesLeft, getInfoOnstartUp } from './constant/Helpers';
+import { getInfoOnstartUp } from './constant/Helpers';
 import * as React from 'react';
 import { getUniqueId } from './constant/Helpers';
 

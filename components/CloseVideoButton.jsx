@@ -4,14 +4,14 @@ import { appColors } from '../constant/AppColors'
 import BACK_SVG from '../assets/images/BackSvg'
 
 
-export default function CloseVideoButton({onPress}) {
+export default function CloseVideoButton({onPress,  displayText='Try Again'}) {
     return (
         <TouchableHighlight style={styles.rootContainer} underlayColor={appColors.tryAgainButtonPressedColor} onPress={onPress}>
             <View style={styles.iconTextContainer}>
                 <View style={styles.iconContainer}>
                     <BACK_SVG color={appColors.generateButtonColor}/>
                 </View>
-                <Text style={styles.text}>Try again</Text>
+                <Text style={styles.text}>{displayText}</Text>
             </View>
         </TouchableHighlight>
     )

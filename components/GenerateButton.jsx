@@ -76,7 +76,6 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     }
 
     async function onGeneratePress(){
-        console.log(`Uses at: ${usesLeft}`);
         if (mergedImages && usesLeft > 0){
             setShowModal(true);
             setGettingVideo(true);

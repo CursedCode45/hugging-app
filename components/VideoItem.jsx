@@ -48,7 +48,8 @@ export default function VideoItem(props){
     })
 
     function onVideoItemClick(){
-        setIsOpen(true);
+        setIsOpen(!isOpen);
+
     }
     
     return(
