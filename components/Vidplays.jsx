@@ -1,5 +1,5 @@
 import { useVideoPlayer, VideoView } from 'expo-video';
-import { StyleSheet, View, Image } from 'react-native';
+import { StyleSheet, View, Image, StatusBar } from 'react-native';
 import * as FileSystem from "expo-file-system";
 import * as React from 'react';
 import Watermark from './../assets/images/Watermark_User_Vids.png';

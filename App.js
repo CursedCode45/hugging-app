@@ -53,7 +53,7 @@ export default function App() {
         <AppProvider>
           <View style={{ flex: 1, backgroundColor: appColors.background }}>
             <NavigationContainer theme={DarkTheme}>
-                <StatusBar color={'dark-content'} x></StatusBar>
+                
                 <Tab.Navigator initialRouteName='Huggify' screenOptions={screenOptions}>
                   <Tab.Screen name='Huggify' component={GenerateScreen}/>
                   <Tab.Screen name='My Videos' component={UserVideos}/>

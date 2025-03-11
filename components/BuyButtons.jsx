@@ -8,6 +8,7 @@ import { getPremium } from '../constant/Helpers';
 import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
 import { useAppContext } from '../AppContext';
 import { buyOneVideo } from '../constant/Helpers';
+import X_SVG from '../assets/images/XSVG';
 
 
 export default function BuyButtons({ setShowGetProScreen, setShowWatermark, filename={filename}}){
@@ -44,59 +45,98 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
     }
 
     return (
-    <View>
-        {/* Buy Weekly Button */}
-        <TouchableHighlight style={styles.weeklyButton} underlayColor={appColors.weakDark} onPressIn={()=> {setSelect(0)}}>
-            <View style={styles.weeklyContainer}>
-                {(select === 0)? <View style={styles.selectedWeekly}/> : null}
-                <View style={styles.weeklyTextContainer}>
-                    <View style={styles.leftTextContainer}>
-                    <Text style={styles.text}>Yearly Access</Text>
-                    <Text style={styles.salesText}>Just $49.99 per year</Text>
-                    </View>
-                    <View style={styles.weekPriceTextContainer}>
-                        <Text style={styles.weekPriceText}>$0.96</Text>
-                        <Text style={styles.weekDescriptionText}>per week</Text>
-                    </View>
-                </View>
+    <View style={styles.rootContainer}>
 
+        {/* Selling Points Container */}
+        <View style={styles.salesPointContainer}>
+            <Text style={styles.sellingPointTitle}>Get Pro Access</Text>
+            <View style={styles.saleTextAndIcon}>
+                <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
+                <Text style={styles.sellingPointText}>Save videos without watermarks</Text>
             </View>
-        </TouchableHighlight>
-
-        {/* Buy One Time Button */}
-        <TouchableHighlight style={[styles.optionButton]} underlayColor={appColors.weakDark} onPressIn={()=> {setSelect(1)}}>
-            <View style={styles.oneTimeContainer}>
-                {(select === 1)? <View style={styles.selectedOneTime}/> : null}
-                <View style={styles.weeklyTextContainer}>
-                    <View style={styles.leftTextContainer}>
-                    <Text style={styles.text}>Weekly Access</Text>
-                    <Text style={styles.salesText}>Cancel anytime</Text>
-                    </View>
-                    <View style={styles.weekPriceTextContainer}>
-                        <Text style={styles.weekPriceText}>$5.99</Text>
-                        <Text style={styles.weekDescriptionText}>per week</Text>
-                    </View>
-                </View>
+            <View style={styles.saleTextAndIcon}>
+                <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
+                <Text style={styles.sellingPointText}>Downlaod HD videos</Text>
             </View>
-        </TouchableHighlight>
+            <View style={styles.saleTextAndIcon}>
+                <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
+                <Text style={styles.sellingPointText}>Generate up to 5 videos daily</Text>
+            </View>
+            <View style={styles.saleTextAndIcon}>
+                <View style={styles.svgContainer}><CHECKMARK_SVG/></View>
+                <Text style={styles.sellingPointText}>Fast video processing</Text>
+            </View>
+        </View>
 
-        {/* Checkout Button */}
-        <TouchableHighlight style={styles.checkoutTextContainer} underlayColor={appColors.closeButtonPressedColor} onPress={localONcheckoutPress}>
-            {loading
-            ? <ActivityIndicator size={'small'} color={appColors.closeButtonTextColor}/>
-            : <Text style={styles.checkoutText}>Checkout</Text>}
-        </TouchableHighlight>
+        <View style={styles.allButtonsContainer}>
+            {/* Buy Weekly Button */}
+            <TouchableHighlight style={styles.weeklyButton} underlayColor={appColors.weakDark} onPressIn={()=> {setSelect(0)}}>
+                <View style={styles.weeklyContainer}>
+                    {(select === 0)? <View style={styles.selectedWeekly}/> : null}
+                    <View style={styles.weeklyTextContainer}>
+                        <View style={styles.leftTextContainer}>
+                        <Text style={styles.text}>Yearly Access</Text>
+                        <Text style={styles.salesText}>Just $49.99 per year</Text>
+                        </View>
+                        <View style={styles.weekPriceTextContainer}>
+                            <Text style={styles.weekPriceText}>$0.96</Text>
+                            <Text style={styles.weekDescriptionText}>per week</Text>
+                        </View>
+                    </View>
 
-        {/* Cancel Button */}
-        <TouchableHighlight style={styles.cancelTextContainer} underlayColor={appColors.deleteButtonPressedColor} onPress={onCancelPress}>
-            <Text style={styles.cancelText}>Cancel</Text>
-        </TouchableHighlight>
+                </View>
+            </TouchableHighlight>
+
+
+            {/* Buy Weekly Button */}
+            <TouchableHighlight style={styles.weeklyButton} underlayColor={appColors.weakDark} onPressIn={()=> {setSelect(1)}}>
+                <View style={styles.weeklyContainer}>
+                    {(select === 1)? <View style={styles.selectedWeekly}/> : null}
+                    <View style={styles.weeklyTextContainer}>
+                        <View style={styles.leftTextContainer}>
+                        <Text style={styles.text}>Weekly Access</Text>
+                        <Text style={styles.salesText}>Cancel anytime</Text>
+                        </View>
+                        <View style={styles.weekPriceTextContainer}>
+                            <Text style={styles.weekPriceText}>$5.99</Text>
+                            <Text style={styles.weekDescriptionText}>per week</Text>
+                        </View>
+                    </View>
+
+                </View>
+            </TouchableHighlight>
+
+            <View style={styles.smallTextContainer}>
+                <Text style={styles.smallText}>No commitment - cancel anytime</Text>
+            </View>
+
+            {/* Checkout Button */}
+            <TouchableHighlight style={styles.checkoutTextContainer} underlayColor={appColors.generateButtonPressedColor} onPress={localONcheckoutPress}>
+                {loading
+                ? <ActivityIndicator size={'small'} color={appColors.closeButtonTextColor}/>
+                : <Text style={styles.checkoutText}>Try it now</Text>}
+            </TouchableHighlight>
+
+            <View style={styles.smallTextContainer}>
+                <Text style={styles.smallText}>Terms of Use • Privacy Policy • Restore</Text>
+            </View>
+        </View>
     </View>
     )
 }
 
 
 const styles = StyleSheet.create({
+    rootContainer:{
+        flex: 1,
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        paddingBottom: 60,
+    },
+
+
     optionButton:{
         display: 'flex',
         justifyContent: 'center',
@@ -108,7 +148,7 @@ const styles = StyleSheet.create({
         maxWidth: 500,
         height: 65,
 
-        borderRadius: 5,
+        borderRadius: 10,
     },
 
     weeklyButton: {
@@ -120,7 +160,7 @@ const styles = StyleSheet.create({
 
         height: 65,
 
-        borderRadius: 5,
+        borderRadius: 10,
     },
 
     weeklyContainer: {
@@ -154,7 +194,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: appColors.saveButtonTextColor,
 
-        borderRadius: 9,
+        borderRadius: 13,
     },
 
     selectedOneTime: {
@@ -170,7 +210,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: appColors.saveButtonTextColor,
 
-        borderRadius: 9,
+        borderRadius: 13,
         
     },
 
@@ -216,14 +256,6 @@ const styles = StyleSheet.create({
         color: appColors.textColor,
     },
 
-    lineContainer: {
-        display: 'flex',
-        alignItems: 'center',
-
-        width: '100%',
-        height: 0.4,
-    },
-
     horizontalLine: {
         width: '90%',
         height: '100%',
@@ -246,33 +278,33 @@ const styles = StyleSheet.create({
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: appColors.closeButtonColor,
-        borderRadius: 5,
+        backgroundColor: appColors.generateButtonColor,
+        borderRadius: 10,
 
         marginTop: 15,
 
         width: wp(85),
         maxWidth: 500,
-        height: 50,
+        height: 60,
     },
 
     checkoutText: {
-        fontSize: 23,
-        color: appColors.closeButtonTextColor,
+        color: appColors.veryLightColor,
+        fontSize: 17,
+        textAlign: 'center'
     },
 
     cancelTextContainer:{
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: appColors.deleteButtonColor,
-        borderRadius: 5,
+        backgroundColor: 'none',
+        borderRadius: 1000,
+        position: 'absolute',
+        top: 10,
+        left: 10,
 
         marginTop: 10,
 
-        width: wp(85),
-        maxWidth: 500,
-        height: 50,
+        width: 30,
+        height: 30,
     },
 
     cancelText: {
@@ -288,10 +320,49 @@ const styles = StyleSheet.create({
         marginBottom: 2.2,
     },
 
+
+    salesPointContainer: {
+        display: 'flex',
+        position: 'absolute',
+        top: -215,
+        left: 120,
+    },
+
     svgContainer: {
-        width: 20,
-        height: 20,
+        width: 25,
+        height: 25,
         marginRight: 5,
     },
 
+
+    saleTextAndIcon: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        margin: 3,
+    },
+
+    sellingPointText: {
+        fontSize: 17,
+        color: appColors.veryLightColor,
+    },
+
+    sellingPointTitle:{
+        fontSize: 37,
+        fontFamily: appColors.fontSemiBold,
+        color: appColors.veryLightColor,
+        marginBottom: 20,
+    },
+
+    smallTextContainer: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        marginTop: 10,
+    },
+
+    smallText: {
+        fontSize: 13,
+        color: appColors.veryLightColor,
+    },
 })
