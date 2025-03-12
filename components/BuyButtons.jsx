@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, TouchableHighlight, ActivityIndicator, Button, Pressable } from 'react-native'
+import { StyleSheet, Text, View, TouchableHighlight, ActivityIndicator, Alert, Pressable } from 'react-native'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
 import { hp, wp } from '../constant/Helpers'
@@ -10,15 +10,26 @@ import TermsOfServicesModal from './TermsOfServicesModal';
 import PrivacyPolicyModal from './PrivacyPolicyModal';
 import CHECKMARK_CIRCLE_SVG from '../assets/images/CheckmarkCircleSvg';
 import { USES_COUNT_ON_PREMIUM, USES_COUNT_ON_YEARLY_PREMIUM } from '../constant/Settings';
+import { restoreMissingVideos } from '../constant/Helpers';
 
-export default function BuyButtons({ setShowGetProScreen, setShowWatermark, filename={filename}}){
+export default function BuyButtons({ setShowGetProScreen, setShowWatermark}){
     const [select, setSelect] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
     const [showTos, setShowTos] = React.useState(false);
     const [showPp, setShowPp] = React.useState(false);
-    const [restorePurchases, setRestorePurchases] = React.useState(false);
 
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
+
+    function onRestorePress(){
+        try{
+            Alert.alert("Restoring videos from the server, don't close the app")
+            restoreMissingVideos(isPremium);
+        }
+        catch(e){
+            Alert.alert("Error connecting to the server.")
+            console.warn(`Problem restoring videos: ${e}`)
+        }
+    }
 
     function onCancelPress(){
         setShowGetProScreen(false);
@@ -125,7 +136,7 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark, file
                 <Text style={{color: appColors.mediumDark, fontSize: 25}}>•</Text>
                 <Pressable onPress={() => {setShowPp(true)}}><Text style={styles.bottomText}> Privacy Policy </Text></Pressable >
                 <Text style={{color: appColors.mediumDark, fontSize: 25}}>•</Text>
-                <Pressable onPress={() => {}}><Text style={styles.bottomText}> Restore </Text></Pressable >
+                <Pressable onPress={onRestorePress}><Text style={styles.bottomText}> Restore </Text></Pressable >
             </View>
         </View>
         <TermsOfServicesModal showModal={showTos} onModalClose={() => {setShowTos(false)}}/>

@@ -7,6 +7,7 @@ import { appColors } from '../constant/AppColors';
 import GetProWeeklyOnly from './GetProWeeklyOnly';
 import { Alert } from 'react-native';
 import { USES_COUNT_ON_PREMIUM } from '../constant/Settings';
+import GetPro from './GetPro';
 
 
 
@@ -15,15 +16,6 @@ const SettingsPremiumButton = () => {
     const [ loading, setLoading ] = React.useState(false);
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
     const [showGetProModal, setShowGetProModal] = React.useState(false);
-
-    async function onCheckoutPress(){
-        if(loading){
-            return;
-        }
-        setShowGetProModal(false);
-        setIsPremium(true);
-        setUsesLeft(USES_COUNT_ON_PREMIUM);
-    }
 
     async function onGetPremiumPress() {
         if(loading){
@@ -83,7 +75,7 @@ const SettingsPremiumButton = () => {
                         <DIAMOND_SVG/>
                     </View>
                     {loading? <LoadingContainer/> : <Text style={styles.text}>Get Premium</Text>}
-                    { showGetProModal && <GetProWeeklyOnly onGetProModalClose={()=>{setShowGetProModal(false)}} onCheckoutPress={onCheckoutPress} isVisible={showGetProModal}/>}
+                    { showGetProModal && <GetPro setShowGetProScreen={setShowGetProModal} setShowWatermark={() => {}}/>}
                 </View>
             </TouchableHighlight>
         )

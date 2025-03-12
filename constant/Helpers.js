@@ -338,6 +338,7 @@ export async function restoreMissingVideos(isPremium){
                 await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true');
             }
         }
+        Alert.alert(`Finished saving videos`);
     }
     catch(e){
         Alert.alert('Error Connecting with the server, please try again later');

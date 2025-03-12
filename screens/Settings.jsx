@@ -11,6 +11,7 @@ import TermsOfServicesModal from '../components/TermsOfServicesModal';
 import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 import SettingsPremiumButton from '../components/SettingsPremiumButton';
 import RestorePurchasesButton from '../components/RestorePurchasesButton';
+import ContactUsButton from '../components/ContactUsButton';
 
 
 export default function Settings(){
@@ -67,7 +68,7 @@ export default function Settings(){
             </View>
           </TouchableHighlight>
 
-          <TouchableHighlight style={styles.textContainer} underlayColor={onPressColor} onPress={()=>{setShowTOS(true)}}>
+          <View style={styles.textContainer}>
             <View style={styles.textContainer}>
               <View style={[styles.svgContainer, {backgroundColor: appColors.orangeDarkColor}]}>
                 <TERMS_AND_USE_SVG color={appColors.deleteButtonTextColor}/>
@@ -75,8 +76,8 @@ export default function Settings(){
               <Text style={styles.text}>Uses: {usesLeft}</Text>
               <View style={styles.horizontalLine}/>
             </View>
-          </TouchableHighlight>
-
+          </View>
+          <ContactUsButton/>
           <RestorePurchasesButton/>
           <SettingsPremiumButton/>
 

@@ -13,7 +13,7 @@ export default function GetProButton({filename, setShowWatermark}){
 
     if(showGetProScreen){
         return(
-            <GetPro setShowGetProScreen={setShowGetProScreen} setShowWatermark={setShowWatermark} filename={filename}/>
+            <GetPro setShowGetProScreen={setShowGetProScreen} setShowWatermark={setShowWatermark}/>
         )
     }
     return (

@@ -1,25 +1,23 @@
-import { StyleSheet, Text, View, Image, SafeAreaView, Modal, StatusBar, TouchableHighlight } from 'react-native';
+import { StyleSheet, Text, View, Modal, StatusBar, TouchableHighlight } from 'react-native';
 import React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import Watermark from './../assets/images/Watermark.png';
 import { hp, wp } from '../constant/Helpers';
 import BuyButtons from './BuyButtons';
 import * as FileSystem from "expo-file-system";
 import LoadingComponentBreathing from './LoadingComponentBreathing';
 import { Vidplays } from './Vidplays';
 import X_SVG from '../assets/images/XSVG';
-import { AppProvider } from '../AppContext';
 
 
-export default function GetPro({setShowGetProScreen, setShowWatermark, filename}){
+export default function GetPro({setShowGetProScreen, setShowWatermark}){
   const [thumbnail, setThumbnail] = React.useState(null);
   const [video, setVideo] = React.useState(null);
-
+  
   function onCancelPress(){
     setShowGetProScreen(false);
-}
-
+  }
+  
   async function loadVideo(){
     try{
       const fileUri = `${FileSystem.documentDirectory}home_videos/home_hugging_video.mp4`;
@@ -57,7 +55,7 @@ export default function GetPro({setShowGetProScreen, setShowWatermark, filename}
           <TouchableHighlight style={styles.cancelTextContainer} underlayColor={appColors.mediumDark} onPress={onCancelPress}><X_SVG color={appColors.lighterDark}/></TouchableHighlight>
           {(video)? <Vidplays source={video} style={[styles.videoContainer]}/> : <LoadingComponentBreathing style={styles.videoContainer} breathColor1={appColors.mediumDark} breathColor2={appColors.lighterDark}/>}
           <View style={styles.buttonContainer}>
-            <BuyButtons setShowGetProScreen={setShowGetProScreen} setShowWatermark={setShowWatermark} filename={filename}/>
+            <BuyButtons setShowGetProScreen={setShowGetProScreen} setShowWatermark={setShowWatermark}/>
           </View>
       </View>
     </Modal>
