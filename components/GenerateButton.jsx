@@ -66,6 +66,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             else{
                 await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'false');
             }
+            setUsesLeft(usesLeft-1);
             return true
 
         }
@@ -83,14 +84,12 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             setImage1(null);
             setImage2(null);
             setMergedImages(null);
-            if (isSuccessful){
-                setUsesLeft(usesLeft-1);
-            }
-            else{
+            if (!isSuccessful){
                 onModalClose();
                 Alert.alert('Something went wrong please try again later');
             }
         }
+
         else if (mergedImages && usesLeft === 0 && isPremium){
             Alert.alert(`You've ran out of uses for today, please try again tomorrow`)
         }

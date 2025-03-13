@@ -26,7 +26,10 @@
       },
       "bundleIdentifier": "com.leka45.huggingapp",
       "infoPlist": {
-        "ITSAppUsesNonExemptEncryption": false
+        "ITSAppUsesNonExemptEncryption": false,
+        "UIBackgroundModes": [
+          "fetch"
+        ]
       }
     },
     "android": {
@@ -69,7 +72,8 @@
           ]
         }
       ],
-      "expo-router"
+      "expo-router",
+      "expo-asset"
     ],
     "extra": {
       "eas": {

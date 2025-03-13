@@ -14,6 +14,8 @@ import RestorePurchasesButton from '../components/RestorePurchasesButton';
 import ContactUsButton from '../components/ContactUsButton';
 
 
+const BACKGROUND_TASK = 'fetch-video-on-background';
+
 export default function Settings(){
   const [showTOS, setShowTOS] = useState(false);
   const [showPP, setShowPP] = useState(false);
@@ -77,6 +79,7 @@ export default function Settings(){
               <View style={styles.horizontalLine}/>
             </View>
           </View>
+
           <ContactUsButton/>
           <RestorePurchasesButton/>
           <SettingsPremiumButton/>
