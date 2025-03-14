@@ -8,6 +8,7 @@ export const appColors = {
     weakDark: 'rgb(34, 34, 34)',
     bottomTab: 'rgba(30, 30, 30, 1)',
     mediumDark: '#676575',
+    weakLight: '#575757',
     lightColor: '#88898a',
     veryLightColor: '#f2fbff',
     textColor: '#e6e9f5',

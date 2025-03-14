@@ -12,7 +12,7 @@ import PrivacyPolicyModal from '../components/PrivacyPolicyModal';
 import SettingsPremiumButton from '../components/SettingsPremiumButton';
 import RestorePurchasesButton from '../components/RestorePurchasesButton';
 import ContactUsButton from '../components/ContactUsButton';
-
+import LoadingSkeletonView from '../components/LoadingSkeletonView';
 
 const BACKGROUND_TASK = 'fetch-video-on-background';
 
@@ -41,7 +41,17 @@ export default function Settings(){
     catch(e){
       console.warn(`Error happened while deliting videos: ${e}`)
     }
-}
+  }
+
+  if (usesLeft === null){
+      return(
+          <View style={styles.rootLoadingContainer}>
+                <View style={styles.loadingContainer}>
+                    <LoadingSkeletonView color1={appColors.lighterDark} color2={appColors.weakLight} borderRadius={15}/>
+              </View>
+          </View>
+      );
+  }
 
 
   return(
@@ -102,6 +112,12 @@ const styles = StyleSheet.create({
       backgroundColor: appColors.background,
     },
 
+    rootLoadingContainer: {
+      flex: 1,
+      display: 'flex',
+      alignItems: 'center',
+    },
+
     container: {
       display: 'flex',
       flex: 1,
@@ -129,6 +145,15 @@ const styles = StyleSheet.create({
       width: '100%',
       paddingLeft: 10,
       height: 45,
+    },
+
+    loadingContainer: {
+      width: wp(92),
+      maxWidth: 500,
+      height: 45*6,
+      borderRadius: 15,
+      backgroundColor: 'blue',
+      marginTop: 10,
     },
 
     svgContainer: {

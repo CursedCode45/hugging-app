@@ -7,8 +7,8 @@ import { UserVideoModal } from './UserVideoModal';
 import { wp, hp } from '../constant/Helpers';
 import { setImageSize } from '../constant/Helpers';
 import { useNavigation } from '@react-navigation/native';
-import * as MediaLibrary from 'expo-media-library';
-
+import LoadingSkeletonView from './LoadingSkeletonView.jsx';
+import { useAppContext } from '../AppContext.js';
 
 export default function VideoItem(props){
     // Navigation
@@ -17,6 +17,7 @@ export default function VideoItem(props){
     const [thumbnail, setThumbnail] = React.useState(null);
     const [thumbnailWidth, setThumbnailWidth] = React.useState(0);
     const [thumbnailHeight, setThumbnailHeight] = React.useState(0);
+    const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
     const [isOpen, setIsOpen] = React.useState(false);
     const fileUri = FileSystem.documentDirectory + props.filename;
@@ -50,6 +51,17 @@ export default function VideoItem(props){
     function onVideoItemClick(){
         setIsOpen(!isOpen);
 
+    }
+
+
+    if (usesLeft === null){
+        return(
+            <View styles={styles.videoItemContainer}>
+                <View style={styles.touchable}>
+                    <LoadingSkeletonView color1={appColors.lighterDark} color2={appColors.weakLight} borderRadius={0}/>
+                </View>
+            </View>
+        );
     }
     
     return(

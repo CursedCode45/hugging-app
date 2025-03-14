@@ -4,7 +4,7 @@ import * as VideoThumbnails from 'expo-video-thumbnails';
 import * as FileSystem from "expo-file-system";
 import * as SecureStore from 'expo-secure-store';
 import * as Crypto from 'expo-crypto';
-import { USES_COUNT_ON_INSTALL, USES_COUNT_ON_PREMIUM, USES_COUNT_ON_YEARLY_PREMIUM } from './Settings';
+import { USES_COUNT_ON_PREMIUM, USES_COUNT_ON_YEARLY_PREMIUM } from './Settings';
 import { Alert } from 'react-native';
 import { backend_domain } from './Settings';
 

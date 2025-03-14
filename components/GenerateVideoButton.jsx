@@ -2,12 +2,15 @@ import { StyleSheet, Text, View, TouchableHighlight, Alert } from 'react-native'
 import * as React from 'react'
 import { appColors } from '../constant/AppColors'
 import { wp } from '../constant/Helpers';
+import LoadingSkeletonView from './LoadingSkeletonView.jsx';
+import { useAppContext } from '../AppContext.js';
 
 
 export default function GenerateVideoButton({image1, image2, onPress}) {
     const [buttonStyle, setButtonStyle] = React.useState(styles.buttonContainerUnclickable);
     const [buttonPressColor, setButtonPressColor] = React.useState(appColors.lighterDark);
     const [textColor, setTextColor] = React.useState(appColors.lightColor);
+    const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
     React.useEffect(() => {
         if (image1 !== null && image2 !== null){
@@ -21,6 +24,17 @@ export default function GenerateVideoButton({image1, image2, onPress}) {
             setTextColor(appColors.lightColor);
         }
     }, [image1, image2])
+
+    if (usesLeft === null){
+        console.log('it is null');
+        return(
+            <View style={[styles.rootContainer]}>
+                <View style={styles.buttonContainer}>
+                <LoadingSkeletonView color1={appColors.lighterDark} color2={appColors.weakLight}/>
+                </View>
+            </View>
+        )
+    }
 
     return (
         <View style={styles.rootContainer}>

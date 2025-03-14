@@ -1,11 +1,9 @@
 import { StyleSheet, Text, View, TouchableHighlight, ActivityIndicator, Alert, Pressable } from 'react-native'
 import React from 'react'
 import { appColors } from '../constant/AppColors'
-import { hp, wp } from '../constant/Helpers'
-import CHECKMARK_SVG from '../assets/images/CheckmarkSvg';
+import { wp } from '../constant/Helpers'
 import { getPremium } from '../constant/Helpers';
 import { useAppContext } from '../AppContext';
-import { buyOneVideo } from '../constant/Helpers';
 import TermsOfServicesModal from './TermsOfServicesModal';
 import PrivacyPolicyModal from './PrivacyPolicyModal';
 import CHECKMARK_CIRCLE_SVG from '../assets/images/CheckmarkCircleSvg';
@@ -22,17 +20,13 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark}){
 
     function onRestorePress(){
         try{
-            Alert.alert("Restoring videos from the server, don't close the app")
+            Alert.alert("Do not close the app while we restore videos.")
             restoreMissingVideos(isPremium);
         }
         catch(e){
             Alert.alert("Error connecting to the server.")
             console.warn(`Problem restoring videos: ${e}`)
         }
-    }
-
-    function onCancelPress(){
-        setShowGetProScreen(false);
     }
 
     async function localONcheckoutPress(){

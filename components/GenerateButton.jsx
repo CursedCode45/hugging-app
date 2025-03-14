@@ -5,10 +5,10 @@ import GenerateVideoButton from './GenerateVideoButton.jsx';
 import GeneratingVideoModal from './GeneratingVideoModal.jsx';
 import MergeImages from './MergeImages.jsx';
 import * as SecureStore from 'expo-secure-store';
-import { useNavigation, useRoute } from '@react-navigation/native';
 import { Alert } from 'react-native'
 import { useAppContext } from '../AppContext.js';
-import { appUseCredit, getAllVideoBasenames, getFormattedDate, getUniqueId, setVideoSizeAndSaveThumbnail } from '../constant/Helpers.js';
+import { getUniqueId, setVideoSizeAndSaveThumbnail } from '../constant/Helpers.js';
+import GetPro from './GetPro.jsx';
 
 
 export default function GenerateButton({image1, setImage1, image2, setImage2}){
@@ -17,13 +17,16 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
     const [gettingVideo, setGettingVideo] = React.useState(false);
     const [videoStream, setVideoStream] = React.useState(null);
     const [videoAspectRatio, setVideoAspectRatio] = React.useState(1.66666666);
-
-
+    
+    
     // Variables For Merge Images Component
     const [mergedImages, setMergedImages] = React.useState(null);
-
+    
     // Premium Variables
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
+    const [ showGetProScreen, setShowGetProScreen ] = React.useState(false);
+
+
     async function apiUploadImage() {
         try {
             const userID = await getUniqueId();
@@ -94,18 +97,7 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             Alert.alert(`You've ran out of uses for today, please try again tomorrow`)
         }
         else if (mergedImages && usesLeft === 0 && !isPremium){
-            Alert.alert('Are you sure?', 'This action will permanently delete the video', [
-                {
-                    text: 'Cancel',
-                    onPress: () => console.log('Cancel Pressed'),
-                    style: 'cancel',
-                },
-                {
-                    text: 'Delete',
-                    style: 'destructive',
-                    onPress: () => console.log('Delete Pressed')
-                },
-            ]);
+            setShowGetProScreen(true);
         }
         else if (mergedImages && usesLeft === null){
             Alert.alert(`Not connected to the server, please restart the app or try again later`);
@@ -124,11 +116,13 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
         }
     }, [image1, image2])
 
+
     return(
         <>
             {(image1 && image2 && !mergedImages) && <MergeImages image1={image1} image2={image2} mergedImages={mergedImages} setMergedImages={setMergedImages}/>}
             <GeneratingVideoModal showModal={showModal} gettingVideo={gettingVideo} onModalClose={onModalClose} videoStream={videoStream} videoAspectRatio={videoAspectRatio} isPremium={isPremium}/>
             <GenerateVideoButton image1={image1} image2={image2} onPress={onGeneratePress}/>
+            { showGetProScreen && <GetPro setShowGetProScreen={setShowGetProScreen} setShowWatermark={()=>{}}/>}
         </>
         
     );

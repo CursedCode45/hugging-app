@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, ActivityIndicator } from 'react-native'
 import * as React from 'react'
-import { hp, wp } from '../constant/Helpers'
+import { wp } from '../constant/Helpers'
 import { appColors } from '../constant/AppColors'
 import Animated, {
     useSharedValue,
@@ -43,6 +43,7 @@ export default function LoadingBarAndScreenSkeleton(){
                 <ActivityIndicator size={'large'} color={appColors.lightColor} />
             </View>
             <Animated.Text style={styles.text}>Generating{dots}</Animated.Text>
+            <Text style={styles.text}>Please do not close the app while video is generating.</Text>
         </View>
     )
 }

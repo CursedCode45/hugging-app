@@ -6,7 +6,8 @@ import X_SVG from '../assets/images/XSVG.js';
 import { appColors } from '../constant/AppColors.js';
 import { wp } from '../constant/Helpers.js';
 import * as ImageManipulator from 'expo-image-manipulator';
-
+import LoadingSkeletonView from './LoadingSkeletonView.jsx';
+import { useAppContext } from '../AppContext.js';
 
 
 function WithoutImage({filename, onPress}){
@@ -37,8 +38,18 @@ function WithImage({image, onRemoveImage}){
     );
 }
 
+function Loading(){
+    return(
+        <View style={[styles.container, styles.iconTextContainer]}>
+            <LoadingSkeletonView color1={appColors.lighterDark} color2={appColors.weakLight}/>
+        </View>
+    );
+}
+
 
 export default function PhotoUpload({image, setImage, filename}){
+    const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
+
     async function selectImage(){
         try{
             const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -72,6 +83,12 @@ export default function PhotoUpload({image, setImage, filename}){
 
     function onXpress(){
         setImage(null);
+    }
+
+    if (usesLeft === null){
+        return(
+            <Loading/>
+        )
     }
 
 

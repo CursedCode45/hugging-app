@@ -1,5 +1,4 @@
 import { StyleSheet, Button, Text, View } from 'react-native';
-import BottomTab from '../components/BottomTab'  
 import { UploadPhotosContainer } from '../components/UploadPhotosContainer';
 import { appColors } from '../constant/AppColors';
 import { Vidplays } from '../components/Vidplays';
@@ -10,10 +9,15 @@ import * as FileSystem from "expo-file-system";
 import { Asset } from 'expo-asset';
 import LoadingComponentBreathing from '../components/LoadingComponentBreathing';
 import { wp } from '../constant/Helpers';
+import { useAppContext } from '../AppContext';
+import GetPro from '../components/GetPro';
 
 
 export default function GenerateScreen(){
     const [video, setVideo] = useState(null);
+    const [showGetProScreen, setShowGetProScreen] = useState(false);
+    const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
+
     async function saveHomeVideoToStorage() {
       try{
         // If Video Exist in mobile dont save it.
@@ -42,6 +46,13 @@ export default function GenerateScreen(){
     useLayoutEffect(() => {
       saveHomeVideoToStorage();
     }, [])
+    
+    useEffect(()=>{
+      console.log(`Uses Left: ${usesLeft}`);
+      if (usesLeft === 0){
+        setShowGetProScreen(true);
+      }
+    }, [usesLeft])
 
 
     return(
@@ -53,6 +64,7 @@ export default function GenerateScreen(){
             <Text style={styles.textDescription}>Make two people come to life with a hug.</Text>
             <UploadPhotosContainer/>
         </View>
+        {showGetProScreen && <GetPro setShowGetProScreen={setShowGetProScreen} setShowWatermark={()=>{}}/>}
       </View>
 
     );
