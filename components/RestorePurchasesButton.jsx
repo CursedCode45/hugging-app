@@ -17,6 +17,7 @@ const RestorePurchasesButton = () => {
             if (loading){
                 return;
             }
+            Alert.alert("Do not close the app while we restore videos.");
             setLoading(true);
             await restoreMissingVideos(isPremium);
             setLoading(false);

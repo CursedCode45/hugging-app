@@ -31,7 +31,6 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark}){
 
     async function localONcheckoutPress(){
         try{
-
             setLoading(true);
             let isYearlyBought = (select===0)? true : false
             let usesBought = isYearlyBought? USES_COUNT_ON_YEARLY_PREMIUM : USES_COUNT_ON_PREMIUM
@@ -40,8 +39,8 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark}){
                 setShowWatermark('false');
                 setIsPremium(true);
                 setUsesLeft(usesBought);
+                setShowGetProScreen(false);
             }
-            setShowGetProScreen(false);
             setLoading(false);
         }
         catch(e){
@@ -127,9 +126,9 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark}){
 
             <View style={[styles.legalTextContainer]}>
                 <Pressable onPress={() => {setShowTos(true)}}><Text style={styles.bottomText}>Terms of Use </Text></Pressable >
-                <Text style={{color: appColors.mediumDark, fontSize: 25}}>•</Text>
+                <Text style={{color: appColors.mediumDark, fontSize: 13}}>•</Text>
                 <Pressable onPress={() => {setShowPp(true)}}><Text style={styles.bottomText}> Privacy Policy </Text></Pressable >
-                <Text style={{color: appColors.mediumDark, fontSize: 25}}>•</Text>
+                <Text style={{color: appColors.mediumDark, fontSize: 13}}>•</Text>
                 <Pressable onPress={onRestorePress}><Text style={styles.bottomText}> Restore </Text></Pressable >
             </View>
         </View>
@@ -140,6 +139,7 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark}){
 }
 
 
+const buttonHeight = 60; 
 const styles = StyleSheet.create({
     rootContainer:{
         flex: 1,
@@ -147,22 +147,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'flex-end',
-        paddingBottom: 60,
-    },
-
-
-    optionButton:{
-        display: 'flex',
-        justifyContent: 'center',
-
-        backgroundColor: appColors.lighterDark,
-        marginTop: 15,
-
-        width: wp(85),
-        maxWidth: 500,
-        height: 65,
-
-        borderRadius: 10,
+        paddingBottom: 40,
     },
 
     weeklyButton: {
@@ -172,7 +157,7 @@ const styles = StyleSheet.create({
         width: wp(85),
         maxWidth: 500,
 
-        height: 65,
+        height: buttonHeight,
 
         borderRadius: 10,
     },
@@ -197,7 +182,7 @@ const styles = StyleSheet.create({
 
         width: wp(85) + 6,
         maxWidth: 500 + 6,
-        height: 65 + 6,
+        height: buttonHeight + 6,
 
         borderWidth: 3,
         borderColor: appColors.generateButtonColor,
@@ -211,23 +196,12 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        height: 50,
-        marginTop: 10,
-        marginLeft: 10,
-        marginRight: 10,
-    },
-    textContainer: {
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        height: 50,
-        marginLeft: 10,
-        marginRight: 10,
+        height: '100%',
+        padding: 10
     },
 
     text: {
-        fontSize: 23,
+        fontSize: 22,
         color: appColors.textColor,
     },
 
@@ -235,17 +209,20 @@ const styles = StyleSheet.create({
         display: 'flex',
         justifyContent: 'center',
         height: '100%',
+        
     },
 
     weekPriceText: {
         fontFamily: appColors.fontSemiBold,
         fontSize: 20,
         color: appColors.textColor,
+
     },
 
     weekDescriptionText: {
-        fontFamily: appColors.fontThin,
-        color: appColors.textColor,
+        fontFamily: appColors.fontExtraLight,
+        fontSize: 12,
+        color: appColors.mediumDark,
     },
 
     horizontalLine: {
@@ -262,8 +239,9 @@ const styles = StyleSheet.create({
     },
 
     salesText: {
+        fontSize:12,
         fontFamily: appColors.fontExtraLight,
-        color: appColors.textColor,
+        color: appColors.mediumDark,
     },
 
     checkoutTextContainer:{
@@ -272,8 +250,6 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         backgroundColor: appColors.generateButtonColor,
         borderRadius: 10,
-
-        marginTop: 15,
 
         width: wp(85),
         maxWidth: 500,
@@ -306,8 +282,8 @@ const styles = StyleSheet.create({
     },
 
     percentageContainer:{
-        backgroundColor: appColors.generateButtonColor,
-        padding: 7,
+        backgroundColor: appColors.generateButtonPressedColor,
+        padding: 6,
         borderRadius: 1000
     },
 
@@ -329,13 +305,13 @@ const styles = StyleSheet.create({
     salesPointContainer: {
         display: 'flex',
         position: 'absolute',
-        top: -215,
+        top: -196,
         left: 120,
     },
 
     svgContainer: {
-        width: 23,
-        height: 23,
+        width: 20,
+        height: 20,
         marginRight: 5,
     },
 
@@ -344,7 +320,7 @@ const styles = StyleSheet.create({
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
-        margin: 5,
+        margin: 6,
     },
 
     sellingPointText: {
@@ -353,10 +329,11 @@ const styles = StyleSheet.create({
     },
 
     sellingPointTitle:{
-        fontSize: 37,
+        fontSize: 28,
         fontFamily: appColors.fontSemiBold,
         color: appColors.veryLightColor,
-        marginBottom: 20,
+        marginBottom: 15,
+        paddingLeft: 7,
     },
 
     smallTextContainer: {
@@ -364,7 +341,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 15,
+        margin: 20,
     },
 
     legalTextContainer: {
@@ -372,11 +349,11 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 7,
+        marginTop: 13,
     },
 
     smallText: {
-        fontSize: 13,
+        fontSize: 12,
         color: appColors.veryLightColor,
     },
 

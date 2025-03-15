@@ -90,8 +90,8 @@ rootContainer:{
   },
 
   videoContainer: {
-    width: wp(210),
-    height: wp(210)/1.66666666666,
+    width: wp(220),
+    height: wp(220)/1.66666666666,
     marginTop: -44,
 
     backgroundColor: appColors.lightColor,
