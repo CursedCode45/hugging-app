@@ -319,6 +319,7 @@ export async function restoreMissingVideos(isPremium){
             return;
         }
 
+        Alert.alert("Do not close the app while we restore videos.");
         for (const video_info of video_info_json.videos){
             let fileName = `${parseInt(video_info.name.split('.')[0])}`;
             fileName = '00000000000' + fileName;

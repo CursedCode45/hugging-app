@@ -13,15 +13,20 @@ import { restoreMissingVideos } from '../constant/Helpers';
 export default function BuyButtons({ setShowGetProScreen, setShowWatermark}){
     const [select, setSelect] = React.useState(0);
     const [loading, setLoading] = React.useState(false);
+    const [restoreLoading, setRestoreLoading] = React.useState(false);
     const [showTos, setShowTos] = React.useState(false);
     const [showPp, setShowPp] = React.useState(false);
 
     const { usesLeft, setUsesLeft, isPremium, setIsPremium } = useAppContext();
 
-    function onRestorePress(){
+    async function onRestorePress(){
         try{
-            Alert.alert("Do not close the app while we restore videos.")
-            restoreMissingVideos(isPremium);
+            if(restoreLoading){
+                return;
+            }
+            setRestoreLoading(true);
+            await restoreMissingVideos(isPremium);
+            setRestoreLoading(false);
         }
         catch(e){
             Alert.alert("Error connecting to the server.")
