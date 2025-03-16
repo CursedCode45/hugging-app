@@ -1,11 +1,10 @@
-import { StyleSheet, View, ScrollView, FlatList } from 'react-native';
+import { StyleSheet, View, FlatList } from 'react-native';
 import * as React from 'react';
 import { appColors } from '../constant/AppColors';
 import VideoItem from '../components/VideoItem';
 import { wp } from '../constant/Helpers';
 import { getAllVideoBasenames } from '../constant/Helpers';
 import { useFocusEffect } from '@react-navigation/native';
-import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
 
 
 export default function GenerateScreen(){

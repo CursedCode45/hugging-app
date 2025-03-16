@@ -1,8 +1,6 @@
 import { StyleSheet, Text, View, TouchableHighlight, Alert } from 'react-native';
 import { appColors } from '../constant/AppColors';
 import { useState } from 'react';
-import * as FileSystem from "expo-file-system";
-import DELETE_SVG from '../assets/images/DeleteSvg';
 import TERMS_AND_USE_SVG from '../assets/images/TermsAndUseSvg';
 import LOCK_SVG from '../assets/images/LockSvg';
 import { getAllVideoBasenames, wp, deleteVideo } from '../constant/Helpers';

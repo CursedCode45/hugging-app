@@ -21,9 +21,7 @@ export default function BuyButtons({ setShowGetProScreen, setShowWatermark}){
 
     async function onRestorePress(){
         try{
-            if(restoreLoading){
-                return;
-            }
+            if(restoreLoading) return;
             setRestoreLoading(true);
             await restoreMissingVideos(isPremium);
             setRestoreLoading(false);

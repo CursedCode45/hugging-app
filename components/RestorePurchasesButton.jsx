@@ -14,9 +14,7 @@ const RestorePurchasesButton = () => {
 
     async function onRestoreClick() {
         try{
-            if (loading){
-                return;
-            }
+            if (loading) return;
             setLoading(true);
             await restoreMissingVideos(isPremium);
             setLoading(false);

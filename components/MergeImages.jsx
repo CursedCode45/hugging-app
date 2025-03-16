@@ -1,20 +1,19 @@
-import React, { useEffect, useRef, useState, useLayoutEffect, use } from 'react';
-import { View, Button, Image, StyleSheet } from 'react-native';
+import React, { useRef } from 'react';
+import { View, StyleSheet } from 'react-native';
 import Svg, { Image as SvgImage } from 'react-native-svg';
 import ViewShow, { captureRef } from 'react-native-view-shot';
-import * as MediaLibrary from 'expo-media-library';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { hp } from '../constant/Helpers';
 
 
 export default function MergeImages({ image1, image2, mergedImages, setMergedImages }){
     const svgRef = useRef();
-    const maxHeight = 1080
+    const maxHeight = 768
     const loadCount = useRef(0);
 
     async function saveImage(){
         try {
-            const uri = await captureRef(svgRef, {
+            let uri = await captureRef(svgRef, {
                 result: 'tmpfile',
                 height: maxHeight,
                 width: maxHeight*2,
@@ -22,8 +21,8 @@ export default function MergeImages({ image1, image2, mergedImages, setMergedIma
                 format: 'jpg',
                 useRenderInContext: true,
             });
-
-            setMergedImages(uri);
+            let img = await ImageManipulator.manipulateAsync(uri, [{ resize: {height: 768, width: 768*2}} ]);
+            setMergedImages(img.uri);
         }
         catch (error) {
             console.error('Error Merge:', error);
@@ -45,7 +44,7 @@ export default function MergeImages({ image1, image2, mergedImages, setMergedIma
                 collapsable={false}
             >
 
-                <Svg height={ maxHeight } width={ maxHeight*2 }>
+                <Svg height={maxHeight} width={maxHeight*2}>
                     <SvgImage onLoad={mergeImagesOnLoad} href={{ uri: image1.uri }}    x="0"                    y="0"    width={ `${maxHeight}` }      height={ `${maxHeight}` }/>
                     <SvgImage onLoad={mergeImagesOnLoad} href={{ uri: image2.uri }}    x={ `${maxHeight}` }     y="0"    width={ `${maxHeight}` }      height={ `${maxHeight}` }/>
                 </Svg>

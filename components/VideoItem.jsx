@@ -4,7 +4,7 @@ import { appColors } from '../constant/AppColors';
 import * as FileSystem from "expo-file-system";
 import * as VideoThumbnails from 'expo-video-thumbnails';
 import { UserVideoModal } from './UserVideoModal';
-import { wp, hp } from '../constant/Helpers';
+import { wp } from '../constant/Helpers';
 import { setImageSize } from '../constant/Helpers';
 import { useNavigation } from '@react-navigation/native';
 import LoadingSkeletonView from './LoadingSkeletonView.jsx';

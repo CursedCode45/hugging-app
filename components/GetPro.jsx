@@ -1,8 +1,8 @@
-import { StyleSheet, Text, View, Modal, StatusBar, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, Modal, StatusBar, TouchableHighlight } from 'react-native';
 import React from 'react';
 import { appColors } from '../constant/AppColors';
 import * as VideoThumbnails from 'expo-video-thumbnails';
-import { hp, wp } from '../constant/Helpers';
+import { wp } from '../constant/Helpers';
 import BuyButtons from './BuyButtons';
 import * as FileSystem from "expo-file-system";
 import LoadingComponentBreathing from './LoadingComponentBreathing';

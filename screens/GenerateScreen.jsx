@@ -1,4 +1,4 @@
-import { StyleSheet, Button, Text, View } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
 import { UploadPhotosContainer } from '../components/UploadPhotosContainer';
 import { appColors } from '../constant/AppColors';
 import { Vidplays } from '../components/Vidplays';
