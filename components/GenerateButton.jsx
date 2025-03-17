@@ -43,26 +43,21 @@ export default function GenerateButton({image1, setImage1, image2, setImage2}){
             if (!response.ok){
                 return false;  
             }
-            
-            const metadataEncoded = response.headers.get('X-Metadata');
-            const metadata = JSON.parse(decodeURIComponent(metadataEncoded));
-            const videoBlob = await response.blob();
+            const responseJson = await response.json();
 
             // Make a new Video file name
-            var fileName = metadata.video_id;
+            const generatedVideoUrl = responseJson.url;
+            var fileName = responseJson.video_id;
             fileName = '00000000000' + fileName;
             fileName = fileName.substr(fileName.length-12);
             fileName = `${fileName}.mp4`;
             const fileUri = FileSystem.documentDirectory + fileName;
 
-            const fr = new FileReader();
-            fr.onload = async function(e) {
-                await FileSystem.writeAsStringAsync(fileUri, fr.result.split(',')[1], { encoding: FileSystem.EncodingType.Base64 });
-                setVideoSizeAndSaveThumbnail(fileUri, setVideoAspectRatio);
-                setVideoStream(fileUri);
-                setGettingVideo(false);
-            };
-            fr.readAsDataURL(videoBlob);
+            await FileSystem.downloadAsync(generatedVideoUrl, fileUri)
+            setVideoSizeAndSaveThumbnail(fileUri, setVideoAspectRatio);
+            setVideoStream(fileUri);
+            setGettingVideo(false);
+
             if(!isPremium){
                 await SecureStore.setItemAsync(`show_watermark_${fileName}`, 'true');
             }
