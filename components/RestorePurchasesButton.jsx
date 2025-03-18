@@ -39,7 +39,6 @@ const RestorePurchasesButton = () => {
                     <DIAMOND_SVG/>
                 </View>
                 {loading? <LoadingContainer/> : <Text style={styles.text}>Restore missing videos</Text> }
-                <View style={styles.horizontalLine}/>
             </View>
         </TouchableHighlight>
     )

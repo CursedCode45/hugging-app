@@ -78,19 +78,8 @@ export default function Settings(){
             </View>
           </TouchableHighlight>
 
-          <View style={styles.textContainer}>
-            <View style={styles.textContainer}>
-              <View style={[styles.svgContainer, {backgroundColor: appColors.orangeDarkColor}]}>
-                <TERMS_AND_USE_SVG color={appColors.deleteButtonTextColor}/>
-              </View>
-              <Text style={styles.text}>Uses: {usesLeft}</Text>
-              <View style={styles.horizontalLine}/>
-            </View>
-          </View>
-
           <ContactUsButton/>
           <RestorePurchasesButton/>
-          <SettingsPremiumButton/>
 
         </View>
       </View>
